@@ -1,0 +1,17 @@
+[package]
+name = "trade-meta"
+version = "0.0.0"
+authors = ["Coldiary <coldiary@orange.fr>"]
+edition = "2018"
+publish = false
+
+[dependencies.trade]
+path = ".."
+
+[dependencies.elrond-wasm]
+version = "0.23.0"
+# path = "../../../../elrond-wasm"
+
+[dependencies.elrond-wasm-debug]
+version = "0.23.0"
+# path = "../../../../elrond-wasm-debug"
