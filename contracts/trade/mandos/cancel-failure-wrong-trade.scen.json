@@ -1,46 +1,28 @@
 {
-    "name": "trade create",
+    "name": "trade cancel failure - wrong trade",
     "steps": [
         {
             "step": "externalSteps",
-            "path": "trade-init.scen.json"
-        },
-        {
-            "step": "setState",
-            "accounts": {
-                "address:alice": {
-                    "nonce": "0",
-                    "balance": "10,000,000,000,000,000,000",
-                    "esdt": {}
-                },
-                "address:bob": {
-                    "nonce": "0",
-                    "balance": "1,000,000,000,000,000,000",
-                    "esdt": {
-                        "str:TEST-123456": "4,000,000"
-                    }
-                }
-            }
+            "path": "create-success.scen.json"
         },
         {
             "step": "scCall",
-            "txId": "createTrade-1",
+            "txId": "cancelTrade-2",
             "tx": {
                 "from": "address:alice",
                 "to": "sc:trade",
-                "egldValue": "1,000,000,000,000,000,000",
-                "function": "createTrade",
+                "egldValue": "0",
+                "function": "cancelTrade",
                 "arguments": [
-                    "1,000,000",
-                    "str:TEST-123456",
-                    "0x01|address:bob"
+                    "2"
                 ],
-                "gasLimit": "100,000,000",
+                "gasLimit": "10,000,000",
                 "gasPrice": "0"
             },
             "expect": {
-                "out": ["1"],
-                "status": "",
+                "out": [],
+                "status": "4",
+                "message": "str:This trade does not exist",
                 "gas": "*",
                 "refund": "*"
             }
@@ -54,7 +36,7 @@
                     "storage": {}
                 },
                 "address:alice": {
-                    "nonce": "1",
+                    "nonce": "2",
                     "balance": "9,000,000,000,000,000,000",
                     "esdt": {},
                     "storage": {}
@@ -63,7 +45,8 @@
                     "nonce": "0",
                     "balance": "1,000,000,000,000,000,000",
                     "esdt": {
-                        "str:TEST-123456": "4,000,000"
+                        "str:TEST-123456": "4,000,000",
+                        "str:NOPE-987654": "1,000,000"
                     },
                     "storage": {}
                 },
@@ -77,7 +60,7 @@
                             "0-offer_address": "address:alice",
                             "1-offer_asset_token": "nested:str:EGLD",
                             "2-offer_asset_quantity": "biguint:1,000,000,000,000,000,000",
-                            "3-trader_address": "0x01|address:bob",
+                            "3-trader_address": "0x00",
                             "4-trader_asset_token": "nested:str:TEST-123456",
                             "5-trader_asset_quantity": "biguint:1,000,000"
                         }

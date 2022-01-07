@@ -28,7 +28,7 @@ pub trait Trade {
         #[payment_token] offer_token: TokenIdentifier,
         requested_quantity: BigUint,
         requested_token: TokenIdentifier,
-        required_address: Option<ManagedAddress>,
+        reserved_for: Option<ManagedAddress>,
     ) -> SCResult<u64> {
         require!(offer_quantity > 0, "Offer asset quantity must be more than 0");
         require!(offer_token.is_egld() || offer_token.is_valid_esdt_identifier(), "Invalid token provided as offer");
@@ -39,7 +39,7 @@ pub trait Trade {
             offer_address: self.blockchain().get_caller(),
             offer_asset_token: offer_token,
             offer_asset_quantity: offer_quantity,
-            trader_address: required_address,
+            trader_address: reserved_for,
             trader_asset_token: requested_token,
             trader_asset_quantity: requested_quantity,
         };
@@ -58,10 +58,10 @@ pub trait Trade {
     ) -> SCResult<()> {
         let caller = self.blockchain().get_caller();
 
-        require!(!self.trades(&trade_id).is_empty(), "This trade does not exist.");
+        require!(!self.trades(&trade_id).is_empty(), "This trade does not exist");
 
         let trade = self.trades(&trade_id).get();
-        require!(caller == trade.offer_address, "Only the creator of the trade can cancel it.");
+        require!(caller == trade.offer_address, "Only the creator of the trade can cancel it");
 
         let token_identifier = trade.offer_asset_token;
         let token_amount = trade.offer_asset_quantity;
@@ -82,17 +82,17 @@ pub trait Trade {
     ) -> SCResult<()> {
         let caller = self.blockchain().get_caller();
 
-        require!(!self.trades(&trade_id).is_empty(), "This trade does not exist.");
+        require!(!self.trades(&trade_id).is_empty(), "This trade does not exist");
 
         let trade = self.trades(&trade_id).get();
 
         if trade.trader_address.is_some() {
             let trader_address = trade.trader_address.unwrap();
-            require!(trader_address == caller, "This trade has been reserved.");
+            require!(trader_address == caller, "This trade has been reserved");
         }
 
-        require!(trade.trader_asset_token == paid_token, "Invalid token provided as payment.");
-        require!(trade.trader_asset_quantity == paid_quantity, "Invalid amount provided as payment.");
+        require!(trade.trader_asset_token == paid_token, "Invalid token provided as payment");
+        require!(trade.trader_asset_quantity == paid_quantity, "Invalid amount provided as payment");
 
         let offer_address = trade.offer_address;
         let offer_token = trade.trader_asset_token;

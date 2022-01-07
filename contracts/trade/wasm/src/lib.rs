@@ -8,8 +8,8 @@ elrond_wasm_node::wasm_endpoints! {
     trade
     (
         init
-        createTrade
         cancelTrade
+        createTrade
         trade
     )
 }
