@@ -1,55 +1,33 @@
 {
-    "name": "trade create success - reserved",
+    "name": "trade failure - wrong trade",
     "steps": [
         {
             "step": "externalSteps",
-            "path": "init.scen.json"
-        },
-        {
-            "step": "setState",
-            "accounts": {
-                "address:alice": {
-                    "nonce": "0",
-                    "balance": "10,000,000,000,000,000,000",
-                    "esdt": {}
-                },
-                "address:bob": {
-                    "nonce": "0",
-                    "balance": "1,000,000,000,000,000,000",
-                    "esdt": {
-                        "str:TEST-123456": "4,000,000",
-                        "str:NOPE-987654": "1,000,000"
-                    }
-                },
-                "address:carol": {
-                    "nonce": "0",
-                    "balance": "3,000,000,000,000,000,000",
-                    "esdt": {
-                        "str:TEST-123456": "4,000,000",
-                        "str:NOPE-987654": "1,000,000"
-                    }
-                }
-            }
+            "path": "create-success.scen.json"
         },
         {
             "step": "scCall",
-            "txId": "createTrade-2",
+            "txId": "trade-4",
             "tx": {
-                "from": "address:alice",
+                "from": "address:bob",
                 "to": "sc:trade",
-                "egldValue": "1,000,000,000,000,000,000",
-                "function": "createTrade",
-                "arguments": [
-                    "1,000,000",
-                    "str:TEST-123456",
-                    "0x01|address:bob"
+                "esdtValue": [
+                    {
+                        "tokenIdentifier": "str:TEST-123456",
+                        "value": "3,000,000"
+                    }
                 ],
-                "gasLimit": "100,000,000",
+                "function": "trade",
+                "arguments": [
+                    "2"
+                ],
+                "gasLimit": "10,000,000",
                 "gasPrice": "0"
             },
             "expect": {
-                "out": ["1"],
-                "status": "",
+                "out": [],
+                "status": "4",
+                "message": "str:This trade does not exist",
                 "gas": "*",
                 "refund": "*"
             }
@@ -69,17 +47,8 @@
                     "storage": {}
                 },
                 "address:bob": {
-                    "nonce": "0",
+                    "nonce": "1",
                     "balance": "1,000,000,000,000,000,000",
-                    "esdt": {
-                        "str:TEST-123456": "4,000,000",
-                        "str:NOPE-987654": "1,000,000"
-                    },
-                    "storage": {}
-                },
-                "address:carol": {
-                    "nonce": "0",
-                    "balance": "3,000,000,000,000,000,000",
                     "esdt": {
                         "str:TEST-123456": "4,000,000",
                         "str:NOPE-987654": "1,000,000"
@@ -96,7 +65,7 @@
                             "0-offer_address": "address:alice",
                             "1-offer_asset_token": "nested:str:EGLD",
                             "2-offer_asset_quantity": "biguint:1,000,000,000,000,000,000",
-                            "3-trader_address": "0x01|address:bob",
+                            "3-trader_address": "0x00",
                             "4-trader_asset_token": "nested:str:TEST-123456",
                             "5-trader_asset_quantity": "biguint:1,000,000"
                         }
