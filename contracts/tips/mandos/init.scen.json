@@ -1,0 +1,57 @@
+{
+    "name": "tips deployment test",
+    "steps": [
+        {
+            "step": "setState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000"
+                }
+            },
+            "newAddresses": [
+                {
+                    "creatorAddress": "address:owner",
+                    "creatorNonce": "0",
+                    "newAddress": "sc:tips"
+                }
+            ]
+        },
+        {
+            "step": "scDeploy",
+            "txId": "deploy",
+            "tx": {
+                "from": "address:owner",
+                "contractCode": "file:../output/tips.wasm",
+                "arguments": [
+                ],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "0",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000",
+                    "storage": {}
+                },
+                "sc:tips": {
+                    "nonce": "0",
+                    "balance": "0",
+                    "storage": {
+                        "str:nextId": "1"
+                    },
+                    "code": "file:../output/tips.wasm"
+                }
+            }
+        }
+    ]
+}
