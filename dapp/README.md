@@ -1,46 +1,71 @@
-# Getting Started with Create React App
+# @elrondnetwork/dapp-template
+The __Elrond dApp Template__, built using [React.js](https://reactjs.org/) and [Typescript](https://www.typescriptlang.org/).
+It's a basic implementation of [@elrondnetwork/dapp-core](https://www.npmjs.com/package/@elrondnetwork/dapp-core), providing the basics for Elrond authentication and TX signing.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+See [Dapp template](https://dapp-template.elrond.com/) for live demo.
 
-## Available Scripts
+## Requirements
 
-In the project directory, you can run:
+* Node.js version 12.16.2+
+* Npm version 6.14.4+
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
+The dapp is a client side only poject and is built using the [Create React App](https://create-react-app.dev)  scripts.
+
+### Instalation and running
+
+### Step 1. Install modules
+
+From a terminal, navigate to the project folder and run:
+
+```bash
+npm install
+```
+
+### Step 2. Update Configs
+
+Edit a new file `src/config.tsx` and copy the content of `src/config.devnet.tsx`. If you want to develop against `testnet`, change all instances of `devnet` to `testnet`.
+
+### Step 3. Running in development mode
+
+In the project folder run:
+
+```bash
+npm run start
+```
+
+This will start the React app in development mode, using the configs found in the `config.tsx` file.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
+### Step 4. Build for testing and production use
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A build of the app is necessary to deploy for testing purposes or for production use.
+To build the project run:
 
-### `npm run build`
+```bash
+npm run build
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Roadmap
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+See the [open issues](https://github.com/ElrondNetwork/dapp-template/issues) for a list of proposed features (and known issues).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contributing
 
-### `npm run eject`
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+One can contribute by creating _pull requests_, or by opening _issues_ for discovered bugs or desired features.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Developers
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+The [Elrond Team](https://elrond.com/team/).

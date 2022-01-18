@@ -1,54 +1,46 @@
-import { BrowserRouter as Router, Switch, Route, Redirect, useLocation } from "react-router-dom";
-import { Context as DappContext } from '@elrondnetwork/dapp';
+import React from 'react';
+import { DappProvider, DappUI } from '@elrondnetwork/dapp-core';
+import { Route, Routes, BrowserRouter as Router, Navigate } from 'react-router-dom';
+import Layout from 'components/Layout';
+import { network, walletConnectBridge, walletConnectDeepLink } from 'config';
+import PageNotFound from 'pages/PageNotFound';
+import { routeNames } from 'routes';
+import routes from 'routes';
+import '@elrondnetwork/dapp-core/build/index.css';
 
-import './App.css';
-import { Layout } from './components/Layout';
-import { Fund } from './pages/Fund';
-import { Kickstart } from './pages/Kickstart';
-import { Tip } from './pages/Tip';
-import { Trade } from './pages/Trade';
-import { config, DappName } from "./network.config";
-import { LedgerStyled } from "./components/elrond/LedgerStyled";
-import { UnlockStyled } from "./components/elrond/UnlockStyled";
-import { WalletConnectStyled } from "./components/elrond/WalletConnectStyled";
+const {
+  TransactionsToastList,
+  DappCorePages: { UnlockPage }
+} = DappUI;
 
-const Routing = () => {
-    const location = useLocation<{ referer: string } | undefined>();
-
-    const loginRedirect = location.state?.referer ?? '/';
-
-    return (
-        <Switch>
-            <Route exact path="/">
-                <Redirect to="/fund" />
-            </Route>
-            <Route path="/connect" exact={true} component={() => <UnlockStyled callbackRoute={loginRedirect} />}/>
-            <Route path="/ledger" exact={true} component={() => <LedgerStyled callbackRoute={loginRedirect} />} />
-            <Route path="/walletconnect" exact={true} component={() => <WalletConnectStyled callbackRoute={loginRedirect}/>} />
-            <Route path="/fund">
-                <Fund />
-            </Route>
-            <Route path="/kickstart">
-                <Kickstart />
-            </Route>
-            <Route path="/tip">
-                <Tip />
-            </Route>
-            <Route path="/trade">
-                <Trade />
-            </Route>
-        </Switch>
-    )
-}
-
-export const App = () => {
+const App = () => {
   return (
-      <DappContext config={config} >
-        <Router>
-            <Layout title={DappName}>
-                <Routing />
-            </Layout>
-        </Router>
-      </DappContext>
+    <Router>
+      <DappProvider
+        networkConfig={{ network, walletConnectBridge, walletConnectDeepLink }}
+        modalClassName='custom-class-for-modals'
+      >
+        <Layout>
+          <TransactionsToastList />
+          <Routes>
+            <Route
+              path={routeNames.unlock}
+              element={<UnlockPage loginRoute={routeNames.dashboard} />}
+            />
+            {routes.map((route: any, index: number) => (
+              <Route
+                path={route.path}
+                key={'route-key-' + index}
+                element={<route.component />}
+              />
+            ))}
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Layout>
+      </DappProvider>
+    </Router>
   );
-}
+};
+
+export default App;
