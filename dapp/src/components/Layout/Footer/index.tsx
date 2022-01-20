@@ -3,18 +3,10 @@ import { ReactComponent as HeartIcon } from '../../../assets/img/heart.svg';
 
 const Footer = () => {
   return (
-    <footer className='text-center mt-2 mb-3'>
-      <div>
-        <a
-          {...{
-            target: '_blank'
-          }}
-          className='d-flex align-items-center'
-          href='https://elrond.com/'
-        >
-          Made with <HeartIcon className='mx-1' /> for the Elrond Community.
+    <footer className='flex justify-center items-center mt-2 mb-3'>
+        <a {...{target: '_blank'}} className='flex items-center' href='https://elrond.com/'>
+          Made with <HeartIcon className='mx-1' fill='#ff0000' /> for the Elrond Community.
         </a>
-      </div>
     </footer>
   );
 };

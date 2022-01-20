@@ -1,14 +1,12 @@
 import React from 'react';
 import { logout, useGetAccountInfo } from '@elrondnetwork/dapp-core';
-import { Navbar as BsNavbar, NavItem, Nav } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
-import { dAppName } from 'config';
+import { Link } from 'react-router-dom';
+import { navLink, primaryButton } from 'components/styles';
 import { routeNames } from 'routes';
-import { ReactComponent as ElrondLogo } from './../../../assets/img/elrond.svg';
 import { ReactComponent as DappLogo } from './../../../assets/img/logo_light.svg';
+import { ReactComponent as ElrondLogo } from './../../../assets/img/elrond-symbol.svg';
 
 const Navbar = () => {
-  const { pathname } = useLocation();
   const { address } = useGetAccountInfo();
 
   const handleLogout = () => {
@@ -18,41 +16,32 @@ const Navbar = () => {
   const isLoggedIn = Boolean(address);
 
   return (
-    <BsNavbar className='bg-white border-bottom px-4 py-3'>
-      <div className='container-fluid'>
-        <Link
-          className='d-flex align-items-center navbar-brand mr-0'
-          to={routeNames.home}
-        >
-          <DappLogo className='dapp-logo' />
+    <div className='bg-white border-bottom px-4 py-3'>
+      <div className='flex flex-row justify-between items-center'>
+        <Link to={routeNames.home} className='flex'>
+          <ElrondLogo className='h-8 mr-2'/>
+          <DappLogo className='h-auto w-48'/>
         </Link>
 
-        <Nav className='m-auto' activeKey={pathname}>
-          <Nav.Link className="mx-3 text-lg text-uppercase font-bold" href={routeNames.kickstart}>Kickstart</Nav.Link>
-          <Nav.Link className="mx-3 text-uppercase font-bold" href={routeNames.fundraise}>Fundraise</Nav.Link>
-          <Nav.Link className="mx-3 text-uppercase font-bold" href={routeNames.tip}>Tip</Nav.Link>
-          <Nav.Link className="mx-3 text-uppercase font-bold" href={routeNames.trade}>Trade</Nav.Link>
-          <Nav.Link className="mx-3 text-uppercase font-bold" href={routeNames.giveaway}>Giveaway</Nav.Link>
-          <Nav.Link className="mx-3 text-uppercase font-bold" href={routeNames.airdrop}>Airdrop</Nav.Link>
-        </Nav>
+
+        <div className='flex flex-row items-center gap-6'>
+          <Link className={navLink} to={routeNames.kickstart}>Kickstart</Link>
+          <Link className={navLink} to={routeNames.fundraise}>Fundraise</Link>
+          <Link className={navLink} to={routeNames.tip}>Tip</Link>
+          <Link className={navLink} to={routeNames.trade}>Trade</Link>
+          <Link className={navLink} to={routeNames.giveaway}>Giveaway</Link>
+          <Link className={navLink} to={routeNames.airdrop}>Airdrop</Link>
+        </div>
 
         {isLoggedIn ? (
-            <NavItem>
-              <a className='btn btn-primary text-white' href={routeNames.home} onClick={handleLogout}>
-                Disconnect
-              </a>
-            </NavItem>
+          <button className={primaryButton} onClick={handleLogout}>Disconnect</button>
           ) : (
-            <Link
-                to={routeNames.unlock}
-                className='btn btn-primary mt-3 text-white'
-                data-testid='loginBtn'
-              >
+            <Link to={routeNames.unlock} className={primaryButton}>
                 Connect
               </Link>
           )}
       </div>
-    </BsNavbar>
+    </div>
   );
 };
 

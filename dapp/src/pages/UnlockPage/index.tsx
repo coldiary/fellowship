@@ -1,6 +1,6 @@
-import React from "react";
-import { DappUI, getIsLoggedIn } from "@elrondnetwork/dapp-core";
-import { routeNames } from "routes";
+import React from 'react';
+import { DappUI, getIsLoggedIn } from '@elrondnetwork/dapp-core';
+import { routeNames } from 'routes';
 
 export const UnlockRoute: () => JSX.Element = () => {
   const {
@@ -27,20 +27,22 @@ export const UnlockRoute: () => JSX.Element = () => {
 
             <ExtensionLoginButton
               callbackRoute={routeNames.dashboard}
-              loginButtonText={"Extension"}
+              className="bg-gray-400"
+              buttonClassName="bg-gray-400"
+              loginButtonText={'Extension'}
             />
             <WebWalletLoginButton
               callbackRoute={routeNames.dashboard}
-              loginButtonText={"Web wallet"}
+              loginButtonText={'Web wallet'}
             />
             <LedgerLoginButton
-              loginButtonText={"Ledger"}
+              loginButtonText={'Ledger'}
               callbackRoute={routeNames.dashboard}
-              className={"test-class_name"}
+              className={'test-class_name'}
             />
             <WalletConnectLoginButton
               callbackRoute={routeNames.dashboard}
-              loginButtonText={"Maiar"}
+              loginButtonText={'Maiar'}
             />
           </div>
         </div>
