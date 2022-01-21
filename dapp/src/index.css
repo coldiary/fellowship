@@ -20,3 +20,16 @@ code {
 a:hover {
   text-decoration: none;
 }
+
+.login-button > span {
+  background: none !important;
+}
+
+.modal-container {
+  background: none !important;
+}
+
+.modal-container .bg-main {
+  background: none !important;
+  color: black !important;;
+}

@@ -1,10 +1,12 @@
 import React from 'react';
 import { logout, useGetAccountInfo } from '@elrondnetwork/dapp-core';
 import { Link } from 'react-router-dom';
-import { navLink, primaryButton } from 'components/styles';
+
+import { navLink } from 'components/styles';
 import { routeNames } from 'routes';
-import { ReactComponent as DappLogo } from './../../../assets/img/logo_light.svg';
-import { ReactComponent as ElrondLogo } from './../../../assets/img/elrond-symbol.svg';
+import { ReactComponent as DappLogo } from 'assets/img/logo_light.svg';
+import { ReactComponent as ElrondLogo } from 'assets/img/elrond-symbol.svg';
+import { WalletConnection } from './WalletConnection';
 
 const Navbar = () => {
   const { address } = useGetAccountInfo();
@@ -33,13 +35,7 @@ const Navbar = () => {
           <Link className={navLink} to={routeNames.airdrop}>Airdrop</Link>
         </div>
 
-        {isLoggedIn ? (
-          <button className={primaryButton} onClick={handleLogout}>Disconnect</button>
-          ) : (
-            <Link to={routeNames.unlock} className={primaryButton}>
-                Connect
-              </Link>
-          )}
+        <WalletConnection />
       </div>
     </div>
   );

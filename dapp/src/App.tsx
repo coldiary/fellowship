@@ -4,13 +4,11 @@ import { Route, Routes, BrowserRouter as Router, Navigate } from 'react-router-d
 import Layout from 'components/Layout';
 import { network, walletConnectBridge, walletConnectDeepLink } from 'config';
 import PageNotFound from 'pages/PageNotFound';
-import { routeNames } from 'routes';
 import routes from 'routes';
 // import '@elrondnetwork/dapp-core/build/index.css';
 
 const {
   TransactionsToastList,
-  DappCorePages: { UnlockPage }
 } = DappUI;
 
 const App = () => {
@@ -23,10 +21,6 @@ const App = () => {
         <Layout>
           <TransactionsToastList />
           <Routes>
-            <Route
-              path={routeNames.unlock}
-              element={<UnlockPage loginRoute={routeNames.dashboard} />}
-            />
             {routes.map((route: any, index: number) => (
               <Route
                 path={route.path}
