@@ -7,6 +7,7 @@ import { routeNames } from 'routes';
 import { ReactComponent as DappLogo } from 'assets/img/logo_light.svg';
 import { ReactComponent as ElrondLogo } from 'assets/img/elrond-symbol.svg';
 import { WalletConnection } from './WalletConnection';
+import ReactTooltip from 'react-tooltip';
 
 const Navbar = () => {
   const { address } = useGetAccountInfo();
@@ -27,13 +28,15 @@ const Navbar = () => {
 
 
         <div className='flex flex-row items-center gap-6'>
-          <Link className={navLink} to={routeNames.kickstart}>Kickstart</Link>
-          <Link className={navLink} to={routeNames.fundraise}>Fundraise</Link>
-          <Link className={navLink} to={routeNames.tip}>Tip</Link>
-          <Link className={navLink} to={routeNames.trade}>Trade</Link>
-          <Link className={navLink} to={routeNames.giveaway}>Giveaway</Link>
-          <Link className={navLink} to={routeNames.airdrop}>Airdrop</Link>
+          <Link data-tip="Coming soon !" data-for="nav" className={navLink} to={'/' /*routeNames.kickstart */}>Kickstart</Link>
+          <Link data-tip="Coming soon !" data-for="nav" className={navLink} to={'/' /*routeNames.giveaway */}>Fundraise</Link>
+          <Link data-for="nav" className={navLink} to={routeNames.tip}>Tip</Link>
+          <Link data-tip="Coming soon !" data-for="nav" className={navLink} to={'/' /*routeNames.trade */}>Trade</Link>
+          <Link data-tip="Coming soon !" data-for="nav" className={navLink} to={'/' /*routeNames.giveaway */}>Giveaway</Link>
+          <Link data-tip="Coming soon !" data-for="nav" className={navLink} to={'/' /*routeNames.airdrop */}>Airdrop</Link>
         </div>
+
+        <ReactTooltip id='nav' place='bottom'/>
 
         <WalletConnection />
       </div>
