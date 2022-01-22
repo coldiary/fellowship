@@ -1,9 +1,9 @@
 {
-    "name": "tips update failure - wrong campaign",
+    "name": "tips end failure - wrong campaign",
     "steps": [
         {
             "step": "externalSteps",
-            "path": "create-success.scen.json"
+            "path": "tip-success.scen.json"
         },
         {
             "step": "scCall",
@@ -11,10 +11,9 @@
             "tx": {
                 "from": "address:alice",
                 "to": "sc:tips",
-                "function": "updateCampaign",
+                "function": "endCampaign",
                 "arguments": [
-                    "2",
-                    "str:test2"
+                    "2"
                 ],
                 "gasLimit": "100,000,000",
                 "gasPrice": "0"
@@ -42,8 +41,8 @@
                     "storage": {}
                 },
                 "address:bob": {
-                    "nonce": "0",
-                    "balance": "1,000,000,000,000,000,000",
+                    "nonce": "1",
+                    "balance": "800,000,000,000,000,000",
                     "esdt": {
                         "str:TEST-123456": "4,000,000",
                         "str:NOPE-987654": "1,000,000"
@@ -52,7 +51,7 @@
                 },
                 "sc:tips": {
                     "nonce": "0",
-                    "balance": "0",
+                    "balance": "200,000,000,000,000,000",
                     "esdt": {},
                     "storage": {
                         "str:nextId": "2",
@@ -60,8 +59,8 @@
                             "0-creator_address": "address:alice",
                             "1-token_identifier": "nested:str:EGLD",
                             "2-metadata_uri": "nested:str:test",
-                            "3-amount": "biguint:0",
-                            "4-claimable": "biguint:0",
+                            "3-amount": "biguint:200,000,000,000,000,000",
+                            "4-claimable": "biguint:200,000,000,000,000,000",
                             "5-status": "0x00"
                         }
                     },

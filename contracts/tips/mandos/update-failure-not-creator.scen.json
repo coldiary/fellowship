@@ -1,5 +1,5 @@
 {
-    "name": "tips update failure - wrong campaign",
+    "name": "tips update failure - not creator",
     "steps": [
         {
             "step": "externalSteps",
@@ -7,13 +7,13 @@
         },
         {
             "step": "scCall",
-            "txId": "updateCampaign-2",
+            "txId": "updateCampaign-3",
             "tx": {
-                "from": "address:alice",
+                "from": "address:bob",
                 "to": "sc:tips",
                 "function": "updateCampaign",
                 "arguments": [
-                    "2",
+                    "1",
                     "str:test2"
                 ],
                 "gasLimit": "100,000,000",
@@ -22,7 +22,7 @@
             "expect": {
                 "out": [],
                 "status": "4",
-                "message": "str:This campaign does not exist",
+                "message": "str:Only the creator of the campaign can update it",
                 "gas": "*",
                 "refund": "*"
             }
@@ -36,13 +36,13 @@
                     "storage": {}
                 },
                 "address:alice": {
-                    "nonce": "2",
+                    "nonce": "1",
                     "balance": "10,000,000,000,000,000,000",
                     "esdt": {},
                     "storage": {}
                 },
                 "address:bob": {
-                    "nonce": "0",
+                    "nonce": "1",
                     "balance": "1,000,000,000,000,000,000",
                     "esdt": {
                         "str:TEST-123456": "4,000,000",
