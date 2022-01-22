@@ -15,6 +15,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "list files"
+          command: "ls -la"
+      - run:
           name: "Build tips contract"
           command: "cd fellowship/contracts/tips && erdpy contract build"
       - run:
