@@ -19,10 +19,10 @@ jobs:
           command: "ls -la"
       - run:
           name: "Build tips contract"
-          command: "cd fellowship/contracts/tips && erdpy contract build"
+          command: "cd contracts/tips && erdpy contract build"
       - run:
           name: "Test tips contract"
-          command: "cd fellowship/contracts/tips && erdpy contract test"
+          command: "cd contracts/tips && erdpy contract test"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
