@@ -8,7 +8,9 @@ module.exports = {
           lighter: '#9091b6',
           DEFAULT: '#585a88',
           darker: '#30314a'
-        }
+        },
+        whitee: '#ffffff',
+        darkee: '#333333',
       }
     },
   },

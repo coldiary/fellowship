@@ -19,7 +19,7 @@ interface ItemProps {
 
 const Item: FC<ItemProps> = (props) => (
   <Link to={props.link} className='bg-white border rounded-xl p-6 hover:shadow-md'>
-    <div className="h-full flex flex-col items-center" {...(props.tooltip ? {
+    <div className="h-full flex flex-col items-center hover:text-main"  {...(props.tooltip ? {
       'data-tip': props.tooltip,
       'data-for': 'home',
     }: {})}>
@@ -27,7 +27,7 @@ const Item: FC<ItemProps> = (props) => (
         <img className='h-full' src={props.illustration} alt="" />
       </div>
       <div className="m-6 flex-auto flex justify-center items-center">
-        <div className='text-2xl font-medium text-center hover:text-main'>
+        <div className='text-2xl font-medium text-center'>
           {props.title}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { dAppName } from 'config';
+import { Tip } from 'pages/Tip';
 import withPageTitle from './components/PageTitle';
-import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Transaction from './pages/Transaction';
 
@@ -26,16 +26,15 @@ const routes: Array<any> = [
     component: Home
   },
   {
-    path: routeNames.dashboard,
-    title: 'Dashboard',
-    component: Dashboard,
-    authenticatedRoute: true
+    path: routeNames.tip,
+    title: 'Tip',
+    component: Tip
   },
-  {
-    path: routeNames.transaction,
-    title: 'Transaction',
-    component: Transaction
-  }
+  // {
+  //   path: routeNames.transaction,
+  //   title: 'Transaction',
+  //   component: Transaction
+  // }
 ];
 
 const mappedRoutes = routes.map((route) => {
