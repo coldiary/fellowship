@@ -1,0 +1,72 @@
+{
+    "name": "tips end failure - campaign ended",
+    "steps": [
+        {
+            "step": "externalSteps",
+            "path": "end-success.scen.json"
+        },
+        {
+            "step": "scCall",
+            "txId": "endCampaign-4",
+            "tx": {
+                "from": "address:alice",
+                "to": "sc:tips",
+                "function": "endCampaign",
+                "arguments": [
+                    "1"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "4",
+                "message": "str:This campaign has ended",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000",
+                    "storage": {}
+                },
+                "address:alice": {
+                    "nonce": "3",
+                    "balance": "10,200,000,000,000,000,000",
+                    "esdt": {},
+                    "storage": {}
+                },
+                "address:bob": {
+                    "nonce": "1",
+                    "balance": "800,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "4,000,000",
+                        "str:NOPE-987654": "1,000,000"
+                    },
+                    "storage": {}
+                },
+                "sc:tips": {
+                    "nonce": "0",
+                    "balance": "0",
+                    "esdt": {},
+                    "storage": {
+                        "str:nextId": "2",
+                        "str:campaigns|u64:1": {
+                            "0-creator_address": "address:alice",
+                            "1-token_identifier": "nested:str:EGLD",
+                            "2-metadata_uri": "nested:str:test",
+                            "3-amount": "biguint:200,000,000,000,000,000",
+                            "4-claimable": "biguint:0",
+                            "5-status": "0x01"
+                        }
+                    },
+                    "code": "file:../output/tips.wasm"
+                }
+            }
+        }
+    ]
+}

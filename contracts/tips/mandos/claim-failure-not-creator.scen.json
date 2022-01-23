@@ -1,0 +1,72 @@
+{
+    "name": "tips claim failure - not creator",
+    "steps": [
+        {
+            "step": "externalSteps",
+            "path": "tip-success.scen.json"
+        },
+        {
+            "step": "scCall",
+            "txId": "claimCampaign-3",
+            "tx": {
+                "from": "address:bob",
+                "to": "sc:tips",
+                "function": "claimCampaign",
+                "arguments": [
+                    "1"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "4",
+                "message": "str:Only the creator of the campaign can claim funds",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000",
+                    "storage": {}
+                },
+                "address:alice": {
+                    "nonce": "1",
+                    "balance": "10,000,000,000,000,000,000",
+                    "esdt": {},
+                    "storage": {}
+                },
+                "address:bob": {
+                    "nonce": "2",
+                    "balance": "800,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "4,000,000",
+                        "str:NOPE-987654": "1,000,000"
+                    },
+                    "storage": {}
+                },
+                "sc:tips": {
+                    "nonce": "0",
+                    "balance": "200,000,000,000,000,000",
+                    "esdt": {},
+                    "storage": {
+                        "str:nextId": "2",
+                        "str:campaigns|u64:1": {
+                            "0-creator_address": "address:alice",
+                            "1-token_identifier": "nested:str:EGLD",
+                            "2-metadata_uri": "nested:str:test",
+                            "3-amount": "biguint:200,000,000,000,000,000",
+                            "4-claimable": "biguint:200,000,000,000,000,000",
+                            "5-status": "0x00"
+                        }
+                    },
+                    "code": "file:../output/tips.wasm"
+                }
+            }
+        }
+    ]
+}

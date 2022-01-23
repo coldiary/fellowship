@@ -56,6 +56,7 @@ pub trait Tips {
         require!(!self.campaigns(&campaign_id).is_empty(), "This campaign does not exist");
 
         let mut campaign = self.campaigns(&campaign_id).get();
+        require!(campaign.status == Status::Active, "This campaign has ended");
         require!(caller == campaign.creator_address, "Only the creator of the campaign can update it");
 
         campaign.metadata_uri = metadata_uri;
@@ -74,6 +75,7 @@ pub trait Tips {
         require!(!self.campaigns(&campaign_id).is_empty(), "This campaign does not exist");
 
         let mut campaign = self.campaigns(&campaign_id).get();
+        require!(campaign.status == Status::Active, "This campaign has ended");
         require!(caller == campaign.creator_address, "Only the creator of the campaign can close it");
 
         let token_identifier = &campaign.token_identifier;
@@ -88,7 +90,7 @@ pub trait Tips {
         Ok(())
     }
 
-    #[endpoint(claim)]
+    #[endpoint(claimCampaign)]
     fn claim(
         &self,
         campaign_id: u64,
@@ -98,6 +100,7 @@ pub trait Tips {
         require!(!self.campaigns(&campaign_id).is_empty(), "This campaign does not exist");
 
         let mut campaign = self.campaigns(&campaign_id).get();
+        require!(campaign.status == Status::Active, "This campaign has ended");
         require!(caller == campaign.creator_address, "Only the creator of the campaign can claim funds");
 
         let token_identifier = &campaign.token_identifier;

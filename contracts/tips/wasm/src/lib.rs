@@ -8,7 +8,7 @@ elrond_wasm_node::wasm_endpoints! {
     tips
     (
         init
-        claim
+        claimCampaign
         createCampaign
         endCampaign
         tip
