@@ -2,7 +2,7 @@ import { dAppName } from 'config';
 import { Tip } from 'pages/Tip';
 import withPageTitle from './components/PageTitle';
 import Home from './pages/Home';
-import Transaction from './pages/Transaction';
+// import Transaction from './pages/Transaction';
 
 export const routeNames = {
   home: '/home',

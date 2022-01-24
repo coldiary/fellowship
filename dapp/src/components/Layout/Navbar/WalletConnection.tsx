@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { logout, useGetAccountInfo } from '@elrondnetwork/dapp-core';
 import { Ui } from '@elrondnetwork/dapp-utils';
 import { Popover } from 'react-tiny-popover';
@@ -37,6 +37,10 @@ export const WalletConnection = () => {
 
     const getTokenShortName = (ticker: string) => ticker.slice(0, ticker.indexOf('-'));
     const getShortHash = (hash: string) => `${hash.slice(0, 5)}...${hash.slice(-5)}`;
+
+    useEffect(() => {
+        console.log(transactions);
+    }, [transactions]);
 
     return isLoggedIn ? (
         <Popover
@@ -85,7 +89,7 @@ export const WalletConnection = () => {
                                             {
                                             tr.status === 'success' ?
                                                 <SuccessIcon title='Successful' /> :
-                                            tr.status === 'failed' ?
+                                            tr.status === 'fail' ?
                                                 <FailureIcon title='Failed' /> :
                                                 <PendingIcon title='Pending' />
                                             }

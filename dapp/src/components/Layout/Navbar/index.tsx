@@ -1,23 +1,14 @@
 import React from 'react';
-import { logout, useGetAccountInfo } from '@elrondnetwork/dapp-core';
 import { Link, NavLink } from 'react-router-dom';
 
+import ReactTooltip from 'react-tooltip';
+import { ReactComponent as ElrondLogo } from 'assets/img/elrond-symbol.svg';
+import { ReactComponent as DappLogo } from 'assets/img/logo_light.svg';
 import { navLink } from 'components/styles';
 import { routeNames } from 'routes';
-import { ReactComponent as DappLogo } from 'assets/img/logo_light.svg';
-import { ReactComponent as ElrondLogo } from 'assets/img/elrond-symbol.svg';
 import { WalletConnection } from './WalletConnection';
-import ReactTooltip from 'react-tooltip';
 
 const Navbar = () => {
-  const { address } = useGetAccountInfo();
-
-  const handleLogout = () => {
-    logout(`${window.location.origin}/unlock`);
-  };
-
-  const isLoggedIn = Boolean(address);
-
   const navLinkClass = (props: { isActive: boolean }) => `${navLink} ${props.isActive ? 'text-main' : ''} `;
 
   return (
