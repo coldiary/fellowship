@@ -21,6 +21,23 @@ pub trait Tips {
         Ok(())
     }
 
+    #[view(getAllCampaigns)]
+    fn get_all_campaigns(
+        &self,
+    ) -> Vec<(u64, CampaignData<Self::Api>)> {
+        let mut all = Vec::new();
+        let count = self.next_id().get();
+
+        for n in 1..count {
+            if !self.campaigns(&n).is_empty() {
+                let campaign = self.campaigns(&n).get();
+                all.push((n, campaign));
+            }
+        }
+
+        all
+    }
+
     #[endpoint(createCampaign)]
     fn create_campaign(
         &self,

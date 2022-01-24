@@ -1,0 +1,65 @@
+{
+    "name": "tips query all campaigns",
+    "steps": [
+        {
+            "step": "externalSteps",
+            "path": "create-success.scen.json"
+        },
+        {
+            "step": "scCall",
+            "txId": "createCampaign-2",
+            "tx": {
+                "from": "address:alice",
+                "to": "sc:tips",
+                "function": "createCampaign",
+                "arguments": [
+                    "str:test",
+                    "str:EGLD"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": ["2"],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scQuery",
+            "tx": {
+                "to": "sc:tips",
+                "function": "getAllCampaigns",
+                "arguments": []
+            },
+            "expect": {
+                "out": [
+                    [
+                        "u64:1",
+                        {
+                            "0-creator_address": "address:alice",
+                            "1-token_identifier": "nested:str:EGLD",
+                            "2-metadata_uri": "nested:str:test",
+                            "3-amount": "biguint:0",
+                            "4-claimable": "biguint:0",
+                            "5-status": "0x00"
+                        },
+                        "u64:2",
+                        {
+                            "0-creator_address": "address:alice",
+                            "1-token_identifier": "nested:str:EGLD",
+                            "2-metadata_uri": "nested:str:test",
+                            "3-amount": "biguint:0",
+                            "4-claimable": "biguint:0",
+                            "5-status": "0x00"
+                        }
+                    ]
+                ],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        }
+    ]
+}
