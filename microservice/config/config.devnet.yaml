@@ -1,0 +1,16 @@
+urls:
+  api: 'https://devnet-api.elrond.com'
+  ipfs: 'https://ipfs.io/ipfs'
+  swagger:
+    - 'https://devnet-microservice.elrond.com'
+    - 'https://testnet-microservice.elrond.com'
+    - 'https://microservice.elrond.com'
+  redis: '127.0.0.1'
+features:
+  publicApi: true
+  privateApi: true
+  transactionProcessor: true
+security:
+  jwtSecret: ''
+contracts:
+  tips: 'erd1qqqqqqqqqqqqqpgqremaaqc6z25j4tv8w0u4ke9qqqrw6r3du4aqkygha9'

@@ -1,0 +1,166 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.60.0-nightly",
+            "commitHash": "bfe15646761a75f0259e204cab071565eed2b1e5",
+            "commitDate": "2022-01-22",
+            "channel": "Nightly",
+            "short": "rustc 1.60.0-nightly (bfe156467 2022-01-22)"
+        },
+        "contractCrate": {
+            "name": "tips",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "elrond-wasm",
+            "version": "0.26.0"
+        }
+    },
+    "name": "Tips",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "campaigns",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "CampaignData"
+                }
+            ]
+        },
+        {
+            "name": "getAllCampaigns",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "List<tuple<u64,CampaignData>>"
+                }
+            ]
+        },
+        {
+            "name": "createCampaign",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "metadata_cid",
+                    "type": "bytes"
+                },
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "updateCampaign",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "campaign_id",
+                    "type": "u64"
+                },
+                {
+                    "name": "metadata_cid",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "endCampaign",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "campaign_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "claimCampaign",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "campaign_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "tip",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "campaign_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        }
+    ],
+    "hasCallback": false,
+    "types": {
+        "CampaignData": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "creator_address",
+                    "type": "Address"
+                },
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "metadata_cid",
+                    "type": "bytes"
+                },
+                {
+                    "name": "amount",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "claimable",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "status",
+                    "type": "Status"
+                }
+            ]
+        },
+        "Status": {
+            "type": "enum",
+            "variants": [
+                {
+                    "name": "Active",
+                    "discriminant": 0
+                },
+                {
+                    "name": "Ended",
+                    "discriminant": 1
+                }
+            ]
+        }
+    }
+}
