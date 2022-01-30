@@ -49,7 +49,7 @@
                         {
                             "0-creator_address": "address:alice",
                             "1-token_identifier": "nested:str:EGLD",
-                            "2-metadata_uri": "nested:str:test",
+                            "2-metadata_cid": "nested:str:test",
                             "3-amount": "biguint:0",
                             "4-claimable": "biguint:0",
                             "5-status": "0x00"

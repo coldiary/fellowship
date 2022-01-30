@@ -15,7 +15,7 @@ pub enum Status {
 pub struct CampaignData<M: ManagedTypeApi> {
     pub creator_address: ManagedAddress<M>,
     pub token_identifier: TokenIdentifier<M>,
-    pub metadata_uri: ManagedBuffer<M>,
+    pub metadata_cid: ManagedBuffer<M>,
     pub amount: BigUint<M>,
     pub claimable: BigUint<M>,
     pub status: Status,

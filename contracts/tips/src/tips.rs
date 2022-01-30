@@ -12,6 +12,7 @@ pub trait Tips {
     #[storage_mapper("nextId")]
     fn next_id(&self) -> SingleValueMapper<u64>;
 
+    #[view]
     #[storage_mapper("campaigns")]
     fn campaigns(&self, id: &u64) -> SingleValueMapper<CampaignData<Self::Api>>;
 
@@ -41,7 +42,7 @@ pub trait Tips {
     #[endpoint(createCampaign)]
     fn create_campaign(
         &self,
-        metadata_uri: ManagedBuffer,
+        metadata_cid: ManagedBuffer,
         token_identifier: TokenIdentifier,
     ) -> SCResult<u64> {
         require!(token_identifier.is_egld() || token_identifier.is_valid_esdt_identifier(), "Invalid token identifier provided");
@@ -49,7 +50,7 @@ pub trait Tips {
         let campaign = CampaignData {
             creator_address: self.blockchain().get_caller(),
             token_identifier,
-            metadata_uri,
+            metadata_cid,
             amount: BigUint::zero(),
             claimable: BigUint::zero(),
             status: Status::Active,
@@ -66,7 +67,7 @@ pub trait Tips {
     fn update_campaign(
         &self,
         campaign_id: u64,
-        metadata_uri: ManagedBuffer,
+        metadata_cid: ManagedBuffer,
     ) -> SCResult<()> {
         let caller = self.blockchain().get_caller();
 
@@ -76,7 +77,7 @@ pub trait Tips {
         require!(campaign.status == Status::Active, "This campaign has ended");
         require!(caller == campaign.creator_address, "Only the creator of the campaign can update it");
 
-        campaign.metadata_uri = metadata_uri;
+        campaign.metadata_cid = metadata_cid;
         self.campaigns(&campaign_id).set(&campaign);
 
         Ok(())
