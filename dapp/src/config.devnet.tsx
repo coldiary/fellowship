@@ -27,6 +27,7 @@ export const dAppName = 'Dapp';
 
 export const proxyAddress = 'http://localhost:3001';
 export const nftStorageApiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDI0NzI4MDdFQTc4YzhGN2M4NTU0RWYyZDlDMzYxMDQwODU0OTc0RDkiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0Mjk5NjgwOTg1NiwibmFtZSI6ImZlbGxvd3NoaXAifQ.Ntaf_Ckf4D38SpRqWwOTJ4dXI_-Q3UYECrQNzOvi_Ck';
+export const ipfsGateway = 'http://127.0.0.1:8080/ipfs';
 
 export const network: NetworkType & {
   graphQlAddress: string;

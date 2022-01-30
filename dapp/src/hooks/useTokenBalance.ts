@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { network } from 'config';
-import { Token } from 'types/Token';
+import { TokenAsset } from 'types/Token';
 
-async function fetchTokenBalanceFor(address: string): Promise<Token[]> {
+async function fetchTokenBalanceFor(address: string): Promise<TokenAsset[]> {
   if (!address) return [];
   const res = await fetch(`${network.apiAddress}/accounts/${address}/tokens`);
   const data = await res.json();
@@ -10,7 +10,7 @@ async function fetchTokenBalanceFor(address: string): Promise<Token[]> {
 }
 
 export default function useTokenBalance(address: string) {
-  const [tokens, setBalance] = useState<Token[]>([]);
+  const [tokens, setBalance] = useState<TokenAsset[]>([]);
 
   useEffect(() => {
     (async () => {

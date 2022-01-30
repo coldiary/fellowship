@@ -1,23 +1,17 @@
 import React from 'react';
-import { DappUI, getIsLoggedIn } from '@elrondnetwork/dapp-core';
+import { DappUI } from '@elrondnetwork/dapp-core';
+import { useLocation } from 'react-router-dom';
 
 import { primaryButton } from 'components/styles';
-import { routeNames } from 'routes';
 
 export const UnlockView: () => JSX.Element = () => {
+  const { pathname } = useLocation();
   const {
     ExtensionLoginButton,
     WebWalletLoginButton,
     LedgerLoginButton,
     WalletConnectLoginButton,
   } = DappUI;
-
-  React.useEffect(() => {
-    const isLoggedIn = getIsLoggedIn();
-    if (isLoggedIn) {
-      window.location.href = routeNames.dashboard;
-    }
-  }, []);
 
   return (
     <div className='h-full flex justify-center items-center'>
@@ -29,36 +23,33 @@ export const UnlockView: () => JSX.Element = () => {
 
             <div className="flex flex-row gap-4">
               <ExtensionLoginButton
-                callbackRoute={routeNames.dashboard}
+                callbackRoute={pathname}
                 className={`${primaryButton} px-3 py-2 login-button `}
                 shouldRenderDefaultCss={false}
                 loginButtonText={'Extension'}
               />
               <WebWalletLoginButton
-                callbackRoute={routeNames.dashboard}
+                callbackRoute={pathname}
                 className={`${primaryButton} px-3 py-2 login-button `}
                 shouldRenderDefaultCss={false}
                 loginButtonText={'Web wallet'}
               />
               <LedgerLoginButton
                 loginButtonText={'Ledger'}
-                callbackRoute={routeNames.dashboard}
+                callbackRoute={pathname}
                 className={`${primaryButton} px-3 py-2 login-button `}
                 shouldRenderDefaultCss={false}
               />
               <WalletConnectLoginButton
-                callbackRoute={routeNames.dashboard}
+                callbackRoute={pathname}
                 className={`${primaryButton} px-3 py-2 login-button `}
                 shouldRenderDefaultCss={false}
                 loginButtonText={'Maiar'}
               />
             </div>
-
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-export default UnlockView;

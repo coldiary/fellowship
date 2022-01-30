@@ -1,40 +1,36 @@
 import React from 'react';
 import { DappProvider, DappUI } from '@elrondnetwork/dapp-core';
-import { Route, Routes, BrowserRouter as Router, Navigate } from 'react-router-dom';
+import { Route, Routes, BrowserRouter as Router, Outlet } from 'react-router-dom';
+
 import Layout from 'components/Layout';
 import { network, walletConnectBridge, walletConnectDeepLink } from 'config';
+import Home from 'pages/Home';
 import PageNotFound from 'pages/PageNotFound';
-import routes from 'routes';
-// import '@elrondnetwork/dapp-core/build/index.css';
+import { Tip } from 'pages/Tip';
 
 const {
-  TransactionsToastList,
+    TransactionsToastList,
 } = DappUI;
 
 const App = () => {
-  return (
-    <Router>
-      <DappProvider
-        networkConfig={{ network, walletConnectBridge, walletConnectDeepLink }}
-        modalClassName='custom-class-for-modals'
-      >
-        <Layout>
-          <TransactionsToastList />
-          <Routes>
-            {routes.map((route: any, index: number) => (
-              <Route
-                path={route.path}
-                key={'route-key-' + index}
-                element={<route.component />}
-              />
-            ))}
-            <Route path="/" element={<Navigate to="/home" />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </Layout>
-      </DappProvider>
-    </Router>
-  );
+    return (
+        <Router>
+            <DappProvider networkConfig={{ network, walletConnectBridge, walletConnectDeepLink }}>
+                <Routes>
+                    <Route path="/" element={(
+                        <Layout>
+                            <TransactionsToastList shouldRenderDefaultCss={false} />
+                            <Outlet/>
+                        </Layout>
+                    )}>
+                        <Route index element={<Home />} />
+                        <Route path="tip/*" element={<Tip />} />
+                        <Route path="*" element={<PageNotFound />} />
+                    </Route>
+                </Routes>
+            </DappProvider>
+        </Router>
+    );
 };
 
 export default App;

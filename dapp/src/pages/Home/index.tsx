@@ -8,7 +8,6 @@ import GiveawayImg from 'assets/img/home/giveaway.svg';
 import KickstartImg from 'assets/img/home/kickstart.svg';
 import TipImg from 'assets/img/home/tip.svg';
 import TradeImg from 'assets/img/home/trade.svg';
-import { routeNames } from 'routes';
 
 interface ItemProps {
   illustration: string;
@@ -40,11 +39,11 @@ const Home = () => {
     <div className='max-w-screen-2xl mx-auto my-4 p-10 w-full flex-auto'>
       <div className="grid grid-cols-3 gap-12">
         <Item tooltip="Coming soon !" link={'/' /*routeNames.kickstart */} illustration={KickstartImg} title='Start your project with funds from the community'></Item>
-        <Item tooltip="Coming soon !" link={'/' /*routeNames.giveaway */} illustration={FundImg} title='Collect funds for a cause'></Item>
-        <Item link={routeNames.tip} illustration={TipImg} title='Support your favorite creators and builders'></Item>
+        <Item tooltip="Coming soon !" link={'/' /*routeNames.giveaway */} illustration={FundImg} title='Collect funds for people in needs'></Item>
+        <Item link="/tip" illustration={TipImg} title='Support your favorite creators and builders'></Item>
         <Item tooltip="Coming soon !" link={'/' /*routeNames.trade */} illustration={TradeImg} title='Trade you assets with confidence'></Item>
         <Item tooltip="Coming soon !" link={'/' /*routeNames.giveaway */} illustration={GiveawayImg} title='Make your followers win assets in a fair way'></Item>
-        <Item tooltip="Coming soon !" link={'/' /*routeNames.airdrop */} illustration={AirdropImg} title='Distribute assets easily'></Item>
+        <Item tooltip="Coming soon !" link={'/' /*routeNames.airdrop */} illustration={AirdropImg} title='Distribute assets easily to your community'></Item>
       </div>
       <ReactTooltip id='home' place='top'/>
     </div>
