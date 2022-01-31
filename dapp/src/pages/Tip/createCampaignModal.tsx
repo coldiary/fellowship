@@ -6,10 +6,12 @@ import { uploadToIPFS } from 'api/ipfs';
 import { createCampaign } from 'api/tips/createCampaign';
 import { ReactComponent as MinusCircleIcon } from 'assets/img/minus-circle.svg';
 import { ReactComponent as UploadImg } from 'assets/img/upload.svg';
+import { CurrencySelect } from 'components/CurrencySelect';
 import { pictureFloatingTextAction, primaryButton } from 'components/styles';
 
 export const CreateCampaignModal = () => {
     const [file, setFile] = useState<(File & { preview: string }) | null>(null);
+    const [currency, setCurrency] = useState('EGLD');
     const submit = async (data: any) => {
         const illustration = file && await uploadToIPFS(data.illustration);
         const metadata = JSON.stringify({
@@ -20,10 +22,7 @@ export const CreateCampaignModal = () => {
         });
 
         const metadata_cid = await uploadToIPFS(metadata);
-        await createCampaign(
-            `https://ipfs.io/ipfs/${metadata_cid}`,
-            data.currency === 'EGLD' ? '' : data.currency,
-        );
+        await createCampaign(metadata_cid, currency === 'EGLD' ? '' : currency);
     };
 
     const removeFile = () => {
@@ -83,11 +82,15 @@ export const CreateCampaignModal = () => {
                                 {errors.title?.type === 'required' && (<div className="text-red-400">Title is required</div>)}
                             </div>
 
-                            <div>
+                            <div className='flex-shrink-0 w-48'>
                                 <label className="block text-sm font-medium text-gray-700">Currency</label>
-                                <select {...register('currency', { required: true })} className='border p-2 rounded-md'>
-                                    <option>EGLD</option>
-                                </select>
+                                <CurrencySelect onChange={setCurrency} defaultCurrency={currency} />
+                                {/* <select {...register('currency', { required: true })} className='border p-2 rounded-md'>
+                                    <option>
+                                        <img className='w-4 h-4 object-contain' src={elrondSymbol} />
+                                        EGLD
+                                    </option>
+                                </select> */}
                             </div>
                         </div>
                     </div>

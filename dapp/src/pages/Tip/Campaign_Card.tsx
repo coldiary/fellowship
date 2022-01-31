@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useContext, useMemo } from 'react';
 import { DappUI } from '@elrondnetwork/dapp-core';
 import { Link } from 'react-router-dom';
 import Truncate from 'react-truncate';
 
 import { ReactComponent as Loader } from 'assets/img/loader.svg';
+import { TokensContext } from 'contexts/Tokens';
 import { Campaign } from 'types/Tips';
 import { useCampaign } from './useCampaign';
 
@@ -13,6 +14,11 @@ interface Props {
 
 export const CampaignCard: FC<Props> = ({ campaign }) => {
     const [, metadata, illustrationUri] = useCampaign({ campaign });
+    const { get } = useContext(TokensContext);
+
+    const token = useMemo(() => {
+        return get(campaign.token_identifier);
+    }, []);
 
     return (
         <div className='border bg-white rounded-md overflow-hidden transition ease-in-out transform hover:scale-105 cursor-pointer'>
@@ -32,7 +38,7 @@ export const CampaignCard: FC<Props> = ({ campaign }) => {
                         </p>
                         <div className="flex-auto"></div>
                         <div className="mt-4 flex flex-row justify-end">
-                            <DappUI.Denominate value={campaign.amount} decimals={2} denomination={18} />
+                            <DappUI.Denominate value={campaign.amount} token={token?.name ?? '-'} decimals={2} denomination={token?.decimals ?? 18} />
                         </div>
                     </div>
                 </Link>

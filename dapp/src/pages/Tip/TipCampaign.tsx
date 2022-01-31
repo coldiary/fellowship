@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useGetAccountInfo, DappUI } from '@elrondnetwork/dapp-core';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -23,6 +23,11 @@ export const TipCampaign = () => {
     const [editModalShown, openEditModal, closeEditModal] = useModal();
     const [endModalShown, openEndModal, closeEndModal] = useModal();
 
+    const token = useMemo(() => {
+        if (!campaign) return;
+        return getToken(campaign.token_identifier);
+    }, [campaign]);
+
     const claim = async () => {
         if (!campaign) return;
         await claimCampaign(campaign.id);
@@ -33,7 +38,6 @@ export const TipCampaign = () => {
         if (campaign.token_identifier === 'EGLD') {
             await tipCampaign(campaign.id, +data.amount * Math.pow(10, 18));
         } else {
-            const token = getToken(campaign.token_identifier);
             if (!token) {
                 console.error('Unknown token identifier');
                 return;
@@ -74,7 +78,7 @@ export const TipCampaign = () => {
                         <div className="flex flex-col gap-2">
                             <div className="text-xl font-medium">Total amount collected :</div>
                             <div className="text-4xl text-right">
-                                <DappUI.Denominate value={campaign.amount} decimals={2} denomination={18} />
+                                <DappUI.Denominate value={campaign.amount} token={token?.name ?? '-'} decimals={2} denomination={token?.decimals ?? 18} />
                             </div>
                         </div>
 
@@ -99,9 +103,9 @@ export const TipCampaign = () => {
                                 <div className="flex flex-col gap-2">
                                     <div className="text-xl font-medium">Claimable :</div>
                                     <div className="text-4xl text-right">
-                                        <DappUI.Denominate value={campaign.claimable} decimals={2} denomination={18} />
+                                        <DappUI.Denominate value={campaign.claimable} token={token?.name ?? '-'} decimals={2} denomination={token?.decimals ?? 18} />
                                     </div>
-                                    <button className={primaryButton} onClick={claim} disabled={campaign.claimable === '0'}>Claim</button>
+                                    <button className={primaryButton} onClick={claim}  disabled={campaign.claimable === '0'}>Claim</button>
                                 </div>
                             ) : (
                                 <form onSubmit={handleSubmit(fund)}>
