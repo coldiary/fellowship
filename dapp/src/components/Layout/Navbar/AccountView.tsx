@@ -60,6 +60,9 @@ export const AccountView = () => {
                         <DappUI.Denominate key={token.identifier} value={token.balance} decimals={2} token={getTokenShortName(token.ticker)}
                             showLastNonZeroDecimal={false} denomination={token.decimals} />
                     ))}
+                    { !tokens.length && (
+                        <>No tokens yet</>
+                    )}
                 </div>
             </div>
 
@@ -80,7 +83,7 @@ export const AccountView = () => {
                             </div>
                             <div className='w-6 flex-shrink-0 text-center'>-</div>
                             <div className='flex-auto overflow-hidden overflow-ellipsis whitespace-nowrap'>
-                                {tr.action.description}
+                                {tr.action?.description}
                             </div>
                             <button title='Open in explorer' className="w-6 ml-2" onClick={() => openExplorer(tr.txHash)}>
                                 <ExplorerIcon />

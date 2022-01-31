@@ -21,16 +21,19 @@ export const CampaignCard: FC<Props> = ({ campaign }) => {
                     <Loader className='m-auto w-10'/>
                 </div>
             ) : (
-                <Link to={`${campaign.id}`} className='hover:text-main'>
+                <Link to={`${campaign.id}`} className='h-full flex flex-col hover:text-main'>
                     <img className='h-32 w-full object-cover' src={illustrationUri ?? ''} />
-                    <div className="p-6">
+                    <div className="flex-auto p-6 flex flex-col">
                         <div className="mb-4 flex flex-row justify-between items-center">
                             <div className="text-xl">{metadata.title}</div>
-                            <DappUI.Denominate value={campaign.amount} denomination={18} />
                         </div>
                         <p className='text-sm text-gray-500'>
                             <Truncate lines={3}>{metadata.description}</Truncate>
                         </p>
+                        <div className="flex-auto"></div>
+                        <div className="mt-4 flex flex-row justify-end">
+                            <DappUI.Denominate value={campaign.amount} decimals={2} denomination={18} />
+                        </div>
                     </div>
                 </Link>
             )}

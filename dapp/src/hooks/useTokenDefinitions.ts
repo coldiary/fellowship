@@ -2,19 +2,18 @@ import { useState, useEffect } from 'react';
 import { proxyAddress } from 'config';
 import { TokenDefinition } from 'types/Token';
 
-async function fetchTokenDefinitions(address: string): Promise<TokenDefinition[]> {
-  if (!address) return [];
+async function fetchTokenDefinitions(): Promise<TokenDefinition[]> {
   const res = await fetch(`${proxyAddress}/tokens`);
   const data = await res.json();
   return data;
 }
 
-export default function useTokenDefinitons(address: string) {
-  const [tokens, setTokens] = useState<any>([]);
+export default function useTokenDefinitons() {
+  const [tokens, setTokens] = useState<TokenDefinition[]>([]);
 
   useEffect(() => {
     (async () => {
-      console.log(await fetchTokenDefinitions(address));
+      setTokens(await fetchTokenDefinitions());
     })().catch(() => setTokens([]));
   }, []);
 

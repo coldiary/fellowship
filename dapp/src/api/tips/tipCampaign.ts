@@ -2,13 +2,14 @@ import { refreshAccount, transactionServices } from '@elrondnetwork/dapp-core';
 import { contractAdresses } from 'config';
 import { encodeToHex } from 'utils/hex';
 
-export const claimCampaign = async (id: number) => {
+export const tipCampaign = async (id: number, amount: number) => {
     const { sendTransactions } = transactionServices;
 
     await refreshAccount();
 
     const { sessionId, error } = await sendTransactions({ transactions: [{
-        data: `claimCampaign@${encodeToHex(id)}`,
+        value: amount,
+        data: `tip@${encodeToHex(id)}`,
         receiver: contractAdresses.tips,
     }] });
 

@@ -1,38 +1,45 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useGetAccountInfo, DappUI } from '@elrondnetwork/dapp-core';
+import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
-import { endCampaign } from 'api/tips/endCampaign';
+import { endCampaign, claimCampaign } from 'api/tips';
+import { tipCampaign } from 'api/tips/tipCampaign';
 import { ReactComponent as Loader } from 'assets/img/loader.svg';
-import { ConfirmModal, Modal, useModal } from 'components/Layout/Modal';
+import { Modal, ConfirmModal, useModal } from 'components/Layout/Modal';
 import { primaryButton, secondaryButton } from 'components/styles';
+import { TokensContext } from 'contexts/Tokens';
 import { CampaignStatus } from 'types/Tips';
 import { EditCampaignModal } from './EditCampaignModal';
 import { useCampaign } from './useCampaign';
 
-
 export const TipCampaign = () => {
     const { id } = useParams();
     const { address } = useGetAccountInfo();
+    const { get: getToken } = useContext(TokensContext);
 
     const [campaign, metadata, illustrationUri] = useCampaign({ id: id ? +id : undefined });
-    const [
-        editModalShown,
-        openEditModal,
-        closeEditModal,
-    ] = useModal();
-
-    const [
-        endModalShown,
-        openEndModal,
-        closeEndModal,
-    ] = useModal();
+    const [editModalShown, openEditModal, closeEditModal] = useModal();
+    const [endModalShown, openEndModal, closeEndModal] = useModal();
 
     const claim = async () => {
         if (!campaign) return;
-
         await claimCampaign(campaign.id);
+    };
+
+    const fund = async (data: any) => {
+        if (!campaign) return;
+        if (campaign.token_identifier === 'EGLD') {
+            await tipCampaign(campaign.id, +data.amount * Math.pow(10, 18));
+        } else {
+            const token = getToken(campaign.token_identifier);
+            if (!token) {
+                console.error('Unknown token identifier');
+                return;
+            }
+            await tipCampaign(campaign.id, +data.amount * Math.pow(10, token.decimals));
+        }
     };
 
     const onCloseEndModal = async (confirm: boolean) => {
@@ -45,6 +52,7 @@ export const TipCampaign = () => {
         }
     };
 
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const isCreator = campaign?.creator_address === address;
 
     return (
@@ -66,7 +74,7 @@ export const TipCampaign = () => {
                         <div className="flex flex-col gap-2">
                             <div className="text-xl font-medium">Total amount collected :</div>
                             <div className="text-4xl text-right">
-                                <DappUI.Denominate value={campaign.amount} denomination={18} />
+                                <DappUI.Denominate value={campaign.amount} decimals={2} denomination={18} />
                             </div>
                         </div>
 
@@ -91,23 +99,29 @@ export const TipCampaign = () => {
                                 <div className="flex flex-col gap-2">
                                     <div className="text-xl font-medium">Claimable :</div>
                                     <div className="text-4xl text-right">
-                                        <DappUI.Denominate value={campaign.claimable} denomination={18} />
+                                        <DappUI.Denominate value={campaign.claimable} decimals={2} denomination={18} />
                                     </div>
                                     <button className={primaryButton} onClick={claim} disabled={campaign.claimable === '0'}>Claim</button>
                                 </div>
                             ) : (
-                                <div className="flex flex-col gap-2">
-                                    <div className="text-xl font-medium">I want to give :</div>
-                                    <div className="flex flex-row gap-2 items-center">
-                                        <input type="number" defaultValue={1} className="border p-2 w-full rounded-md border-gray-300 leading-5 text-4xl text-right" />
-                                        <div className="text-4xl">
-                                            { campaign.token_identifier }
+                                <form onSubmit={handleSubmit(fund)}>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="text-xl font-medium">I want to give :</div>
+                                        <div className="flex flex-row gap-2 items-center">
+                                            <input {...register('amount', { min: 0, required: true, value: 1 })} type="number"
+                                                className={`border p-2 w-full rounded-md border-gray-300 leading-5 text-4xl text-right ${errors.amount ? 'text-red-700' : ''}`}
+                                             />
+                                            <div className="text-4xl">
+                                                { campaign.token_identifier }
+                                            </div>
                                         </div>
+                                        {errors.amount?.type === 'required' && (<div className="text-red-400">Amount is required</div>)}
+                                        {errors.amount?.type === 'min' && (<div className="text-red-400">Amount should be a positive value</div>)}
+                                        <button type='submit' data-tip={address ? null : 'Connect your wallet to use this action'} data-for="tip_action"
+                                            className={`${primaryButton} disabled:opacity-50`} disabled={!address}>Tip</button>
+                                        <ReactTooltip id='tip_action' place='bottom' />
                                     </div>
-                                    <button data-tip={address ? null : 'Connect your wallet to use this action'} data-for="tip_action"
-                                        className={`${primaryButton} disabled:opacity-50`} disabled={!address}>Participate</button>
-                                    <ReactTooltip id='tip_action' place='bottom' />
-                                </div>
+                                </form>
                             )
                         ) : (
                             <div className="text-xl font-medium text-white bg-main-lighter px-3 py-2 rounded-md">
@@ -146,6 +160,3 @@ export const TipCampaign = () => {
         </div>
     );
 };
-function claimCampaign(id: number) {
-    throw new Error('Function not implemented.');
-}
