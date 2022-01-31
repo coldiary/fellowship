@@ -2,8 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { AbiRegistry, Address, ArgSerializer, ContractFunction, ProxyProvider, SmartContract, SmartContractAbi, U64Value } from '@elrondnetwork/erdjs';
 import BigNumber from "bignumber.js";
 
-import { ApiConfigService } from "src/common/api.config.service";
-import { CachingService } from "src/common/caching.service";
+import { ApiConfigService } from "src/services/api.config.service";
+import { CachingService } from "src/services/caching.service";
 import { Constants } from "src/common/utils/constants";
 import { TipsCampaignData } from "src/types/Tips";
 

@@ -1,5 +1,6 @@
 import { Controller, Get, Param } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
+
 import { TipsCampaignData } from "src/types/Tips";
 import { TipsService } from "./tips.service";
 

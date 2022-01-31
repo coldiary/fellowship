@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import axios from "axios";
 import { MetricsService } from "src/endpoints/metrics/metrics.service";
-import { PerformanceProfiler } from "./utils/performance.profiler";
+import { PerformanceProfiler } from "../common/utils/performance.profiler";
 
 @Injectable()
 export class ApiService {
@@ -15,7 +15,7 @@ export class ApiService {
 
   async get(url: string): Promise<any> {
     let profiler = new PerformanceProfiler();
-    
+
     try {
       return await axios.get(url);
     } catch(error: any) {

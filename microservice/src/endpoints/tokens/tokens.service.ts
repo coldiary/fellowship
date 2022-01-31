@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
-import { ApiConfigService } from "src/common/api.config.service";
-import { CachingService } from "src/common/caching.service";
+import { ApiConfigService } from "src/services/api.config.service";
+import { CachingService } from "src/services/caching.service";
 import { Constants } from "src/common/utils/constants";
 import { Token } from "src/types/Token";
 import { HttpService } from "@nestjs/axios";

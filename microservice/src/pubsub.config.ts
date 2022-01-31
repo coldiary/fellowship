@@ -1,4 +1,4 @@
-import { ApiConfigService } from "./common/api.config.service";
+import { ApiConfigService } from "./services/api.config.service";
 import { ClientOptions, ClientProxyFactory, Transport } from '@nestjs/microservices';
 
 export const PubSubProvider = {

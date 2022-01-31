@@ -2,9 +2,9 @@ import { HttpService } from "@nestjs/axios";
 import { Controller, Get, Param } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { firstValueFrom } from "rxjs";
-import { ApiConfigService } from "src/common/api.config.service";
 
-import { CachingService } from "src/common/caching.service";
+import { ApiConfigService } from "src/services/api.config.service";
+import { CachingService } from "src/services/caching.service";
 import { Constants } from "src/common/utils/constants";
 
 @Controller('ipfs')
