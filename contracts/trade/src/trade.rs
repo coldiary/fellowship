@@ -11,6 +11,7 @@ pub trait Trade {
     #[storage_mapper("nextId")]
     fn next_id(&self) -> SingleValueMapper<u64>;
 
+    #[view]
     #[storage_mapper("trades")]
     fn trades(&self, id: &u64) -> SingleValueMapper<TradeData<Self::Api>>;
 
@@ -18,6 +19,31 @@ pub trait Trade {
     fn init(&self) -> SCResult<()> {
         self.next_id().set_if_empty(&1);
         Ok(())
+    }
+
+    #[view(getTradesFor)]
+    fn get_trades_for(
+        &self,
+        address: ManagedAddress,
+    ) -> Vec<(u64, TradeData<Self::Api>)> {
+        let mut all = Vec::new();
+        let count = self.next_id().get();
+
+        for n in 1..count {
+            if !self.trades(&n).is_empty() {
+                let trade = self.trades(&n).get();
+                if (trade.offer_address == address) {
+                    all.push((n, trade));
+                } else if (!trade.trader_address.is_none()) {
+                    let trader_address = trade.trader_address.as_ref().unwrap();
+                    if (*trader_address == address) {
+                        all.push((n, trade));
+                    }
+                }
+            }
+        }
+
+        all
     }
 
     #[payable("*")]

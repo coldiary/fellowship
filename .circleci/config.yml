@@ -15,11 +15,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Build tips contract"
-          command: "cd contracts/tips && erdpy contract build"
+          name: "Build & test tips contract"
+          command: "cd contracts/tips && erdpy contract build && erdpy contract test"
       - run:
-          name: "Test tips contract"
-          command: "cd contracts/tips && erdpy contract test"
+          name: "Build & test trade contract"
+          command: "cd contracts/trade && erdpy contract build && erdpy contract test"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows

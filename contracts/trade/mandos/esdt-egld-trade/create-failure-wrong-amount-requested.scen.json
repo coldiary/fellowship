@@ -1,9 +1,9 @@
 {
-    "name": "trade create failure - wrong amount",
+    "name": "trade create failure - wrong token requested",
     "steps": [
         {
             "step": "externalSteps",
-            "path": "init.scen.json"
+            "path": "../init.scen.json"
         },
         {
             "step": "setState",
@@ -25,14 +25,19 @@
         },
         {
             "step": "scCall",
-            "txId": "createTrade-4",
+            "txId": "createTrade-3",
             "tx": {
-                "from": "address:alice",
+                "from": "address:bob",
                 "to": "sc:trade",
-                "egldValue": "0",
+                "esdtValue": [
+                    {
+                        "tokenIdentifier": "str:TEST-123456",
+                        "value": "1,000,000"
+                    }
+                ],
                 "function": "createTrade",
                 "arguments": [
-                    "1,000,000",
+                    "0",
                     "str:TEST-123456",
                     "0x"
                 ],
@@ -42,7 +47,7 @@
             "expect": {
                 "out": [],
                 "status": "4",
-                "message": "str:Offer asset quantity must be more than 0",
+                "message": "str:Requested asset quantity must be more than 0",
                 "gas": "*",
                 "refund": "*"
             }
@@ -56,13 +61,13 @@
                     "storage": {}
                 },
                 "address:alice": {
-                    "nonce": "1",
+                    "nonce": "0",
                     "balance": "10,000,000,000,000,000,000",
                     "esdt": {},
                     "storage": {}
                 },
                 "address:bob": {
-                    "nonce": "0",
+                    "nonce": "1",
                     "balance": "1,000,000,000,000,000,000",
                     "esdt": {
                         "str:TEST-123456": "4,000,000",
@@ -77,7 +82,7 @@
                     "storage": {
                         "str:nextId": "1"
                     },
-                    "code": "file:../output/trade.wasm"
+                    "code": "file:../../output/trade.wasm"
                 }
             }
         }
