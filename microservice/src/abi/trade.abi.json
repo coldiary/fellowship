@@ -1,0 +1,139 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.60.0-nightly",
+            "commitHash": "bfe15646761a75f0259e204cab071565eed2b1e5",
+            "commitDate": "2022-01-22",
+            "channel": "Nightly",
+            "short": "rustc 1.60.0-nightly (bfe156467 2022-01-22)"
+        },
+        "contractCrate": {
+            "name": "trade",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "elrond-wasm",
+            "version": "0.23.1"
+        }
+    },
+    "name": "Trade",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "trades",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "TradeData"
+                }
+            ]
+        },
+        {
+            "name": "getTradesFor",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "List<tuple<u64,TradeData>>"
+                }
+            ]
+        },
+        {
+            "name": "createTrade",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "requested_quantity",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "requested_token",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "reserved_for",
+                    "type": "Option<Address>"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "cancelTrade",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "trade_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "trade",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "trade_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        }
+    ],
+    "hasCallback": false,
+    "types": {
+        "TradeData": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "offer_address",
+                    "type": "Address"
+                },
+                {
+                    "name": "offer_asset_token",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "offer_asset_quantity",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "trader_address",
+                    "type": "Option<Address>"
+                },
+                {
+                    "name": "trader_asset_token",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "trader_asset_quantity",
+                    "type": "BigUint"
+                }
+            ]
+        }
+    }
+}

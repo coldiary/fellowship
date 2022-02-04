@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
-import { Token } from "src/types/Token";
+import { TokenDefinition } from "src/types/Token";
 import { TokensService } from "./tokens.service";
 
 @Controller('tokens')
@@ -13,7 +13,7 @@ export class TokensController {
 		status: 200,
 		description: 'Returns all tokens',
 	})
-	async getAllTokens(): Promise<Token[]> {
+	async getAllTokens(): Promise<TokenDefinition[]> {
 		return await this._tokens.getAllTokens();
 	}
 
@@ -33,7 +33,7 @@ export class TokensController {
 	})
 	async getCampaign(
 		@Param('id') id: string,
-	): Promise<Token> {
+	): Promise<TokenDefinition> {
 		return await this._tokens.getToken(id);
 	}
 }

@@ -77,4 +77,13 @@ export class ApiConfigService {
 
     return tipsContract;
   }
+
+  getTradeContract(): string {
+    const tradeContract = this.configService.get<string>('contracts.trade');
+    if (!tradeContract) {
+      throw new Error('No trade contract present');
+    }
+
+    return tradeContract;
+  }
 }

@@ -1,7 +1,8 @@
 import { Controller, Get, Param } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
-import { TipsCampaignData } from "src/types/Tips";
+import { ContractInfo } from "src/types/Contract";
+import { Campaign } from "src/types/Tips";
 import { TipsService } from "./tips.service";
 
 @Controller('tips')
@@ -9,12 +10,21 @@ import { TipsService } from "./tips.service";
 export class TipsController {
 	constructor(private readonly _tips: TipsService) { }
 
+	@Get("/contract")
+	@ApiResponse({
+		status: 200,
+		description: 'Returns contract info',
+	})
+	async getContractInfo(): Promise<ContractInfo> {
+		return await this._tips.getContractInfo();
+	}
+
 	@Get("/all")
 	@ApiResponse({
 		status: 200,
 		description: 'Returns all campaigns',
 	})
-	async getAllCampaigns(): Promise<TipsCampaignData[]> {
+	async getAllCampaigns(): Promise<Campaign[]> {
 		return await this._tips.getAllCampaigns();
 	}
 
@@ -25,7 +35,7 @@ export class TipsController {
 	})
 	async getCampaign(
 		@Param('id') id: string,
-	): Promise<TipsCampaignData> {
+	): Promise<Campaign> {
 		return await this._tips.getCampaign(+id);
 	}
 

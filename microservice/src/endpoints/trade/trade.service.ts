@@ -1,17 +1,17 @@
 import { Injectable } from "@nestjs/common";
-import { AbiRegistry, Address, ArgSerializer, ContractFunction, ProxyProvider, SmartContract, SmartContractAbi, U64Value } from '@elrondnetwork/erdjs';
+import { AbiRegistry, Address, AddressValue, ArgSerializer, ContractFunction, ProxyProvider, SmartContract, SmartContractAbi, U64Value } from '@elrondnetwork/erdjs';
 import { HttpService } from "@nestjs/axios";
 import BigNumber from "bignumber.js";
 
 import { ApiConfigService } from "src/services/api.config.service";
 import { CachingService } from "src/services/caching.service";
 import { Constants } from "src/common/utils/constants";
-import { Campaign } from "src/types/Tips";
 import { ContractInfo } from "src/types/Contract";
 import { firstValueFrom } from "rxjs";
+import { Trade } from "src/types/Trades";
 
 @Injectable()
-export class TipsService {
+export class TradeService {
     serializer: ArgSerializer;
     contractAddress: Address;
     proxyProvider: ProxyProvider
@@ -25,72 +25,74 @@ export class TipsService {
     ) {
         this.serializer = new ArgSerializer();
         this.proxyProvider = new ProxyProvider(this.apiConfigService.getApiUrl());
-        this.contractAddress = new Address(this.apiConfigService.getTipsContract());
+        this.contractAddress = new Address(this.apiConfigService.getTradeContract());
         this.loadTipsAbi().catch(console.error);
     }
 
     private async loadTipsAbi() {
-        this.registry = (await AbiRegistry.load({ files: ['src/abi/tips.abi.json'] }));
-        this.abi = new SmartContractAbi(this.registry, ["Tips"]);
+        this.registry = (await AbiRegistry.load({ files: ['src/abi/trade.abi.json'] }));
+        this.abi = new SmartContractAbi(this.registry, ["Trade"]);
     }
 
     async getContractInfo(): Promise<ContractInfo> {
         return await this.cachingService.getOrSetCache(
-            `tips:contract`,
+            `trade:contract`,
             async () => await this.queryContractInfo(),
             Constants.oneMinute() * 10,
         );
     }
 
-    async getAllCampaigns(): Promise<Campaign[]> {
+    async getTradesForAddress(address: string): Promise<Trade[]> {
         return await this.cachingService.getOrSetCache(
-            `tips:all`,
-            async () => await this.queryAllCampaigns(),
+            `trade:${address}`,
+            async () => await this.queryTradesFor(address),
             Constants.oneMinute() * 10,
         );
     }
 
-    async getCampaign(id: number): Promise<Campaign> {
+    async getTrade(id: number): Promise<Trade> {
         return await this.cachingService.getOrSetCache(
-            `tips:${id}`,
-            async () => await this.queryCampaign(id),
+            `trade:${id}`,
+            async () => await this.queryTrade(id),
             Constants.oneMinute() * 10,
         );
     }
 
     async clearCache() {
-        await this.cachingService.deleteInCache(`tips:*`);
+        await this.cachingService.deleteInCache(`trade:*`);
     }
 
-    private async queryAllCampaigns(): Promise<Campaign[]> {
-        if (!this.abi || !this.registry) throw new Error('Tips ABI not loaded');
+    private async queryTradesFor(address: string): Promise<Trade[]> {
+        if (!this.abi || !this.registry) throw new Error('Trade ABI not loaded');
 
         const contract = new SmartContract({ address: this.contractAddress, abi: this.abi });
 
         const result = await contract.runQuery(this.proxyProvider, {
-            func: new ContractFunction('getAllCampaigns'),
-            args: [],
+            func: new ContractFunction('getTradesFor'),
+            args: [
+                new AddressValue(new Address(address))
+            ],
         });
 
 
         let returnData: string[] = result.returnData;
 
-        const definitions = this.registry.getInterface('Tips').getEndpoint('getAllCampaigns').output;
+        const definitions = this.registry.getInterface('Trade').getEndpoint('getTradesFor').output;
         const values = this.serializer.buffersToValues(returnData.map(data => Buffer.from(data, 'base64')), definitions);
         const items: any[] = values[0].valueOf();
 
-        const campaigns = items.reduce((acc, item) => [...acc, this.formatCampaignData(item.field1, item.field0)], []);
+        const trades = items.reduce((acc, item) => [...acc, this.formatTrade(item.field1, item.field0)], []);
 
-        return campaigns;
+        return trades;
     }
 
-    private async queryCampaign(id: number): Promise<Campaign> {
+    private async queryTrade(id: number): Promise<Trade> {
         if (!this.abi || !this.registry) throw new Error('Tips ABI not loaded');
 
         const contract = new SmartContract({ address: this.contractAddress, abi: this.abi });
 
         const result = await contract.runQuery(this.proxyProvider, {
-            func: new ContractFunction('campaigns'),
+            func: new ContractFunction('trades'),
             args: [
                 new U64Value(new BigNumber(id))
             ],
@@ -98,11 +100,11 @@ export class TipsService {
 
         let returnData: string[] = result.returnData;
 
-        const definitions = this.registry.getInterface('Tips').getEndpoint('campaigns').output;
+        const definitions = this.registry.getInterface('Trade').getEndpoint('trades').output;
         const values = this.serializer.buffersToValues(returnData.map(d => Buffer.from(d, 'base64')), definitions);
         const data: any[] = values[0].valueOf();
 
-        return this.formatCampaignData(data, new BigNumber(id));
+        return this.formatTrade(data, new BigNumber(id));
     }
 
     private async queryContractInfo(): Promise<ContractInfo> {
@@ -111,15 +113,15 @@ export class TipsService {
         return res.data;
     }
 
-    private formatCampaignData(serialized: any, id: BigNumber): Campaign {
+    private formatTrade(serialized: any, id: BigNumber): Trade {
         return {
             id: id.toNumber(),
-            creator_address: (serialized.creator_address as Address).toString(),
-            token_identifier: serialized.token_identifier.toString(),
-            metadata_cid: (serialized.metadata_cid as Buffer).swap16().toString('ucs2'),
-            amount: (serialized.amount as BigNumber).toString(),
-            claimable: (serialized.claimable as BigNumber).toString(),
-            status: serialized.status,
+            offer_address: (serialized.offer_address as Address).toString(),
+            offer_asset_token: (serialized.offer_asset_token as Buffer).toString(),
+            offer_asset_quantity: (serialized.offer_asset_quantity as BigNumber).toString(),
+            trader_address: serialized.trader_address !== null ? (serialized.trader_address as Address).toString() : undefined,
+            trader_asset_token: (serialized.trader_asset_token as Buffer).toString(),
+            trader_asset_quantity: (serialized.trader_asset_quantity as BigNumber).toString(),
         }
     }
 }
