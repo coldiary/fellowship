@@ -1,4 +1,11 @@
 module.exports = {
+  webpack: {
+    configure: {
+      resolve: {
+        symlinks: false
+      },
+    }
+  },
   style: {
     postcss: {
       plugins: [

@@ -8,6 +8,7 @@ import { TokensContext, useTokensContext } from 'contexts/Tokens';
 import Home from 'pages/Home';
 import PageNotFound from 'pages/PageNotFound';
 import { Tip } from 'pages/Tip';
+import { Trade } from 'pages/Trade';
 
 const {
     TransactionsToastList,
@@ -29,6 +30,7 @@ const App = () => {
                         )}>
                             <Route index element={<Home />} />
                             <Route path="tip/*" element={<Tip />} />
+                            <Route path="trade/*" element={<Trade />} />
                             <Route path="*" element={<PageNotFound />} />
                         </Route>
                     </Routes>

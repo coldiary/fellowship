@@ -65,9 +65,13 @@ export const CurrencySelect: FC<CurrencySelectProps> = ({ defaultCurrency, onCha
         return [egld, ...mapped];
     }, [all]);
 
+    const defaultOption = useMemo((): Option | undefined => {
+        return options.find(o => o.value === defaultCurrency);
+    }, [options]);
+
     const onSelect = (selected: any) => onChange(selected.value);
 
     return (
-        <Select defaultValue={defaultCurrency} options={options} components={{ Option, SingleValue }} styles={styles} onChange={onSelect}/>
+        <Select defaultValue={defaultOption} options={options} components={{ Option, SingleValue }} styles={styles} onChange={onSelect}/>
     );
 };

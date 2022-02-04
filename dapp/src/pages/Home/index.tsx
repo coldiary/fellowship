@@ -41,7 +41,7 @@ const Home = () => {
         <Item tooltip="Coming soon !" link={'/' /*routeNames.kickstart */} illustration={KickstartImg} title='Start your project with funds from the community'></Item>
         <Item tooltip="Coming soon !" link={'/' /*routeNames.giveaway */} illustration={FundImg} title='Collect funds for people in needs'></Item>
         <Item link="/tip" illustration={TipImg} title='Support your favorite creators and builders'></Item>
-        <Item tooltip="Coming soon !" link={'/' /*routeNames.trade */} illustration={TradeImg} title='Trade you assets with confidence'></Item>
+        <Item link='/trade' illustration={TradeImg} title='Trade you assets with confidence'></Item>
         <Item tooltip="Coming soon !" link={'/' /*routeNames.giveaway */} illustration={GiveawayImg} title='Make your followers win assets in a fair way'></Item>
         <Item tooltip="Coming soon !" link={'/' /*routeNames.airdrop */} illustration={AirdropImg} title='Distribute assets easily to your community'></Item>
       </div>

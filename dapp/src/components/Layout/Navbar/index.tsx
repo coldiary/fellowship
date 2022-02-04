@@ -22,8 +22,8 @@ const Navbar = () => {
         <div className='flex flex-row items-center gap-6'>
           <NavLink data-tip="Coming soon !" data-for="nav" className={navLinkClass} to={'/' /*routeNames.kickstart */}>Kickstart</NavLink>
           <NavLink data-tip="Coming soon !" data-for="nav" className={navLinkClass} to={'/' /*routeNames.giveaway */}>Fundraise</NavLink>
-          <NavLink data-for="nav" className={navLinkClass} to="/tip">Tip</NavLink>
-          <NavLink data-tip="Coming soon !" data-for="nav" className={navLinkClass} to={'/' /*routeNames.trade */}>Trade</NavLink>
+          <NavLink className={navLinkClass} to="/tip">Tip</NavLink>
+          <NavLink className={navLinkClass} to='/trade'>Trade</NavLink>
           <NavLink data-tip="Coming soon !" data-for="nav" className={navLinkClass} to={'/' /*routeNames.giveaway */}>Giveaway</NavLink>
           <NavLink data-tip="Coming soon !" data-for="nav" className={navLinkClass} to={'/' /*routeNames.airdrop */}>Airdrop</NavLink>
         </div>

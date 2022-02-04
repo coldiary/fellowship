@@ -17,7 +17,8 @@ export const walletConnectDeepLink =
   'https://maiar.page.link/?apn=com.elrond.maiar.wallet&isi=1519405832&ibi=com.elrond.maiar.wallet&link=https://maiar.com/';
 
 export const contractAdresses = {
-  tips: 'erd1qqqqqqqqqqqqqpgqremaaqc6z25j4tv8w0u4ke9qqqrw6r3du4aqkygha9'
+  tips: 'erd1qqqqqqqqqqqqqpgqremaaqc6z25j4tv8w0u4ke9qqqrw6r3du4aqkygha9',
+  trade: 'erd1qqqqqqqqqqqqqpgqsa0t6waa9rlzrmny6hnn30kg7m22daddu4aqjfagyx'
 };
 
 export const contractAddress =

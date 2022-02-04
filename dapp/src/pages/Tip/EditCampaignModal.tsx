@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 
 import { getIPFSUri, uploadToIPFS } from 'api/ipfs';
-import { updateCampaign } from 'api/tips/updateCampaign';
+import { updateCampaign } from 'api/tips';
 import { ReactComponent as LoaderIcon } from 'assets/img/loader.svg';
 import { ReactComponent as MinusCircleIcon } from 'assets/img/minus-circle.svg';
 import { ReactComponent as UploadImg } from 'assets/img/upload.svg';

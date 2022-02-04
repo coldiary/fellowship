@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { fetchObjectFromIPFS, getIPFSUri } from 'api/ipfs';
-import { getCampaign } from 'api/tips/getCampaign';
+import { getCampaign } from 'api/tips';
 import placeholderPath from 'assets/img/placeholder.png';
 import { Campaign, CampaignMetadata } from 'types/Tips';
 

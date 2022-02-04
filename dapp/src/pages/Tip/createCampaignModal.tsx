@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 
 import { uploadToIPFS } from 'api/ipfs';
-import { createCampaign } from 'api/tips/createCampaign';
+import { createCampaign } from 'api/tips';
 import { ReactComponent as MinusCircleIcon } from 'assets/img/minus-circle.svg';
 import { ReactComponent as UploadImg } from 'assets/img/upload.svg';
 import { CurrencySelect } from 'components/CurrencySelect';
@@ -85,12 +85,6 @@ export const CreateCampaignModal = () => {
                             <div className='flex-shrink-0 w-48'>
                                 <label className="block text-sm font-medium text-gray-700">Currency</label>
                                 <CurrencySelect onChange={setCurrency} defaultCurrency={currency} />
-                                {/* <select {...register('currency', { required: true })} className='border p-2 rounded-md'>
-                                    <option>
-                                        <img className='w-4 h-4 object-contain' src={elrondSymbol} />
-                                        EGLD
-                                    </option>
-                                </select> */}
                             </div>
                         </div>
                     </div>

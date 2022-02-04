@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
 import { endCampaign, claimCampaign } from 'api/tips';
-import { tipCampaign } from 'api/tips/tipCampaign';
+import { tipCampaign } from 'api/tips';
 import { ReactComponent as Loader } from 'assets/img/loader.svg';
 import { Modal, ConfirmModal, useModal } from 'components/Layout/Modal';
 import { primaryButton, secondaryButton } from 'components/styles';
