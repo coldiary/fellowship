@@ -1,6 +1,6 @@
 import { refreshAccount, transactionServices } from '@elrondnetwork/dapp-core';
-import { SimpleTransactionType } from '@elrondnetwork/dapp-core/build/services/transactions/types';
-import { ArgSerializer, TokenIdentifierValue } from '@elrondnetwork/dapp-core/node_modules/@elrondnetwork/erdjs';
+import { SimpleTransactionType } from '@elrondnetwork/dapp-core';
+import { ArgSerializer, TokenIdentifierValue } from '@elrondnetwork/erdjs';
 
 import { encodeToHex } from './hex';
 

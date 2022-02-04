@@ -1,11 +1,11 @@
-import { ContractFunction, TransactionPayload, StringValue, BigUIntValue, TokenIdentifierValue, OptionalValue, Address, AddressValue, AddressType } from '@elrondnetwork/dapp-core/node_modules/@elrondnetwork/erdjs';
-import { BigNumber } from '@elrondnetwork/dapp-core/node_modules/@elrondnetwork/erdjs/node_modules/bignumber.js';
+import { ContractFunction, TransactionPayload, StringValue, BigUIntValue, TokenIdentifierValue, OptionalValue, Address, AddressValue, AddressType } from '@elrondnetwork/erdjs';
+import { BigNumber } from '@elrondnetwork/erdjs/node_modules/bignumber.js';
 import { contractAdresses, proxyAddress } from 'config';
 import { Trade } from 'types/Trades';
 import { formatPayload, sendTransaction } from 'utils/contract';
 
 export const getTrade = async (id: number): Promise<Trade> => {
-    const res = await fetch(`${proxyAddress}/trades/${id}`);
+    const res = await fetch(`${proxyAddress}/trade/${id}`);
     const data = await res.json() as Trade;
     return data;
 };

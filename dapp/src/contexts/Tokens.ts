@@ -1,5 +1,6 @@
 import { createContext, useMemo } from 'react';
 
+import EGLDIcon from 'assets/img/elrond-symbol.svg';
 import useTokenDefinitons from 'hooks/useTokenDefinitions';
 import { TokenDefinition } from 'types/Token';
 
@@ -21,6 +22,9 @@ export function useTokensContext() {
             name: 'EGLD',
             identifier: 'EGLD',
             decimals: 18,
+            assets: {
+                svgUrl: EGLDIcon,
+            }
         } as TokenDefinition;
         return tokens.find(t => t.identifier === identifier);
     };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { DappProvider, DappUI } from '@elrondnetwork/dapp-core';
+import { DappProvider, DappUI, DappCoreUIWrapper } from '@elrondnetwork/dapp-core';
 import { Route, Routes, BrowserRouter as Router, Outlet } from 'react-router-dom';
 
 import Layout from 'components/Layout';
@@ -12,6 +12,8 @@ import { Trade } from 'pages/Trade';
 
 const {
     TransactionsToastList,
+    NotificationModal,
+    SignTransactionsModals,
 } = DappUI;
 
 const App = () => {
@@ -21,19 +23,23 @@ const App = () => {
         <Router>
             <TokensContext.Provider value={tokenContexValue}>
                 <DappProvider networkConfig={{ network, walletConnectBridge, walletConnectDeepLink }}>
-                    <Routes>
-                        <Route path="/" element={(
-                            <Layout>
-                                <TransactionsToastList shouldRenderDefaultCss={false} />
-                                <Outlet/>
-                            </Layout>
-                        )}>
-                            <Route index element={<Home />} />
-                            <Route path="tip/*" element={<Tip />} />
-                            <Route path="trade/*" element={<Trade />} />
-                            <Route path="*" element={<PageNotFound />} />
-                        </Route>
-                    </Routes>
+                    <DappCoreUIWrapper>
+                        <Routes>
+                            <Route path="/" element={(
+                                <Layout>
+                                    <TransactionsToastList shouldRenderDefaultCss={false} />
+                                    <NotificationModal />
+                                    <SignTransactionsModals className='custom-modal ' />
+                                    <Outlet/>
+                                </Layout>
+                            )}>
+                                <Route index element={<Home />} />
+                                <Route path="tip/*" element={<Tip />} />
+                                <Route path="trade/*" element={<Trade />} />
+                                <Route path="*" element={<PageNotFound />} />
+                            </Route>
+                        </Routes>
+                    </DappCoreUIWrapper>
                 </DappProvider>
             </TokensContext.Provider>
         </Router>

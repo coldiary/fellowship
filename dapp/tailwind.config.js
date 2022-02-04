@@ -3,6 +3,9 @@ module.exports = {
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
+      gridTemplateColumns: {
+        'trade': '1fr 48px 1fr'
+      },
       colors: {
         main: {
           lighter: '#9091b6',

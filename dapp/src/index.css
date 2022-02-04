@@ -26,7 +26,7 @@ a:hover {
 }
 
 .modal-container {
-  background: none !important;
+  background: #fff !important;
 }
 
 .modal-container .bg-main {
@@ -34,7 +34,11 @@ a:hover {
   color: black !important;
 }
 
-.modal-container.login-button {
+.modal-container .card-body svg {
+  margin: 1rem auto;
+}
+
+.modal-container.custom-modal {
   color: black !important;
   display: block;
   position: absolute;
@@ -42,9 +46,11 @@ a:hover {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 50%;
+
+  @apply shadow-md;
 }
 
-.modal-container.login-button .card-title .d-flex {
+.modal-container.custom-modal .card-title .d-flex {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

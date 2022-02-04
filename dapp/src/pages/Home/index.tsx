@@ -1,4 +1,5 @@
 import React, { FC }  from 'react';
+import { DappUI } from '@elrondnetwork/dapp-core';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 

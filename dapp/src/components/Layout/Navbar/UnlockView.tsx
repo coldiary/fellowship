@@ -24,26 +24,31 @@ export const UnlockView: () => JSX.Element = () => {
             <div className="flex flex-row gap-4">
               <ExtensionLoginButton
                 callbackRoute={pathname}
-                className={`${primaryButton} px-3 py-2 login-button `}
-                shouldRenderDefaultCss={false}
+                buttonClassName={`${primaryButton} px-3 py-2 `}
+                className={'custom-modal '}
+                shouldRenderDefaultCss={true}
                 loginButtonText={'Extension'}
+                redirectAfterLogin={false}
               />
               <WebWalletLoginButton
                 callbackRoute={pathname}
-                className={`${primaryButton} px-3 py-2 login-button `}
-                shouldRenderDefaultCss={false}
+                buttonClassName={`${primaryButton} px-3 py-2 `}
+                className='custom-modal'
+                shouldRenderDefaultCss={true}
                 loginButtonText={'Web wallet'}
               />
               <LedgerLoginButton
                 loginButtonText={'Ledger'}
                 callbackRoute={pathname}
-                className={`${primaryButton} px-3 py-2 login-button `}
-                shouldRenderDefaultCss={false}
+                buttonClassName={`${primaryButton} px-3 py-2 `}
+                className='custom-modal'
+                shouldRenderDefaultCss={true}
               />
               <WalletConnectLoginButton
                 callbackRoute={pathname}
-                className={`${primaryButton} px-3 py-2 login-button `}
-                shouldRenderDefaultCss={false}
+                buttonClassName={`${primaryButton} px-3 py-2 `}
+                className='custom-modal'
+                shouldRenderDefaultCss={true}
                 loginButtonText={'Maiar'}
               />
             </div>
