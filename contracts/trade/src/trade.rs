@@ -46,6 +46,7 @@ pub trait Trade {
         all
     }
 
+    #[allow(clippy::too_many_arguments)]
     #[payable("*")]
     #[endpoint(createTrade)]
     fn create_trade(
@@ -54,18 +55,23 @@ pub trait Trade {
         #[payment_token] offer_token: TokenIdentifier,
         requested_quantity: BigUint,
         requested_token: TokenIdentifier,
-        reserved_for: Option<ManagedAddress>,
+        #[var_args] reserved_for: OptionalArg<ManagedAddress>,
     ) -> SCResult<u64> {
         require!(offer_quantity > 0, "Offer asset quantity must be more than 0");
         require!(offer_token.is_egld() || offer_token.is_valid_esdt_identifier(), "Invalid token provided as offer");
         require!(requested_quantity > 0, "Requested asset quantity must be more than 0");
         require!(requested_token.is_egld() || requested_token.is_valid_esdt_identifier(), "Invalid token provided for requested asset");
 
+        let reserved = match reserved_for {
+            OptionalArg::Some(d) => Option::Some(d),
+            OptionalArg::None => Option::None,
+        };
+
         let trade = TradeData {
             offer_address: self.blockchain().get_caller(),
             offer_asset_token: offer_token,
             offer_asset_quantity: offer_quantity,
-            trader_address: reserved_for,
+            trader_address: reserved,
             trader_asset_token: requested_token,
             trader_asset_quantity: requested_quantity,
         };
