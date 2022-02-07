@@ -42,7 +42,7 @@
                 "arguments": [
                     "1,000,000",
                     "str:TEST-123456",
-                    "0x01|address:bob"
+                    "address:bob"
                 ],
                 "gasLimit": "100,000,000",
                 "gasPrice": "0"

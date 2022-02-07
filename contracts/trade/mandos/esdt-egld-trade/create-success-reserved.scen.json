@@ -47,7 +47,7 @@
                 "arguments": [
                     "1,000,000,000,000,000,000",
                     "str:EGLD",
-                    "0x01|address:alice"
+                    "address:alice"
                 ],
                 "gasLimit": "100,000,000",
                 "gasPrice": "0"

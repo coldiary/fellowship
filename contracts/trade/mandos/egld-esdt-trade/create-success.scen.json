@@ -33,8 +33,7 @@
                 "function": "createTrade",
                 "arguments": [
                     "1,000,000",
-                    "str:TEST-123456",
-                    "0x"
+                    "str:TEST-123456"
                 ],
                 "gasLimit": "100,000,000",
                 "gasPrice": "0"

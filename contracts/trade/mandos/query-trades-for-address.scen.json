@@ -41,8 +41,7 @@
                 "function": "createTrade",
                 "arguments": [
                     "1,000,000",
-                    "str:TEST-123456",
-                    "0x"
+                    "str:TEST-123456"
                 ],
                 "gasLimit": "100,000,000",
                 "gasPrice": "0"
@@ -69,8 +68,7 @@
                 "function": "createTrade",
                 "arguments": [
                     "1,000,000,000,000,000,000",
-                    "str:EGLD",
-                    "0x"
+                    "str:EGLD"
                 ],
                 "gasLimit": "100,000,000",
                 "gasPrice": "0"
@@ -93,7 +91,7 @@
                 "arguments": [
                     "1,000,000",
                     "str:TEST-123456",
-                    "0x1|address:bob"
+                    "address:bob"
                 ],
                 "gasLimit": "100,000,000",
                 "gasPrice": "0"
