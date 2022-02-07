@@ -9,7 +9,7 @@ urls:
 features:
   publicApi: true
   privateApi: true
-  transactionProcessor: false
+  transactionProcessor: true
 security:
   jwtSecret: ''
 contracts:

@@ -10,7 +10,7 @@ import { AccountsModule } from './endpoints/accounts/accounts.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ load: [configuration] }),
+    ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
     TipsModule,
     TokensModule,
     TradeModule,

@@ -119,7 +119,7 @@ export class TipsService {
             metadata_cid: (serialized.metadata_cid as Buffer).swap16().toString('ucs2'),
             amount: (serialized.amount as BigNumber).toString(),
             claimable: (serialized.claimable as BigNumber).toString(),
-            status: serialized.status,
+            status: serialized.status.name,
         }
     }
 }
