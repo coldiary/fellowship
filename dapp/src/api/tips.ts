@@ -15,12 +15,14 @@ export const getAllCampaigns = async (): Promise<Campaign[]> => {
 };
 
 export const createCampaign = async (metadata_cid: string, token_identifier: string) => {
+    const payload = formatPayload('createCampaign', [
+        { value: metadata_cid, targetType: 'ManagedBuffer' },
+        { value: token_identifier, targetType: 'TokenIdentifier' },
+    ]);
+    console.log(payload);
     return await sendTransaction([{
         value: '0',
-        data: formatPayload('createCampaign', [
-            { value: metadata_cid, targetType: 'ManagedBuffer' },
-            { value: token_identifier, targetType: 'TokenIdentifier' },
-        ]),
+        data: payload,
         receiver: contractAdresses.tips,
     }]);
 };

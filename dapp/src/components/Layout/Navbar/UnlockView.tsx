@@ -1,5 +1,5 @@
 import React from 'react';
-import { DappUI } from '@elrondnetwork/dapp-core';
+import { DappUI } from '@elrondnetwork/dapp-core-components';
 import { useLocation } from 'react-router-dom';
 
 import { primaryButton } from 'components/styles';
@@ -28,7 +28,6 @@ export const UnlockView: () => JSX.Element = () => {
                 className={'custom-modal '}
                 shouldRenderDefaultCss={true}
                 loginButtonText={'Extension'}
-                redirectAfterLogin={false}
               />
               <WebWalletLoginButton
                 callbackRoute={pathname}

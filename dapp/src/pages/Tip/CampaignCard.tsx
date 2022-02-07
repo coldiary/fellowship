@@ -1,5 +1,5 @@
 import React, { FC, useContext, useMemo } from 'react';
-import { DappUI } from '@elrondnetwork/dapp-core';
+import { DappUI } from '@elrondnetwork/dapp-core-components';
 import { Link } from 'react-router-dom';
 import Truncate from 'react-truncate';
 

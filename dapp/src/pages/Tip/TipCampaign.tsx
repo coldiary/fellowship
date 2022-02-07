@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from 'react';
-import { useGetAccountInfo, DappUI } from '@elrondnetwork/dapp-core';
+import { useGetAccountInfo } from '@elrondnetwork/dapp-core';
+import { DappUI } from '@elrondnetwork/dapp-core-components';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';

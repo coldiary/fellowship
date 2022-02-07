@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { logout, useGetAccountInfo, DappUI } from '@elrondnetwork/dapp-core';
+import { logout, useGetAccountInfo } from '@elrondnetwork/dapp-core';
+import { DappUI } from '@elrondnetwork/dapp-core-components';
 
 import { ReactComponent as CopyCheckIcon } from 'assets/img/copy-check.svg';
 import { ReactComponent as CopyIcon } from 'assets/img/copy.svg';

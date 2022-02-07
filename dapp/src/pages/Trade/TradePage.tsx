@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { DappUI, useGetAccountInfo } from '@elrondnetwork/dapp-core';
+import { useGetAccountInfo } from '@elrondnetwork/dapp-core';
+import { DappUI } from '@elrondnetwork/dapp-core-components';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getTrade, cancelTrade, trade as doTrade } from 'api/trades';

@@ -1,6 +1,6 @@
 import React, { FC, useContext, useEffect, useMemo } from 'react';
+import { DappUI } from '@elrondnetwork/dapp-core-components';
 import { Link } from 'react-router-dom';
-import { DappUI } from '@elrondnetwork/dapp-core';
 
 import { ReactComponent as Loader } from 'assets/img/loader.svg';
 import { ReactComponent as TradeIcon } from 'assets/img/trade.svg';

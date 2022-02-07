@@ -1,5 +1,5 @@
 import { refreshAccount, transactionServices } from '@elrondnetwork/dapp-core';
-import { SimpleTransactionType } from '@elrondnetwork/dapp-core';
+import { SimpleTransactionType } from '@elrondnetwork/dapp-core/build/types/transactions';
 import { ArgSerializer, TokenIdentifierValue } from '@elrondnetwork/erdjs';
 
 import { encodeToHex } from './hex';
@@ -21,7 +21,7 @@ const formatArg = (arg: ContractArgument) => {
         case 'ManagedBuffer':
         case 'Number':
             return encodeToHex(arg.value);
-        case 'TokenIdentifier': return (new ArgSerializer()).valuesToString([new TokenIdentifierValue(Buffer.from(arg.value))]);
+        case 'TokenIdentifier': return (new ArgSerializer()).valuesToStrings([new TokenIdentifierValue(Buffer.from(arg.value))])[0];
         default: throw new Error('Unmapped type');
     }
 };

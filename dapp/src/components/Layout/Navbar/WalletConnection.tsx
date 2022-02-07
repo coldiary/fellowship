@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGetAccountInfo } from '@elrondnetwork/dapp-core';
 
 import { ReactComponent as CashIcon } from 'assets/img/cash.svg';
@@ -10,8 +10,13 @@ import { AccountView } from './AccountView';
 
 export const WalletConnection = () => {
     const { address } = useGetAccountInfo();
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
-    const isLoggedIn = Boolean(address);
+    useEffect(() => {
+        setTimeout(() => {
+            setLoggedIn(Boolean(address));
+        }, 500);
+    }, [address]);
 
     const [
         connectModalShown,
