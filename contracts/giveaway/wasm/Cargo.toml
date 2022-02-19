@@ -1,5 +1,5 @@
 [package]
-name = "airdrop-wasm"
+name = "giveaway-wasm"
 version = "0.0.0"
 authors = ["Coldiary <coldiary@orange.fr>"]
 edition = "2018"
@@ -15,15 +15,15 @@ lto = true
 debug = false
 panic = "abort"
 
-[dependencies.airdrop]
+[dependencies.giveaway]
 path = ".."
 
 [dependencies.elrond-wasm-node]
-version = "0.23.0"
+version = "0.27.4"
 # path = "../../../../elrond-wasm-node"
 
 [dependencies.elrond-wasm-output]
-version = "0.23.0"
+version = "0.27.4"
 # path = "../../../../elrond-wasm-output"
 features = ["wasm-output-mode"]
 

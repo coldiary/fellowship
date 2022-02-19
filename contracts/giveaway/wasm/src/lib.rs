@@ -5,12 +5,10 @@
 #![no_std]
 
 elrond_wasm_node::wasm_endpoints! {
-    airdrop
+    giveaway
     (
         init
-        airdrop
-        claim
-        createAirdrop
+        createOpenGiveaway
     )
 }
 
