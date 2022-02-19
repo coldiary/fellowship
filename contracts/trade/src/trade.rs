@@ -62,16 +62,11 @@ pub trait Trade {
         require!(requested_quantity > 0, "Requested asset quantity must be more than 0");
         require!(requested_token.is_egld() || requested_token.is_valid_esdt_identifier(), "Invalid token provided for requested asset");
 
-        let reserved = match reserved_for {
-            OptionalArg::Some(d) => Option::Some(d),
-            OptionalArg::None => Option::None,
-        };
-
         let trade = TradeData {
             offer_address: self.blockchain().get_caller(),
             offer_asset_token: offer_token,
             offer_asset_quantity: offer_quantity,
-            trader_address: reserved,
+            trader_address: reserved_for.into_option(),
             trader_asset_token: requested_token,
             trader_asset_quantity: requested_quantity,
         };
