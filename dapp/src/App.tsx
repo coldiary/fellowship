@@ -1,11 +1,13 @@
 import React from 'react';
-import { DappProvider } from '@elrondnetwork/dapp-core';
-import { DappUI } from '@elrondnetwork/dapp-core-components';
+import { DappUI, DappProvider } from '@elrondnetwork/dapp-core';
 import { Route, Routes, BrowserRouter as Router, Outlet } from 'react-router-dom';
 
+import { ComposeProviders } from 'components/ComposeProviders';
 import Layout from 'components/Layout';
-import { network, walletConnectBridge, walletConnectDeepLink } from 'config';
-import { TokensContext, useTokensContext } from 'contexts/Tokens';
+import { ToastList } from 'components/Toast';
+import { AccountContextProvider } from 'contexts/Account';
+import { ToastsContextProvider } from 'contexts/Toasts';
+import { TokensContextProvider } from 'contexts/Tokens';
 import Home from 'pages/Home';
 import PageNotFound from 'pages/PageNotFound';
 import { Tip } from 'pages/Tip';
@@ -13,19 +15,26 @@ import { Trade } from 'pages/Trade';
 
 const {
     TransactionsToastList,
+    SignTransactionsModals,
+    NotificationModal,
 } = DappUI;
 
 const App = () => {
-    const tokenContexValue = useTokensContext();
-
     return (
         <Router>
-            <TokensContext.Provider value={tokenContexValue}>
-                <DappProvider networkConfig={{ network, walletConnectBridge, walletConnectDeepLink }}>
+            <DappProvider environment='devnet'>
+                <ComposeProviders providers={[
+                    ToastsContextProvider,
+                    TokensContextProvider,
+                    AccountContextProvider,
+                ]}>
                     <Routes>
                         <Route path="/" element={(
                             <Layout>
-                                <TransactionsToastList shouldRenderDefaultCss={false} />
+                                <ToastList />
+                                <TransactionsToastList />
+                                <SignTransactionsModals className='custom-modal ' />
+                                <NotificationModal  />
                                 <Outlet/>
                             </Layout>
                         )}>
@@ -35,8 +44,8 @@ const App = () => {
                             <Route path="*" element={<PageNotFound />} />
                         </Route>
                     </Routes>
-                </DappProvider>
-            </TokensContext.Provider>
+                </ComposeProviders>
+            </DappProvider>
         </Router>
     );
 };

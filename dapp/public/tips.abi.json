@@ -1,0 +1,202 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.61.0-nightly",
+            "commitHash": "38a0b81b1c32764d6a583a5efb6f306b8c44c503",
+            "commitDate": "2022-03-06",
+            "channel": "Nightly",
+            "short": "rustc 1.61.0-nightly (38a0b81b1 2022-03-06)"
+        },
+        "contractCrate": {
+            "name": "tips",
+            "version": "0.0.1"
+        },
+        "framework": {
+            "name": "elrond-wasm",
+            "version": "0.29.3"
+        }
+    },
+    "name": "Tips",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "campaigns",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "CampaignData"
+                }
+            ]
+        },
+        {
+            "name": "donations",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                },
+                {
+                    "name": "id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "getCampaigns",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "List<CampaignData>"
+                }
+            ]
+        },
+        {
+            "name": "createCampaign",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "metadata_cid",
+                    "type": "bytes"
+                },
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "updateCampaign",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "campaign_id",
+                    "type": "u64"
+                },
+                {
+                    "name": "metadata_cid",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "endCampaign",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "campaign_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "claimCampaign",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "campaign_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "tip",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "campaign_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        }
+    ],
+    "hasCallback": false,
+    "types": {
+        "CampaignData": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "u64"
+                },
+                {
+                    "name": "creator_address",
+                    "type": "Address"
+                },
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "metadata_cid",
+                    "type": "bytes"
+                },
+                {
+                    "name": "status",
+                    "type": "Status"
+                },
+                {
+                    "name": "amount",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "claimable",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "donations",
+                    "type": "u64"
+                },
+                {
+                    "name": "participants",
+                    "type": "u64"
+                }
+            ]
+        },
+        "Status": {
+            "type": "enum",
+            "variants": [
+                {
+                    "name": "Active",
+                    "discriminant": 0
+                },
+                {
+                    "name": "Ended",
+                    "discriminant": 1
+                }
+            ]
+        }
+    }
+}

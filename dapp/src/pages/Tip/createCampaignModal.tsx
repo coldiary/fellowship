@@ -1,18 +1,25 @@
-import React, { useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 
 import { uploadToIPFS } from 'api/ipfs';
-import { createCampaign } from 'api/tips';
+import { Tips } from 'api/tips';
+import { ReactComponent as LoaderIcon } from 'assets/img/loader.svg';
 import { ReactComponent as MinusCircleIcon } from 'assets/img/minus-circle.svg';
 import { ReactComponent as UploadImg } from 'assets/img/upload.svg';
 import { CurrencySelect } from 'components/CurrencySelect';
 import { pictureFloatingTextAction, primaryButton } from 'components/styles';
 
-export const CreateCampaignModal = () => {
+interface Props {
+    closeModal: () => void;
+}
+
+export const CreateCampaignModal: FC<Props> = ({ closeModal }) => {
     const [file, setFile] = useState<(File & { preview: string }) | null>(null);
     const [currency, setCurrency] = useState('EGLD');
+    const [submitting, setSubmitting] = useState(false);
     const submit = async (data: any) => {
+        setSubmitting(true);
         const illustration = file && await uploadToIPFS(data.illustration);
         const metadata = JSON.stringify({
             title: data.title,
@@ -22,7 +29,8 @@ export const CreateCampaignModal = () => {
         });
 
         const metadata_cid = await uploadToIPFS(metadata);
-        await createCampaign(metadata_cid, currency === 'EGLD' ? '' : currency);
+        await Tips.instance.createCampaign(metadata_cid, currency === 'EGLD' ? '' : currency);
+        closeModal();
     };
 
     const removeFile = () => {
@@ -112,7 +120,12 @@ export const CreateCampaignModal = () => {
                     <div className="text-xs text-gray-500 w-64">
                         Creating a campaign requires a transaction on the Elrond Network (Tx fee: ~0.001egld)
                     </div>
-                    <button type='submit' className={primaryButton}>Create campaign</button>
+                    <button type='submit' className={primaryButton}>
+                    { submitting ?
+                            <LoaderIcon className='w-4 h-6' /> :
+                            <>Create campaign</>
+                        }
+                    </button>
                 </div>
             </form>
 

@@ -1,49 +1,61 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { useGetAccountInfo } from '@elrondnetwork/dapp-core';
-import { DappUI } from '@elrondnetwork/dapp-core-components';
+import { DappUI, transactionServices, useGetAccountInfo } from '@elrondnetwork/dapp-core';
 import { useNavigate, useParams } from 'react-router-dom';
+import useSWR from 'swr';
 
-import { getTrade, cancelTrade, trade as doTrade } from 'api/trades';
-import { ReactComponent as Loader } from 'assets/img/loader.svg';
+import { Trades } from 'api/trades';
+import { ReactComponent as CheckIcon } from 'assets/img/check-circle.svg';
 import { ReactComponent as TradeIcon } from 'assets/img/trade.svg';
+import { Button } from 'components/Button';
 import { ConfirmModal, useModal } from 'components/Layout/Modal';
 import { primaryButton } from 'components/styles';
 import { TokensContext } from 'contexts/Tokens';
 import { Trade } from 'types/Trades';
 import { getShortHash } from 'utils/display';
 
+const {
+    useGetPendingTransactions,
+    useTrackTransactionStatus,
+} = transactionServices;
+
 export const TradePage = () => {
     const { id } = useParams();
+    const { hasPendingTransactions } = useGetPendingTransactions();
     const { address } = useGetAccountInfo();
     const navigate = useNavigate();
     const { get: getToken } = useContext(TokensContext);
-    const [trade, setTrade] = useState<Trade | undefined>(undefined);
+    const { data: trade, mutate } = useSWR(id ? `trade-${id}` : null, async (): Promise<Trade | undefined> => {
+        if (!id) return;
+        return await Trades.instance.getTrade(+id);
+    });
     const isCreator = trade?.offer_address === address;
+
+    const [txId, setTxId] = useState<string | null>(null);
+    const { isSuccessful } = useTrackTransactionStatus({ transactionId: txId });
 
     const [cancelModalShown, openCancelModal, closeCancelModal] = useModal();
 
     useEffect(() => {
         if (!trade) return;
-        if (trade.offer_address !== address && trade.trader_address !== address) {
+        if (trade.offer_address !== address && trade.trader_address &&trade.trader_address !== address) {
             navigate('/');
         }
     }, [trade]);
 
-    useEffect(() => {
-        (async () => {
-            if (!id) return;
-            setTrade(await getTrade(+id));
-        })().catch(console.error);
-    }, [id]);
+    useEffect(() => { mutate(); }, [id, hasPendingTransactions]);
 
     const [offerToken, traderToken] = useMemo(() => {
         if (!trade) return [];
-        return [getToken(trade.offer_asset_token), getToken(trade.trader_asset_token)];
+        return [
+            getToken(trade.offer_asset_token),
+            getToken(trade.trader_asset_token),
+        ];
     }, [trade]);
 
-    const proceedTrade = async (data: any) => {
+    const proceedTrade = async () => {
         if (!trade || !traderToken) return;
-        await doTrade(trade.id, +data.amount * Math.pow(10, traderToken.decimals), traderToken.identifier);
+        const sessionId = await Trades.instance.trade(trade.id, +trade.trader_asset_quantity, traderToken.identifier);
+        setTxId(sessionId);
     };
 
     const onCloseCancelModal = async (confirm: boolean) => {
@@ -52,47 +64,61 @@ export const TradePage = () => {
         if (!id) return;
 
         if (confirm) {
-            await cancelTrade(+id);
+            await Trades.instance.cancelTrade(+id);
         }
     };
 
     return (
         <div className='max-w-screen-2xl mx-auto my-4 p-10 w-full flex-auto flex flex-col'>
             { !trade || !offerToken || !traderToken ? (
-                <div className="flex items-center justify-between p-6">
-                    <Loader className='m-auto w-10'/>
-                </div>
+                <>
+                    { isSuccessful ? (
+                        <div className='bg-whitee border rounded-md gap-6 p-12 flex flex-col justify-center items-center'>
+                            <CheckIcon className='w-20 text-green-700' />
+                            <div className="text-4xl bold">
+                                Trade successful
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex items-center justify-center p-6 text-4xl opacity-50">
+                            Trade not found
+                        </div>
+                    )}
+                </>
             ) : (
-                <div className="flex flex-col gap-24 p-12 bg-whitee border">
+                <div className="flex flex-col gap-12 p-6 md:gap-24 md:p-12 bg-whitee border">
                     <div className="text-lg text-center">
-                        {isCreator ? 'You created this trade :' : 'This trade has been reserved for you :'}
+                        {
+                            isCreator ? 'You created this trade :' :
+                            trade.trader_address ? 'This trade has been reserved for you :' : null
+                        }
                     </div>
 
-                    <div className="grid grid-cols-trade items-center">
-                        <div className="flex-auto flex flex-col items-center gap-8">
+                    <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-trade items-center">
+                        <div className="flex-auto flex flex-col items-center gap-4 md:gap-8">
                             <div className="text-xs uppercase">Offered</div>
                             <div className="flex flex-row items-center gap-4">
                                 <img className='w-8 h-8' src={offerToken.assets?.svgUrl} />
-                                <div className="text-4xl">
+                                <div className="text-2xl md:text-4xl">
                                     <DappUI.Denominate value={trade.offer_asset_quantity} token={offerToken.name} denomination={offerToken.decimals} decimals={2}/>
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-center items-center">
+                        <div className="flex justify-center items-center w-12 transform rotate-90 m-auto md:rotate-0">
                             <TradeIcon className='w-full h-full' />
                         </div>
-                        <div className="flex-auto flex flex-col items-center gap-8">
+                        <div className="flex-auto flex flex-col items-center gap-4 md:gap-8">
                             <div className="text-xs uppercase">Asked</div>
                             <div className="flex flex-row items-center gap-4">
                                 <img className='w-8 h-8' src={traderToken.assets?.svgUrl} />
-                                <div className="text-4xl">
+                                <div className="tex-2xl md:text-4xl">
                                     <DappUI.Denominate value={trade.trader_asset_quantity} token={traderToken.name} denomination={traderToken.decimals} decimals={2}/>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-trade items-center">
+                    <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-trade items-center">
                         <div className="flex-auto flex flex-col items-center gap-4">
                             {isCreator ? (
                                 <ConfirmModal shown={cancelModalShown} closeModal={onCloseCancelModal}
@@ -119,7 +145,7 @@ export const TradePage = () => {
                         </div>
                         <div className="flex-auto flex flex-col items-center gap-4">
                             {!isCreator ? (
-                                <button className={primaryButton} onClick={proceedTrade}>Trade</button>
+                                <Button onClick={proceedTrade} onlyAuth>Trade</Button>
                             ) : (
                                 <div className='text-gray-600 font-medium'>
                                     {trade.trader_address && <>Reserved for {getShortHash(trade.trader_address)}</>}

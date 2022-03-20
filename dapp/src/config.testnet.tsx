@@ -1,35 +1,11 @@
-import { NetworkType } from '@elrondnetwork/dapp-core';
+export const environment = 'testnet';
 
-export const decimals = 4;
-export const denomination = 18;
-export const gasPerDataByte = 1500;
-export const timeout = 10000; // 10 sec
-
-export const walletConnectBridgeAddresses: string[] = [
-  'https://walletconnect-bridge.maiar.com'
-];
-export const walletConnectBridge: string =
-  walletConnectBridgeAddresses[
-    Math.floor(Math.random() * walletConnectBridgeAddresses.length)
-  ];
-
-export const walletConnectDeepLink =
-  'https://maiar.page.link/?apn=com.elrond.maiar.wallet&isi=1519405832&ibi=com.elrond.maiar.wallet&link=https://maiar.com/';
-
-export const contractAddress =
-  'erd1qqqqqqqqqqqqqpgquvt728n40ssd8n2qns9jrlqpwq2jc4rj4cysfuj3ad';
-
-export const dAppName = 'Dapp';
-
-export const network: NetworkType & {
-  graphQlAddress: string;
-} = {
-  id: 'testnet',
-  name: 'Testnet',
-  egldLabel: 'xEGLD',
-  walletAddress: 'https://testnet-wallet.elrond.com',
-  apiAddress: 'https://testnet-api.elrond.com',
-  gatewayAddress: 'https://testnet-gateway.elrond.com',
-  explorerAddress: 'http://testnet-explorer.elrond.com',
-  graphQlAddress: 'https://testnet-exchange-graph.elrond.com/graphql'
+export const contracts = {
+  tips: { name: 'Tips', address: 'erd1qqqqqqqqqqqqqpgqt8vfhqpvtsvjce9jle3gw5njwqq0l9hju4aq9wfw9s', abiPath: '/tips.abi.json' },
+  trade: { name: 'Trade', address: 'erd1qqqqqqqqqqqqqpgql585tt797dfpg0lpn6ce264nv59a8g9eu4aqx5tvq8', abiPath: '/trade.abi.json' },
 };
+
+export const nftStorageApiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDI0NzI4MDdFQTc4YzhGN2M4NTU0RWYyZDlDMzYxMDQwODU0OTc0RDkiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0Mjk5NjgwOTg1NiwibmFtZSI6ImZlbGxvd3NoaXAifQ.Ntaf_Ckf4D38SpRqWwOTJ4dXI_-Q3UYECrQNzOvi_Ck';
+export const ipfsGateway = 'https://ipfs.io/ipfs';
+export const apiAddress = 'https://testnet-api.elrond.com';
+export const explorerAddress = 'http://testnet-explorer.elrond.com';

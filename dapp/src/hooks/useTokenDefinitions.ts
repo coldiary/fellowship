@@ -1,21 +1,13 @@
-import { useState, useEffect } from 'react';
-import { proxyAddress } from 'config';
+import useSWR from 'swr';
+import { apiAddress } from 'config';
 import { TokenDefinition } from 'types/Token';
 
-async function fetchTokenDefinitions(): Promise<TokenDefinition[]> {
-  const res = await fetch(`${proxyAddress}/tokens`);
-  const data = await res.json();
-  return data;
-}
-
 export default function useTokenDefinitons() {
-  const [tokens, setTokens] = useState<TokenDefinition[]>([]);
+  const { data: tokens } = useSWR('tokens', async (): Promise<TokenDefinition[]> => {
+    const res = await fetch(`${apiAddress}/tokens`);
+    const data = await res.json();
+    return data;
+  });
 
-  useEffect(() => {
-    (async () => {
-      setTokens(await fetchTokenDefinitions());
-    })().catch(() => setTokens([]));
-  }, []);
-
-  return { tokens };
+  return { tokens: tokens ?? [] };
 }

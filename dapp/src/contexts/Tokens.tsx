@@ -1,4 +1,4 @@
-import { createContext, useMemo } from 'react';
+import React, { createContext, FC, useMemo } from 'react';
 
 import EGLDIcon from 'assets/img/elrond-symbol.svg';
 import useTokenDefinitons from 'hooks/useTokenDefinitions';
@@ -14,7 +14,7 @@ export const TokensContext = createContext<TokensContextType>({
     get: () => undefined,
 });
 
-export function useTokensContext() {
+export const TokensContextProvider: FC = ({ children }) => {
     const { tokens } = useTokenDefinitons();
 
     const getOne = (identifier: string): TokenDefinition | undefined => {
@@ -31,5 +31,5 @@ export function useTokensContext() {
 
     const value = useMemo(() => ({ all: tokens, get: getOne }), [tokens]);
 
-    return value;
-}
+    return <TokensContext.Provider value={value}>{children}</TokensContext.Provider>;
+};

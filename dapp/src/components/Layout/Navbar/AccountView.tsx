@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { logout, useGetAccountInfo } from '@elrondnetwork/dapp-core';
-import { DappUI } from '@elrondnetwork/dapp-core-components';
+import React, { useContext, useState } from 'react';
+import { logout, DappUI } from '@elrondnetwork/dapp-core';
 
 import { ReactComponent as CopyCheckIcon } from 'assets/img/copy-check.svg';
 import { ReactComponent as CopyIcon } from 'assets/img/copy.svg';
@@ -9,32 +8,30 @@ import { ReactComponent as FailureIcon } from 'assets/img/failure.svg';
 import { ReactComponent as PendingIcon } from 'assets/img/pending.svg';
 import { ReactComponent as SuccessIcon } from 'assets/img/success.svg';
 import { primaryLink } from 'components/styles';
-import { network } from 'config';
-import useLatestTransactions from 'hooks/useLatestTransactions';
-import useTokenBalance from 'hooks/useTokenBalance';
+import { explorerAddress } from 'config';
+import { AccountContext } from 'contexts/Account';
 import { getShortHash, getTokenShortName } from 'utils/display';
 
 export const AccountView = () => {
-    const { address, account } = useGetAccountInfo();
-    const { tokens } = useTokenBalance(address);
-    const { transactions } = useLatestTransactions(address);
+    const account = useContext(AccountContext);
     const [hasCopied, setHasCopied] = useState(false);
 
-    const handleLogout = () => logout(`${window.location.origin}`);
+    const handleLogout = () => logout();
 
-    const openExplorer = (txHash: string) => window.open(`${network.explorerAddress}/transactions/${txHash}`, '_blank');
+    const openExplorer = (txHash: string) => window.open(`${explorerAddress}/transactions/${txHash}`, '_blank');
 
     const copyAddress = () => {
-        navigator.clipboard.writeText(address);
+        if (!account.address) return;
+        navigator.clipboard.writeText(account.address);
         setHasCopied(true);
         setTimeout(() => setHasCopied(false), 3000);
     };
 
-    useEffect(() => {
-        console.log(account, tokens);
-    }, [account, tokens]);
+    // useEffect(() => {
+    //     console.log(account);
+    // }, [account]);
 
-    return (
+    return !account.address ? null : (
         <div className="flex flex-col gap-6">
             <div className="flex flex-row justify-between">
                 <div className="text-2xl">
@@ -47,7 +44,9 @@ export const AccountView = () => {
             <div className='flex flex-col gap-2'>
                 <div className="font-medium">My address :</div>
                 <div className="flex flex-row gap-4 justify-end items-center text-sm">
-                    {address}
+                    <span className="truncate">
+                        {account.address}
+                    </span>
                     <button title='Copy address to clipboard' onClick={copyAddress}>
                         {hasCopied ? <CopyCheckIcon /> : <CopyIcon />}
                     </button>
@@ -57,11 +56,11 @@ export const AccountView = () => {
             <div className='flex flex-col gap-2'>
                 <div className="font-medium">My tokens :</div>
                 <div className="flex flex-row flex-wrap gap-10 text-sm">
-                    {tokens.map(token => (
+                    {account.tokens.map(token => (
                         <DappUI.Denominate key={token.identifier} value={token.balance} decimals={2} token={getTokenShortName(token.ticker)}
                             showLastNonZeroDecimal={false} denomination={token.decimals} />
                     ))}
-                    { !tokens.length && (
+                    { !account.tokens.length && (
                         <>No tokens yet</>
                     )}
                 </div>
@@ -70,7 +69,7 @@ export const AccountView = () => {
             <div className='flex flex-col gap-2'>
                 <div className="font-medium">Latest transactions :</div>
                 <div className="flex flex-col gap-4 text-sm">
-                    {transactions.map(tr => (
+                    {account.transactions.map(tr => (
                         <div key={tr.txHash} className="flex flex-row items-center justify-between">
                             <div className="w-6 mr-2">
                                 {tr.status === 'success' ?

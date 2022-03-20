@@ -1,5 +1,5 @@
 import React, { FC, useContext, useMemo } from 'react';
-import { DappUI } from '@elrondnetwork/dapp-core-components';
+import { DappUI } from '@elrondnetwork/dapp-core';
 import { Link } from 'react-router-dom';
 import Truncate from 'react-truncate';
 
@@ -16,9 +16,7 @@ export const CampaignCard: FC<Props> = ({ campaign }) => {
     const [, metadata, illustrationUri] = useCampaign({ campaign });
     const { get } = useContext(TokensContext);
 
-    const token = useMemo(() => {
-        return get(campaign.token_identifier);
-    }, []);
+    const token = useMemo(() => get(campaign.token_identifier), []);
 
     return (
         <div className='border bg-white rounded-md overflow-hidden transition ease-in-out transform hover:scale-105 cursor-pointer'>

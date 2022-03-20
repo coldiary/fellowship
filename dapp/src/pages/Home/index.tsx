@@ -37,7 +37,7 @@ const Item: FC<ItemProps> = (props) => (
 const Home = () => {
   return (
     <div className='max-w-screen-2xl mx-auto my-4 p-10 w-full flex-auto'>
-      <div className="grid grid-cols-3 gap-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         <Item tooltip="Coming soon !" link={'/' /*routeNames.kickstart */} illustration={KickstartImg} title='Start your project with funds from the community'></Item>
         <Item tooltip="Coming soon !" link={'/' /*routeNames.giveaway */} illustration={FundImg} title='Collect funds for people in needs'></Item>
         <Item link="/tip" illustration={TipImg} title='Support your favorite creators and builders'></Item>

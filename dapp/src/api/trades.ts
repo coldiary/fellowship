@@ -1,124 +1,74 @@
-import { ContractFunction, TransactionPayload, StringValue, BigUIntValue, TokenIdentifierValue, OptionalValue, Address, AddressValue, AddressType } from '@elrondnetwork/erdjs';
-import { BigNumber } from '@elrondnetwork/erdjs/node_modules/bignumber.js';
-import { contractAdresses, proxyAddress } from 'config';
+import { AddressType } from '@elrondnetwork/erdjs';
+
+import { apiAddress, contracts } from 'config';
 import { Trade } from 'types/Trades';
-import { formatPayload, sendTransaction } from 'utils/contract';
+import { Contract } from 'utils/contract';
 
-export const getTrade = async (id: number): Promise<Trade> => {
-    const res = await fetch(`${proxyAddress}/trade/${id}`);
-    const data = await res.json() as Trade;
-    return data;
-};
+export class Trades extends Contract {
+    static instance = new Trades(apiAddress, contracts.trade.address, contracts.trade.name, contracts.trade.abiPath);
 
-export const getTradesFor = async (address: string): Promise<Trade[]> => {
-    const res = await fetch(`${proxyAddress}/trade/address/${address}`);
-    const data = await res.json() as Trade[];
-    return data;
-};
-
-export const createTrade = async (
-    offer_amount: number,
-    offer_token_identifier: string,
-    requested_amount: number,
-    requested_token_identifier: string,
-    reserved_for?: string
-) => {
-    if (offer_token_identifier === 'EGLD') {
-        const payload = TransactionPayload.contractCall()
-            .setFunction(new ContractFunction('createTrade'))
-            .addArg(new BigUIntValue(new BigNumber(requested_amount)))
-            .addArg(new TokenIdentifierValue(Buffer.from(requested_token_identifier, 'utf-8')))
-            .addArg(new OptionalValue(new AddressType(), reserved_for ? new AddressValue(new Address(reserved_for)) : null))
-            .build()
-            .valueOf()
-            .toString();
-        return await sendTransaction([{
-            value: `${offer_amount}`,
-            data: payload,
-            receiver: contractAdresses.trade,
-        }]);
-    } else {
-        const payload = TransactionPayload.contractCall()
-            .setFunction(new ContractFunction('ESDTTransfer'))
-            .addArg(new TokenIdentifierValue(Buffer.from(offer_token_identifier, 'utf-8')))
-            .addArg(new BigUIntValue(new BigNumber(offer_amount)))
-            .addArg(new StringValue('createTrade'))
-            .addArg(new BigUIntValue(new BigNumber(requested_amount)))
-            .addArg(new TokenIdentifierValue(Buffer.from(requested_token_identifier, 'utf-8')))
-            .addArg(new OptionalValue(new AddressType(), reserved_for ? new AddressValue(new Address(reserved_for)) : null))
-            .build()
-            .valueOf()
-            .toString();
-        return await sendTransaction([{
-            value: '0',
-            data: payload,
-            receiver: contractAdresses.trade,
-        }]);
+    async getTrade(id: number): Promise<Trade | undefined> {
+        return await this.query('trades', [Trades.encodeU64Value(id)], async (data) => {
+            return Trades.decodeTrade(data[0].valueOf());
+        }).catch(() => undefined);
     }
-};
 
-// export const createTrade = async (
-//     offer_amount: number,
-//     offer_token_identifier: string,
-//     requested_amount: number,
-//     requested_token_identifier: string,
-//     reserved_for?: string
-// ) => {
-//     if (offer_token_identifier === 'EGLD') {
-//         return await sendTransaction([{
-//             value: `${offer_amount}`,
-//             data: formatPayload('createTrade', [
-//                 { value: requested_amount, targetType: 'Number' },
-//                 { value: requested_token_identifier, targetType: 'TokenIdentifier' },
-//                 (reserved_for ? { value: reserved_for, targetType: 'ManagedBuffer' } : undefined),
-//             ]),
-//             receiver: contractAdresses.trade,
-//         }]);
-//     } else {
-//         return await sendTransaction([{
-//             value: '0',
-//             data: formatPayload('ESDTTransfer', [
-//                 { value: offer_token_identifier, targetType: 'TokenIdentifier' },
-//                 { value: offer_amount, targetType: 'Number' },
-//                 { value: 'createTrade', targetType: 'ManagedBuffer' },
-//                 { value: requested_amount, targetType: 'Number' },
-//                 { value: requested_token_identifier, targetType: 'TokenIdentifier' },
-//                 (reserved_for ? { value: reserved_for, targetType: 'ManagedBuffer' } : undefined),
-//             ]),
-//             receiver: contractAdresses.trade,
-//         }]);
-//     }
-// };
-
-export const cancelTrade = async (id: number) => {
-    return await sendTransaction([{
-        value: '0',
-        data: formatPayload('cancelTrade', [
-            { value: id, targetType: 'Number' },
-        ]),
-        receiver: contractAdresses.trade,
-    }]);
-};
-
-export const trade = async (id: number, amount: number, token_identifier: string) => {
-    if (token_identifier === 'EGLD') {
-        return await sendTransaction([{
-            value: `${amount}`,
-            data: formatPayload('trade', [
-                { value: id, targetType: 'Number' },
-            ]),
-            receiver: contractAdresses.trade,
-        }]);
-    } else {
-        return await sendTransaction([{
-            value: '0',
-            data: formatPayload('ESDTTransfer', [
-                { value: token_identifier, targetType: 'TokenIdentifier' },
-                { value: amount, targetType: 'Number' },
-                { value: 'trade', targetType: 'ManagedBuffer' },
-                { value: id, targetType: 'Number' },
-            ]),
-            receiver: contractAdresses.trade,
-        }]);
+    async getTradesFor(address: string): Promise<Trade[]> {
+        return await this.query('getTrades', [Trades.encodeAddress(address)], async (data) => {
+            const list = data[0].valueOf();
+            return list.map(Trades.decodeTrade);
+        }).catch(() => []);
     }
-};
+
+    async createTrade(
+        offer_amount: number,
+        offer_token_identifier: string,
+        requested_amount: number,
+        requested_token_identifier: string,
+        reserved_for?: string
+    ) {
+        if (offer_token_identifier === 'EGLD') {
+            return await this.call('createTrade', `${offer_amount}`, [
+                Trades.encodeBigUInt(requested_amount),
+                Trades.encodeTokenIdentifier(requested_token_identifier),
+                Trades.wrapOptional(new AddressType(), reserved_for ? Trades.encodeAddress(reserved_for) : null),
+            ], 'Create trade');
+        } else {
+            return await this.call('ESDTTransfer', '0', [
+                Trades.encodeTokenIdentifier(offer_token_identifier),
+                Trades.encodeBigUInt(offer_amount),
+                Trades.encodeString('createTrade'),
+                Trades.encodeBigUInt(requested_amount),
+                Trades.encodeTokenIdentifier(requested_token_identifier),
+                Trades.wrapOptional(new AddressType(), reserved_for ? Trades.encodeAddress(reserved_for) : null),
+            ], 'Create trade');
+        }
+    };
+
+    async cancelTrade(id: number) {
+        return await this.call('cancelTrade', '0', [Trades.encodeU64Value(id)], 'Cancel trade');
+    };
+
+    async trade(id: number, amount: number, token_identifier: string) {
+        if (token_identifier === 'EGLD') {
+            return await this.call('trade', `${amount}`, [Trades.encodeU64Value(id)], 'Trade');
+        } else {
+            return await this.call('ESDTTransfer', '0', [
+                Trades.encodeTokenIdentifier(token_identifier),
+                Trades.encodeBigUInt(amount),
+                Trades.encodeString('trade'),
+                Trades.encodeU64Value(id),
+            ], 'Trade');
+        }
+    };
+
+    static decodeTrade = (t: any): Trade => ({
+        id: t.id.toNumber(),
+        offer_address: Trades.decodeAddress(t.offer_address),
+        offer_asset_token: Trades.decodeString(t.offer_asset_token),
+        offer_asset_quantity: Trades.decodeBigNumber(t.offer_asset_quantity),
+        trader_address: t.trader_address !== null ? Trades.decodeAddress(t.trader_address) : undefined,
+        trader_asset_token: Trades.decodeString(t.trader_asset_token),
+        trader_asset_quantity: Trades.decodeBigNumber(t.trader_asset_quantity),
+    });
+}

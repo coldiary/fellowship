@@ -8,9 +8,11 @@ export interface Campaign {
     creator_address: string;
     token_identifier: string;
     metadata_cid: string;
+    status: string;
     amount: string;
     claimable: string;
-    status: string;
+    donations: number;
+    participants: number;
 }
 
 export interface CampaignMetadata {

@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 
 import { getIPFSUri, uploadToIPFS } from 'api/ipfs';
-import { updateCampaign } from 'api/tips';
+import { Tips } from 'api/tips';
 import { ReactComponent as LoaderIcon } from 'assets/img/loader.svg';
 import { ReactComponent as MinusCircleIcon } from 'assets/img/minus-circle.svg';
 import { ReactComponent as UploadImg } from 'assets/img/upload.svg';
@@ -22,7 +22,7 @@ export const EditCampaignModal: FC<Props> = ({ id, metadata: currentMetadata, cl
     const [submitting, setSubmitting] = useState(false);
     const submit = async (data: any) => {
         setSubmitting(true);
-        const illustration = file && await uploadToIPFS(data.illustration);
+        const illustration = file ? await uploadToIPFS(data.illustration) : currentMetadata.illustration;
         const metadata = JSON.stringify({
             title: data.title,
             description: data.description,
@@ -31,7 +31,7 @@ export const EditCampaignModal: FC<Props> = ({ id, metadata: currentMetadata, cl
         });
 
         const metadata_cid = await uploadToIPFS(metadata);
-        await updateCampaign(id, `https://ipfs.io/ipfs/${metadata_cid}`);
+        await Tips.instance.updateCampaign(id, metadata_cid);
         closeModal();
     };
 

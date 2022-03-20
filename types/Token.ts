@@ -24,13 +24,14 @@ export interface TokenDefinition extends Token {
     assets: {
         website: string;
         description: string;
+        ledgerSignature: string;
         social: {
-        email: string;
-        blog: string;
-        twitter: string;
-        whitepaper: string;
-        coinmarketcap: string;
-        coingecko: string;
+            email: string;
+            blog: string;
+            twitter: string;
+            whitepaper: string;
+            coinmarketcap: string;
+            coingecko: string;
         }
         status: string;
         pngUrl: string;

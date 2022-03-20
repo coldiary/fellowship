@@ -1,0 +1,4 @@
+contracts
+.circleci
+**/node_modules
+!deployment

@@ -5,8 +5,7 @@ export const contracts = {
   trade: { name: 'Trade', address: 'erd1qqqqqqqqqqqqqpgql585tt797dfpg0lpn6ce264nv59a8g9eu4aqx5tvq8', abiPath: '/trade.abi.json' },
 };
 
-export const proxyAddress = 'https://devnet.api.fellowship.tools';
 export const nftStorageApiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDI0NzI4MDdFQTc4YzhGN2M4NTU0RWYyZDlDMzYxMDQwODU0OTc0RDkiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0Mjk5NjgwOTg1NiwibmFtZSI6ImZlbGxvd3NoaXAifQ.Ntaf_Ckf4D38SpRqWwOTJ4dXI_-Q3UYECrQNzOvi_Ck';
-export const ipfsGateway = 'https://ipfs.io/ipfs';
+export const ipfsGateway = 'http://127.0.0.1:8080/ipfs';
 export const apiAddress = 'https://devnet-api.elrond.com';
 export const explorerAddress = 'http://devnet-explorer.elrond.com';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { DappUI } from '@elrondnetwork/dapp-core-components';
+import { DappUI } from '@elrondnetwork/dapp-core';
 import { useLocation } from 'react-router-dom';
 
 import { primaryButton } from 'components/styles';
@@ -21,17 +21,17 @@ export const UnlockView: () => JSX.Element = () => {
             <h4 className="mb-4 text-lg font-medium">Connect your wallet</h4>
             <p className="mb-4">Choose a connection method below :</p>
 
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <ExtensionLoginButton
                 callbackRoute={pathname}
-                buttonClassName={`${primaryButton} px-3 py-2 `}
+                buttonClassName={`${primaryButton} w-full px-3 py-2 `}
                 className={'custom-modal '}
                 shouldRenderDefaultCss={true}
                 loginButtonText={'Extension'}
               />
               <WebWalletLoginButton
                 callbackRoute={pathname}
-                buttonClassName={`${primaryButton} px-3 py-2 `}
+                buttonClassName={`${primaryButton} w-full px-3 py-2 `}
                 className='custom-modal'
                 shouldRenderDefaultCss={true}
                 loginButtonText={'Web wallet'}
@@ -39,13 +39,13 @@ export const UnlockView: () => JSX.Element = () => {
               <LedgerLoginButton
                 loginButtonText={'Ledger'}
                 callbackRoute={pathname}
-                buttonClassName={`${primaryButton} px-3 py-2 `}
+                buttonClassName={`${primaryButton} w-full px-3 py-2 `}
                 className='custom-modal'
                 shouldRenderDefaultCss={true}
               />
               <WalletConnectLoginButton
                 callbackRoute={pathname}
-                buttonClassName={`${primaryButton} px-3 py-2 `}
+                buttonClassName={`${primaryButton} w-full px-3 py-2 `}
                 className='custom-modal'
                 shouldRenderDefaultCss={true}
                 loginButtonText={'Maiar'}

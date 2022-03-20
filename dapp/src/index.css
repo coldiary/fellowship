@@ -10,6 +10,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-width: 375px;
 }
 
 code {
@@ -26,7 +27,8 @@ a:hover {
 }
 
 .modal-container {
-  background: none !important;
+  background: #fff !important;
+  @apply rounded-md;
 }
 
 .modal-container .bg-main {
@@ -45,9 +47,13 @@ a:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 50%;
 
-  @apply shadow-md;
+  @apply shadow-md w-4/5 md:w-1/2;
+}
+
+.modal-container.custom-modal._wrapper {
+  background: #fff !important;
+  @apply rounded-md;
 }
 
 .modal-container.custom-modal .card-title .d-flex {
@@ -67,15 +73,63 @@ a:hover {
 }
 
 .toast .progress .trim {
-  width: 160px;
   overflow: hidden;
   display: inline-block;
   text-overflow: ellipsis;
   line-height: initial;
+  @apply w-36 md:w-56;
+}
+
+.tx-details_trimContainer {
+  flex: 1;
 }
 
 .transactions-toast-list_wrapper .toast {
-  @apply absolute shadow-md bottom-4 right-4 bg-white border truncate rounded-md w-1/3;
+  @apply absolute shadow-md bottom-4 right-4 bg-white border truncate rounded-md w-auto md:w-1/3;
+}
+
+.transactions-toast-list_wrapper .justify-content-between {
+  @apply justify-between items-center;
+}
+
+.transactions-toast-list_wrapper .d-flex {
+  @apply flex flex-row;
+}
+
+.transactions-toast-list_wrapper .media .icon-state {
+  @apply w-12 h-12 rounded-full p-2 flex items-center justify-center;
+}
+
+.transactions-toast-list_wrapper .media .bg-warning {
+  @apply bg-yellow-500;
+}
+
+.transactions-toast-list_wrapper .media .bg-danger {
+  @apply bg-red-500;
+}
+
+.transactions-toast-list_wrapper .media .bg-success {
+  @apply bg-green-500;
+}
+
+.transactions-toast-list_wrapper .media .align-self-center {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.transactions-toast-list_wrapper .media {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  align-items: center;
+}
+
+.transactions-toast-list_wrapper .w-100 {
+  width: 100%;
+}
+
+.transactions-toast-list_wrapper .position-absolute {
+  @apply absolute inset-0;
 }
 
 .transactions-toast-list_wrapper .progress-bar {
@@ -84,4 +138,14 @@ a:hover {
 
 .transactions-toast-list_wrapper .progress-bar .content-height {
   opacity: 0;
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
 }

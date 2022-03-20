@@ -1,69 +1,58 @@
-import { contractAdresses, proxyAddress } from 'config';
+import { contracts, apiAddress } from 'config';
 import { Campaign } from 'types/Tips';
-import { formatPayload, sendTransaction } from 'utils/contract';
+import { Contract } from 'utils/contract';
 
-export const getCampaign = async (id: number) => {
-    const res = await fetch(`${proxyAddress}/tips/campaign/${id}`);
-    const data = await res.json() as Campaign;
-    return data;
-};
+export class Tips extends Contract {
+    static instance = new Tips(apiAddress, contracts.tips.address, contracts.tips.name, contracts.tips.abiPath);
 
-export const getAllCampaigns = async (): Promise<Campaign[]> => {
-    const res = await fetch(`${proxyAddress}/tips/all`);
-    const data = await res.json() as Campaign[];
-    return data;
-};
+    async getCampaign(id: number): Promise<Campaign | undefined> {
+        return await this.query('campaigns', [Tips.encodeU64Value(id)], (data) => {
+            return Tips.decodeCampaign(data[0].valueOf());
+        }).catch(() => undefined);
+    }
 
-export const createCampaign = async (metadata_cid: string, token_identifier: string) => {
-    const payload = formatPayload('createCampaign', [
-        { value: metadata_cid, targetType: 'ManagedBuffer' },
-        { value: token_identifier, targetType: 'TokenIdentifier' },
-    ]);
-    console.log(payload);
-    return await sendTransaction([{
-        value: '0',
-        data: payload,
-        receiver: contractAdresses.tips,
-    }]);
-};
+    async getCampaignsFor(address: string): Promise<Campaign[]> {
+        return await this.query('getCampaigns', [Tips.encodeAddress(address)], (data) => {
+            const list = data[0].valueOf();
+            return list.map(Tips.decodeCampaign);
+        }).catch(() => []);
+    }
 
-export const updateCampaign = async (id: number, metadata_cid: string) => {
-    return await sendTransaction([{
-        value: '0',
-        data: formatPayload('updateCampaign', [
-            { value: id, targetType: 'Number' },
-            { value: metadata_cid, targetType: 'ManagedBuffer' },
-        ]),
-        receiver: contractAdresses.tips,
-    }]);
-};
+    async createCampaign(metadata_cid: string, token_identifier: string) {
+        return await this.call('createCampaign', '0', [
+            Tips.encodeString(metadata_cid),
+            Tips.encodeTokenIdentifier(token_identifier),
+        ], 'Create campaign');
+    }
 
-export const endCampaign = async (id: number) => {
-    return await sendTransaction([{
-        value: '0',
-        data: formatPayload('endCampaign', [
-            { value: id, targetType: 'Number' },
-        ]),
-        receiver: contractAdresses.tips,
-    }]);
-};
+    async updateCampaign(id: number, metadata_cid: string) {
+        return await this.call('updateCampaign', '0', [
+            Tips.encodeU64Value(id),
+            Tips.encodeString(metadata_cid),
+        ], 'Update campaign');
+    }
 
-export const claimCampaign = async (id: number) => {
-    return await sendTransaction([{
-        value: '0',
-        data: formatPayload('claimCampaign', [
-            { value: id, targetType: 'Number' },
-        ]),
-        receiver: contractAdresses.tips,
-    }]);
-};
+    async endCampaign(id: number) {
+        return await this.call('endCampaign', '0', [Tips.encodeU64Value(id)], 'End campaign');
+    }
 
-export const tipCampaign = async (id: number, amount: number) => {
-    return await sendTransaction([{
-        value: `${amount}`,
-        data: formatPayload('tip', [
-            { value: id, targetType: 'Number' },
-        ]),
-        receiver: contractAdresses.tips,
-    }]);
-};
+    async claimCampaign(id: number) {
+        return await this.call('claimCampaign', '0', [Tips.encodeU64Value(id)], 'Claim campaign');
+    }
+
+    async tipCampaign(id: number, amount: string) {
+        return await this.call('tip', amount, [Tips.encodeU64Value(id)], 'Tip campaign');
+    }
+
+    static decodeCampaign = (c: any): Campaign => ({
+        id: Tips.decodeNumber(c.id),
+        creator_address: Tips.decodeAddress(c.creator_address),
+        token_identifier: Tips.decodeString(c.token_identifier),
+        metadata_cid: Tips.decodeString(c.metadata_cid),
+        status: Tips.decodeEnum(c.status),
+        amount: Tips.decodeBigNumber(c.amount),
+        claimable: Tips.decodeBigNumber(c.claimable),
+        donations: Tips.decodeNumber(c.donations),
+        participants: Tips.decodeNumber(c.participants),
+    })
+}

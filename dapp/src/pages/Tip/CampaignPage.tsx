@@ -1,12 +1,11 @@
 import React, { useContext, useMemo } from 'react';
 import { useGetAccountInfo } from '@elrondnetwork/dapp-core';
-import { DappUI } from '@elrondnetwork/dapp-core-components';
+import { DappUI } from '@elrondnetwork/dapp-core';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
-import { endCampaign, claimCampaign } from 'api/tips';
-import { tipCampaign } from 'api/tips';
+import { Tips } from 'api/tips';
 import { ReactComponent as Loader } from 'assets/img/loader.svg';
 import { Modal, ConfirmModal, useModal } from 'components/Layout/Modal';
 import { primaryButton, secondaryButton } from 'components/styles';
@@ -15,7 +14,7 @@ import { CampaignStatus } from 'types/Tips';
 import { EditCampaignModal } from './EditCampaignModal';
 import { useCampaign } from './useCampaign';
 
-export const TipCampaign = () => {
+export const CampaignPage = () => {
     const { id } = useParams();
     const { address } = useGetAccountInfo();
     const { get: getToken } = useContext(TokensContext);
@@ -31,19 +30,19 @@ export const TipCampaign = () => {
 
     const claim = async () => {
         if (!campaign) return;
-        await claimCampaign(campaign.id);
+        await Tips.instance.claimCampaign(campaign.id);
     };
 
     const fund = async (data: any) => {
         if (!campaign) return;
         if (campaign.token_identifier === 'EGLD') {
-            await tipCampaign(campaign.id, +data.amount * Math.pow(10, 18));
+            await Tips.instance.tipCampaign(campaign.id, `${+data.amount * Math.pow(10, 18)}`);
         } else {
             if (!token) {
                 console.error('Unknown token identifier');
                 return;
             }
-            await tipCampaign(campaign.id, +data.amount * Math.pow(10, token.decimals));
+            await Tips.instance.tipCampaign(campaign.id, `${+data.amount * Math.pow(10, token.decimals)}`);
         }
     };
 
@@ -53,7 +52,7 @@ export const TipCampaign = () => {
         if (!campaign) return;
 
         if (confirm) {
-            await endCampaign(campaign.id);
+            await Tips.instance.endCampaign(campaign.id);
         }
     };
 
@@ -61,63 +60,61 @@ export const TipCampaign = () => {
     const isCreator = campaign?.creator_address === address;
 
     return (
-        <div className='max-w-screen-2xl mx-auto my-4 p-10 w-full flex-auto flex flex-col'>
+        <div className='max-w-screen-2xl mx-auto md:my-4 p-4 md:p-10 w-full flex-auto flex flex-col'>
             { !metadata || !campaign ? (
                 <div className="flex items-center justify-between p-6">
                     <Loader className='m-auto w-10'/>
                 </div>
             ) : (
-                <div className="flex flex-row gap-6">
+                <div className="flex flex-col md:flex-row gap-6">
                     <div className="flex-auto flex flex-col border bg-white rounded-md overflow-hidden">
-                        <img className='w-auto h-96 object-cover' src={illustrationUri} />
+                        <img className='w-auto h-36 md:h-96 object-cover' src={illustrationUri} />
                         <div className="p-6 flex flex-col gap-4">
-                            <div className="text-4xl font-bold">{metadata.title}</div>
-                            <div className="text-xl">{metadata.description}</div>
+                            <div className="text-2xl md:text-4xl font-bold">{metadata.title}</div>
+                            <div className="md:text-xl">{metadata.description}</div>
                         </div>
                     </div>
-                    <div className="w-80 flex-shrink-0 flex flex-col gap-6 border bg-white rounded-md p-6">
+                    <div className="md:w-80 flex-shrink-0 flex flex-col gap-3 md:gap-6 border bg-white rounded-md p-6">
                         <div className="flex flex-col gap-2">
-                            <div className="text-xl font-medium">Total amount collected :</div>
-                            <div className="text-4xl text-right">
+                            <div className="text-lg md:text-xl font-medium">Total amount collected :</div>
+                            <div className="text-2xl md:text-4xl text-right">
                                 <DappUI.Denominate value={campaign.amount} token={token?.name ?? '-'} decimals={2} denomination={token?.decimals ?? 18} />
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <div className="text-xl font-medium">Total donations :</div>
-                            <div className="text-4xl text-right">
-                                0
-                            </div>
+                            <div className="text-lg md:text-xl font-medium">Total donations :</div>
+                            <div className="text-2xl md:text-4xl text-right">{campaign.donations ?? 0}</div>
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <div className="text-xl font-medium">Total participants :</div>
-                            <div className="text-4xl text-right">
-                                0
-                            </div>
+                            <div className="text-lg md:text-xl font-medium">Total participants :</div>
+                            <div className="text-2xl md:text-4xl text-right">{campaign.participants ?? 0}</div>
                         </div>
 
-                        <div className="flex-auto"></div>
+                        <div className="hidden md:block flex-auto"></div>
 
                         { campaign.status === CampaignStatus.Active ? (
                             isCreator ? (
-                                <div className="flex flex-col gap-2">
-                                    <div className="text-xl font-medium">Claimable :</div>
-                                    <div className="text-4xl text-right">
-                                        <DappUI.Denominate value={campaign.claimable} token={token?.name ?? '-'} decimals={2} denomination={token?.decimals ?? 18} />
+                                <>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="text-lg md:text-xl font-medium">Claimable :</div>
+                                        <div className="text-2xl md:text-4xl text-right">
+                                            <DappUI.Denominate value={campaign.claimable} token={token?.name ?? '-'} decimals={2} denomination={token?.decimals ?? 18} />
+                                        </div>
                                     </div>
                                     <button className={primaryButton} onClick={claim}  disabled={campaign.claimable === '0'}>Claim</button>
-                                </div>
+                                </>
                             ) : (
                                 <form onSubmit={handleSubmit(fund)}>
                                     <div className="flex flex-col gap-2">
                                         <div className="text-xl font-medium">I want to give :</div>
                                         <div className="flex flex-row gap-2 items-center">
-                                            <input {...register('amount', { min: 0, required: true, value: 1 })} type="number"
-                                                className={`border p-2 w-full rounded-md border-gray-300 leading-5 text-4xl text-right ${errors.amount ? 'text-red-700' : ''}`}
+                                            <input {...register('amount', { min: 0, required: true, value: 1 })} type="number" step={0.0001}
+                                                className={`border p-2 w-full rounded-md border-gray-300 leading-5 text-2xl md:text-4xl text-right ${errors.amount ? 'text-red-700' : ''}`}
                                              />
-                                            <div className="text-4xl">
-                                                { campaign.token_identifier }
+                                            <div className="text-2xl md:text-4xl">
+                                                { token?.name }
                                             </div>
                                         </div>
                                         {errors.amount?.type === 'required' && (<div className="text-red-400">Amount is required</div>)}

@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
+import useSWR from 'swr';
 
-import { fetchContractInfo } from 'api/contracts';
+import { apiAddress } from 'config';
 import { ContractInfo } from 'types/Contract';
 
+const fetchContractInfo = async (address: string): Promise<ContractInfo | undefined> => {
+    if (!address) return undefined;
+    const res = await fetch(`${apiAddress}/accounts/${address}`);
+    const data = await res.json();
+    return data;
+};
+
 export default function useSmartContractInfo(contractAddress: string) {
-    const [info, setInfo] = useState<ContractInfo | undefined>(undefined);
-
-    useEffect(() => {
-        (async () => {
-            setInfo(await fetchContractInfo(contractAddress));
-        })().catch(() => setInfo(undefined));
-    }, []);
-
+    const { data: info } = useSWR(`contract-info-${contractAddress}`, fetchContractInfo);
     return info;
 }
