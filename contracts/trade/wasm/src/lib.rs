@@ -7,10 +7,9 @@
 elrond_wasm_node::wasm_endpoints! {
     trade
     (
-        init
         cancelTrade
         createTrade
-        getTradesFor
+        getTrades
         trade
         trades
     )

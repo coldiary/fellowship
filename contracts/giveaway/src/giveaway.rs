@@ -31,8 +31,8 @@ pub trait Giveaway {
         &self,
         #[payment] paid_quantity: BigUint,
         #[payment_token] paid_token: TokenIdentifier,
-        delivery_plan: Vec<u8>,
-        participants: Vec<ManagedAddress>,
+        delivery_plan: ManagedVec<u8>,
+        participants: ManagedVec<ManagedAddress>,
     ) -> SCResult<()> {
         let delivery_total = delivery_plan.iter().fold(0, |acc, val| acc + val);
         require!(delivery_total != 100, "Giveaway delivery invalid, distribution should use exactly all the funds");
@@ -40,20 +40,14 @@ pub trait Giveaway {
         let giveaway_id = self.next_id().get();
         self.next_id().set(&(giveaway_id + 1));
 
-        for participant in participants {
-            self.participants(&giveaway_id).insert(participant);
-        }
+        require!(participants.len() > 0 && participants.len() > delivery_plan.len(), "Not enough participants to execute delivery");
 
-        let participants_set = Vec::from(self.participants(&giveaway_id).iter());
-
-        require!(participants_set.len() > 0 && participants_set.len() > delivery_plan.len(), "Not enough participants to execute delivery");
-
-        let winning_addresses = self.get_distinct_random(1, participants_set.len(), delivery_plan.len());
+        let winning_addresses = self.get_distinct_random(1, participants.len(), delivery_plan.len());
 
         for i in (0..delivery_plan.len()).rev() {
             let winning_address_id = winning_addresses[i];
-            let winner_address = participants_set[winning_address_id];
-            let prize = self.calculate_percentage_of(&paid_quantity, &BigUint::from(delivery_plan[i]));
+            let winner_address = participants.get(winning_address_id);
+            let prize = self.calculate_percentage_of(&paid_quantity, &BigUint::from(delivery_plan.get(i)));
 
             self.send().direct(
                 &winner_address,
@@ -73,9 +67,9 @@ pub trait Giveaway {
         &self,
         #[payment] paid_quantity: BigUint,
         #[payment_token] paid_token: TokenIdentifier,
-        delivery_plan: Vec<u8>,
-        #[var_args] registration_limit_opt: OptionalArg<u64>,
-        #[var_args] whitelist_opt: OptionalArg<Vec<ManagedAddress>>,
+        delivery_plan: ManagedVec<u8>,
+        #[var_args] registration_limit_opt: OptionalValue<u64>,
+        #[var_args] whitelist_opt: OptionalValue<ManagedVec<ManagedAddress>>,
     ) -> SCResult<u64> {
         let registration_limit = registration_limit_opt.into_option();
 
@@ -91,9 +85,9 @@ pub trait Giveaway {
             token_identifier: paid_token,
             amount: paid_quantity,
             registration_limit,
-            delivery_plan,
+            delivery_plan: ManagedVec::from(delivery_plan),
             whitelist: whitelist_opt.into_option(),
-            claimed: Vec::new(),
+            claimed: ManagedVec::new(),
         };
 
         let giveaway_id = self.next_id().get();

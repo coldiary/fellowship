@@ -27,32 +27,59 @@
             }
         },
         {
+            "step": "scCall",
+            "txId": "createCampaign-3",
+            "tx": {
+                "from": "address:bob",
+                "to": "sc:tips",
+                "function": "createCampaign",
+                "arguments": [
+                    "str:test",
+                    "str:EGLD"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": ["3"],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
             "step": "scQuery",
             "tx": {
                 "to": "sc:tips",
-                "function": "getAllCampaigns",
-                "arguments": []
+                "function": "getCampaigns",
+                "arguments": [
+                    "address:alice"
+                ]
             },
             "expect": {
                 "out": [
                     [
-                        "u64:1",
                         {
-                            "0-creator_address": "address:alice",
-                            "1-token_identifier": "nested:str:EGLD",
-                            "2-metadata_uri": "nested:str:test",
-                            "3-amount": "biguint:0",
-                            "4-claimable": "biguint:0",
-                            "5-status": "0x00"
+                            "0-id": "u64:1",
+                            "1-creator_address": "address:alice",
+                            "2-token_identifier": "nested:str:EGLD",
+                            "3-metadata_uri": "nested:str:test",
+                            "4-status": "0x00",
+                            "5-amount": "biguint:0",
+                            "6-claimable": "biguint:0",
+                            "7-donations": "u64:0",
+                            "8-participants": "u64:0"
                         },
-                        "u64:2",
                         {
-                            "0-creator_address": "address:alice",
-                            "1-token_identifier": "nested:str:EGLD",
-                            "2-metadata_cid": "nested:str:test",
-                            "3-amount": "biguint:0",
-                            "4-claimable": "biguint:0",
-                            "5-status": "0x00"
+                            "0-id": "u64:2",
+                            "1-creator_address": "address:alice",
+                            "2-token_identifier": "nested:str:EGLD",
+                            "3-metadata_cid": "nested:str:test",
+                            "4-status": "0x00",
+                            "5-amount": "biguint:0",
+                            "6-claimable": "biguint:0",
+                            "7-donations": "u64:0",
+                            "8-participants": "u64:0"
                         }
                     ]
                 ],

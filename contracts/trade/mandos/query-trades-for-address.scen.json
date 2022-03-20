@@ -107,7 +107,7 @@
             "step": "scQuery",
             "tx": {
                 "to": "sc:trade",
-                "function": "getTradesFor",
+                "function": "getTrades",
                 "arguments": [
                     "address:bob"
                 ]
@@ -115,23 +115,23 @@
             "expect": {
                 "out": [
                     [
-                        "u64:2",
                         {
-                            "0-offer_address": "address:bob",
-                            "1-offer_asset_token": "nested:str:TEST-123456",
-                            "2-offer_asset_quantity": "biguint:1,000,000",
-                            "3-trader_address": "0x00",
-                            "4-trader_asset_token": "nested:str:EGLD",
-                            "5-trader_asset_quantity": "biguint:1,000,000,000,000,000,000"
+                            "0-id": "u64:2",
+                            "1-offer_address": "address:bob",
+                            "2-offer_asset_token": "nested:str:TEST-123456",
+                            "3-offer_asset_quantity": "biguint:1,000,000",
+                            "4-trader_address": "0x00",
+                            "5-trader_asset_token": "nested:str:EGLD",
+                            "6-trader_asset_quantity": "biguint:1,000,000,000,000,000,000"
                         },
-                        "u64:3",
                         {
-                            "0-offer_address": "address:carol",
-                            "1-offer_asset_token": "nested:str:EGLD",
-                            "2-offer_asset_quantity": "biguint:1,000,000,000,000,000,000",
-                            "3-trader_address": "0x01|address:bob",
-                            "4-trader_asset_token": "nested:str:TEST-123456",
-                            "5-trader_asset_quantity": "biguint:1,000,000"
+                            "0-id": "u64:3",
+                            "1-offer_address": "address:carol",
+                            "2-offer_asset_token": "nested:str:EGLD",
+                            "3-offer_asset_quantity": "biguint:1,000,000,000,000,000,000",
+                            "4-trader_address": "0x01|address:bob",
+                            "5-trader_asset_token": "nested:str:TEST-123456",
+                            "6-trader_asset_quantity": "biguint:1,000,000"
                         }
                     ]
                 ],

@@ -55,13 +55,17 @@
                     "esdt": {},
                     "storage": {
                         "str:nextId": "2",
+                        "str:donations|address:bob|u64:1": "400,000,000,000,000,000",
                         "str:campaigns|u64:1": {
-                            "0-creator_address": "address:alice",
-                            "1-token_identifier": "nested:str:EGLD",
-                            "2-metadata_cid": "nested:str:test",
-                            "3-amount": "biguint:400,000,000,000,000,000",
-                            "4-claimable": "biguint:200,000,000,000,000,000",
-                            "5-status": "0x00"
+                            "0-id": "u64:1",
+                            "1-creator_address": "address:alice",
+                            "2-token_identifier": "nested:str:EGLD",
+                            "3-metadata_cid": "nested:str:test",
+                            "4-status": "0x00",
+                            "5-amount": "biguint:400,000,000,000,000,000",
+                            "6-claimable": "biguint:200,000,000,000,000,000",
+                            "7-donations": "u64:2",
+                            "8-participants": "u64:1"
                         }
                     },
                     "code": "file:../output/tips.wasm"

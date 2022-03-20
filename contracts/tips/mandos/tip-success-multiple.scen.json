@@ -1,17 +1,28 @@
 {
-    "name": "tips claim failure - not creator",
+    "name": "tips fund success",
     "steps": [
         {
             "step": "externalSteps",
             "path": "tip-success.scen.json"
         },
         {
+            "step": "setState",
+            "accounts": {
+                "address:carol": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                }
+            }
+        },
+        {
             "step": "scCall",
-            "txId": "claimCampaign-3",
+            "txId": "tip-1",
             "tx": {
-                "from": "address:bob",
+                "from": "address:carol",
                 "to": "sc:tips",
-                "function": "claimCampaign",
+                "egldValue": "200,000,000,000,000,000",
+                "function": "tip",
                 "arguments": [
                     "1"
                 ],
@@ -20,8 +31,28 @@
             },
             "expect": {
                 "out": [],
-                "status": "4",
-                "message": "str:Only the creator of the campaign can claim funds",
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "tip-2",
+            "tx": {
+                "from": "address:bob",
+                "to": "sc:tips",
+                "egldValue": "100,000,000,000,000,000",
+                "function": "tip",
+                "arguments": [
+                    "1"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
                 "gas": "*",
                 "refund": "*"
             }
@@ -42,30 +73,37 @@
                 },
                 "address:bob": {
                     "nonce": "2",
-                    "balance": "800,000,000,000,000,000",
+                    "balance": "700,000,000,000,000,000",
                     "esdt": {
                         "str:TEST-123456": "4,000,000",
                         "str:NOPE-987654": "1,000,000"
                     },
                     "storage": {}
                 },
+                "address:carol": {
+                    "nonce": "1",
+                    "balance": "800,000,000,000,000,000",
+                    "esdt": {},
+                    "storage": {}
+                },
                 "sc:tips": {
                     "nonce": "0",
-                    "balance": "200,000,000,000,000,000",
+                    "balance": "500,000,000,000,000,000",
                     "esdt": {},
                     "storage": {
                         "str:nextId": "2",
-                        "str:donations|address:bob|u64:1": "200,000,000,000,000,000",
+                        "str:donations|address:bob|u64:1": "300,000,000,000,000,000",
+                        "str:donations|address:carol|u64:1": "200,000,000,000,000,000",
                         "str:campaigns|u64:1": {
                             "0-id": "u64:1",
                             "1-creator_address": "address:alice",
                             "2-token_identifier": "nested:str:EGLD",
                             "3-metadata_cid": "nested:str:test",
                             "4-status": "0x00",
-                            "5-amount": "biguint:200,000,000,000,000,000",
-                            "6-claimable": "biguint:200,000,000,000,000,000",
-                            "7-donations": "u64:1",
-                            "8-participants": "u64:1"
+                            "5-amount": "biguint:500,000,000,000,000,000",
+                            "6-claimable": "biguint:500,000,000,000,000,000",
+                            "7-donations": "u64:3",
+                            "8-participants": "u64:2"
                         }
                     },
                     "code": "file:../output/tips.wasm"

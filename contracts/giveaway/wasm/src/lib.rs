@@ -7,8 +7,8 @@
 elrond_wasm_node::wasm_endpoints! {
     giveaway
     (
-        init
         createOpenGiveaway
+        giveaway
     )
 }
 

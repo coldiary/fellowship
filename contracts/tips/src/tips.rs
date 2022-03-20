@@ -1,4 +1,5 @@
 #![no_std]
+#![feature(generic_associated_types)]
 
 elrond_wasm::imports!();
 
@@ -16,23 +17,30 @@ pub trait Tips {
     #[storage_mapper("campaigns")]
     fn campaigns(&self, id: &u64) -> SingleValueMapper<CampaignData<Self::Api>>;
 
+    #[view]
+    #[storage_mapper("donations")]
+    fn donations(&self, address: &ManagedAddress, id: &u64) -> SingleValueMapper<BigUint<Self::Api>>;
+
     #[init]
     fn init(&self) -> SCResult<()> {
         self.next_id().set_if_empty(&1);
         Ok(())
     }
 
-    #[view(getAllCampaigns)]
-    fn get_all_campaigns(
+    #[view(getCampaigns)]
+    fn get_campaigns_for(
         &self,
-    ) -> Vec<(u64, CampaignData<Self::Api>)> {
-        let mut all = Vec::new();
+        address: ManagedAddress,
+    ) -> ManagedVec<CampaignData<Self::Api>> {
+        let mut all = ManagedVec::new();
         let count = self.next_id().get();
 
         for n in 1..count {
             if !self.campaigns(&n).is_empty() {
                 let campaign = self.campaigns(&n).get();
-                all.push((n, campaign));
+                if campaign.creator_address == address || !self.donations(&address, &n).is_empty() {
+                    all.push(campaign);
+                }
             }
         }
 
@@ -47,17 +55,21 @@ pub trait Tips {
     ) -> SCResult<u64> {
         require!(token_identifier.is_egld() || token_identifier.is_valid_esdt_identifier(), "Invalid token identifier provided");
 
+        let campaign_id = self.next_id().get();
+        self.next_id().set(&(campaign_id + 1));
+
         let campaign = CampaignData {
+            id: campaign_id,
             creator_address: self.blockchain().get_caller(),
             token_identifier,
             metadata_cid,
             amount: BigUint::zero(),
             claimable: BigUint::zero(),
+            donations: 0,
+            participants: 0,
             status: Status::Active,
         };
 
-        let campaign_id = self.next_id().get();
-        self.next_id().set(&(campaign_id + 1));
         self.campaigns(&campaign_id).set(&campaign);
 
         Ok(campaign_id)
@@ -142,15 +154,23 @@ pub trait Tips {
     ) -> SCResult<()> {
         require!(!self.campaigns(&campaign_id).is_empty(), "This campaign does not exist");
 
+        let caller = self.blockchain().get_caller();
         let mut campaign = self.campaigns(&campaign_id).get();
+        let previous_amount = self.donations(&caller, &campaign_id).get();
 
         require!(campaign.status == Status::Active, "This campaign has ended");
         require!(campaign.token_identifier == paid_token, "Invalid token provided as payment");
         require!(paid_quantity > 0, "Invalid amount provided as payment");
 
-        campaign.amount = &campaign.amount + &paid_quantity;
-        campaign.claimable = &campaign.claimable + &paid_quantity;
+        campaign.amount += &paid_quantity;
+        campaign.claimable += &paid_quantity;
+        campaign.donations += 1;
 
+        if previous_amount == 0 {
+            campaign.participants += 1;
+        }
+
+        self.donations(&caller, &campaign_id).update(|amount| *amount += paid_quantity);
         self.campaigns(&campaign_id).set(&campaign);
 
         Ok(())

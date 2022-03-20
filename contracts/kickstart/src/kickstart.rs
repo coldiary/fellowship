@@ -12,11 +12,13 @@ pub trait Kickstart {
     #[storage_mapper("nextId")]
     fn next_id(&self) -> SingleValueMapper<u64>;
 
+    #[view]
     #[storage_mapper("campaigns")]
     fn campaigns(&self, id: &u64) -> SingleValueMapper<CampaignData<Self::Api>>;
 
+    #[view]
     #[storage_mapper("deposits")]
-    fn deposits(&self, id: &u64, donor: &ManagedAddress) -> SingleValueMapper<BigUint>;
+    fn deposits(&self, donor: &ManagedAddress, id: &u64) -> SingleValueMapper<BigUint>;
 
     #[init]
     fn init(&self) -> SCResult<()> {
@@ -27,7 +29,7 @@ pub trait Kickstart {
     #[endpoint(createCampaign)]
     fn create_campaign(
         &self,
-        metadata_uri: ManagedBuffer,
+        metadata_cid: ManagedBuffer,
         token_identifier: TokenIdentifier,
         goal: BigUint,
         deadline: u64,
@@ -39,7 +41,7 @@ pub trait Kickstart {
         let campaign = CampaignData {
             creator_address: self.blockchain().get_caller(),
             token_identifier,
-            metadata_uri,
+            metadata_cid,
             goal,
             deadline,
             amount: BigUint::zero(),
@@ -57,7 +59,7 @@ pub trait Kickstart {
     fn update_campaign(
         &self,
         campaign_id: u64,
-        opt_metadata_uri: Option<ManagedBuffer>,
+        opt_metadata_cid: Option<ManagedBuffer>,
         opt_goal: Option<BigUint>,
         opt_deadline: Option<u64>,
     ) -> SCResult<()> {
@@ -68,27 +70,20 @@ pub trait Kickstart {
         let mut campaign = self.campaigns(&campaign_id).get();
         require!(caller == campaign.creator_address, "Only the creator of the campaign can update it");
 
-        match opt_metadata_uri {
-            Option::Some(metadata_uri) => {
-                campaign.metadata_uri = metadata_uri;
-            },
-            Option::None => {},
+        if opt_metadata_cid.is_some() {
+            campaign.metadata_cid = opt_metadata_cid.unwrap();
         }
 
-        match opt_goal {
-            Option::Some(goal) => {
-                require!(goal > 0, "Invalid amount provided for campaign's goal");
-                campaign.goal = goal;
-            },
-            Option::None => {},
+        if opt_goal.is_some() {
+            let goal = opt_goal.unwrap();
+            require!(goal > 0, "Invalid amount provided for campaign's goal");
+            campaign.goal = goal;
         }
 
-        match opt_deadline {
-            Option::Some(deadline) => {
-                require!(deadline > self.get_current_time(), "Campaign's deadline can't be in the past");
-                campaign.deadline = deadline;
-            },
-            Option::None => {},
+        if opt_deadline.is_some() {
+            let deadline = opt_deadline.unwrap();
+            require!(deadline > self.get_current_time(), "Campaign's deadline can't be in the past");
+            campaign.deadline = deadline;
         }
 
         self.campaigns(&campaign_id).set(&campaign);
@@ -120,12 +115,12 @@ pub trait Kickstart {
             },
             Status::Failed => {
                 let caller = self.blockchain().get_caller();
-                let deposit = self.deposits(&campaign_id, &caller).get();
+                let deposit = self.deposits(&caller, &campaign_id).get();
 
                 if deposit > 0 {
                     let token_identifier = &campaign.token_identifier;
 
-                    self.deposits(&campaign_id, &caller).clear();
+                    self.deposits(&caller, &campaign_id, ).clear();
                     self.send().direct(&caller, &token_identifier, 0, &deposit, &[]);
                 }
 
@@ -152,11 +147,11 @@ pub trait Kickstart {
 
         let caller = self.blockchain().get_caller();
 
-        if (self.deposits(&campaign_id, &caller).is_empty()) {
+        if self.deposits(&caller, &campaign_id).is_empty() {
             campaign.donors += 1;
         }
 
-        self.deposits(&campaign_id, &caller).update(|deposit| *deposit += &paid_quantity);
+        self.deposits(&caller, &campaign_id).update(|deposit| *deposit += &paid_quantity);
 
         campaign.amount = &campaign.amount + &paid_quantity;
 

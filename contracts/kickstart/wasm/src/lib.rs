@@ -7,9 +7,10 @@
 elrond_wasm_node::wasm_endpoints! {
     kickstart
     (
-        init
+        campaigns
         claim
         createCampaign
+        deposits
         fund
         updateCampaign
     )

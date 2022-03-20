@@ -106,12 +106,13 @@
                     "storage": {
                         "str:nextId": "2",
                         "str:trades|u64:1": {
-                            "0-offer_address": "address:alice",
-                            "1-offer_asset_token": "nested:str:TEST-123456",
-                            "2-offer_asset_quantity": "biguint:1,000,000",
-                            "3-trader_address": "0x01|address:bob",
-                            "4-trader_asset_token": "nested:str:NOPE-987654",
-                            "5-trader_asset_quantity": "biguint:1,000,000"
+                            "0-id": "u64:1",
+                            "1-offer_address": "address:alice",
+                            "2-offer_asset_token": "nested:str:TEST-123456",
+                            "3-offer_asset_quantity": "biguint:1,000,000",
+                            "4-trader_address": "0x01|address:bob",
+                            "5-trader_asset_token": "nested:str:NOPE-987654",
+                            "6-trader_asset_quantity": "biguint:1,000,000"
                         }
                     },
                     "code": "file:../../output/trade.wasm"

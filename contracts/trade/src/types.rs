@@ -5,8 +5,9 @@ use elrond_wasm::{
 
 elrond_wasm::derive_imports!();
 
-#[derive(NestedEncode, NestedDecode, TopEncode, TopDecode, TypeAbi)]
+#[derive(NestedEncode, NestedDecode, TopEncode, TopDecode, ManagedVecItem, TypeAbi)]
 pub struct TradeData<M: ManagedTypeApi> {
+    pub id: u64,
     pub offer_address: ManagedAddress<M>,
     pub offer_asset_token: TokenIdentifier<M>,
     pub offer_asset_quantity: BigUint<M>,

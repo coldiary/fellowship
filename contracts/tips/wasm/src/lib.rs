@@ -10,8 +10,9 @@ elrond_wasm_node::wasm_endpoints! {
         campaigns
         claimCampaign
         createCampaign
+        donations
         endCampaign
-        getAllCampaigns
+        getCampaigns
         tip
         updateCampaign
     )
