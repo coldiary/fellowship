@@ -13,6 +13,7 @@ import { PublicAppModule } from './public.app.module';
 import { TransactionProcessorModule } from './transaction.processor.module';
 import * as bodyParser from 'body-parser';
 import { WinstonLoggerOptions } from './winston.config';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const publicApp = await NestFactory.create(PublicAppModule, {
@@ -20,6 +21,8 @@ async function bootstrap() {
   });
   publicApp.use(bodyParser.json({limit: '1mb'}));
   publicApp.enableCors();
+
+  const logger = new Logger('Bootstrap');
 
   let apiConfigService = publicApp.get<ApiConfigService>(ApiConfigService);
   let metricsService = publicApp.get<MetricsService>(MetricsService);
@@ -34,9 +37,9 @@ async function bootstrap() {
   const description = readFileSync(join(__dirname, '..', 'docs', 'swagger.md'), 'utf8');
 
   let documentBuilder = new DocumentBuilder()
-    .setTitle('Elrond Microservice API')
+    .setTitle('Fellowship Microservice API')
     .setDescription(description)
-    .setVersion('1.0.0')
+    .setVersion('0.0.0')
     .setExternalDoc('Elrond Docs', 'https://docs.elrond.com');
 
   let apiUrls = apiConfigService.getSwaggerUrls();
@@ -51,16 +54,19 @@ async function bootstrap() {
 
   if (apiConfigService.getIsPublicApiFeatureActive()) {
     await publicApp.listen(3001);
+    logger.log('Public app endpoints listening on port 3001\n');
   }
 
   if (apiConfigService.getIsPrivateApiFeatureActive()) {
     const privateApp = await NestFactory.create(PrivateAppModule);
     await privateApp.listen(4000);
+    logger.log('Private app endpoints listening on port 4000\n');
   }
 
   if (apiConfigService.getIsTransactionProcessorFeatureActive()) {
     const transactionProcessorApp = await NestFactory.create(TransactionProcessorModule);
     await transactionProcessorApp.listen(6000);
+    logger.log('TxProcessor endpoints listening on port 6000\n');
   }
 }
 

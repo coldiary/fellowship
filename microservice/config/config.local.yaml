@@ -2,8 +2,8 @@ urls:
   api: 'https://devnet-api.elrond.com'
   ipfs: 'https://ipfs.io/ipfs'
   swagger:
-    - 'https://devnet.api.fellowship.tools'
-  redis: 'redis'
+    - 'http://localhost:3001'
+  redis: '127.0.0.1'
 features:
   publicApi: true
   privateApi: true

@@ -1,15 +1,15 @@
 urls:
   api: 'https://api.elrond.com'
+  ipfs: 'https://ipfs.io/ipfs'
   swagger:
-    - 'https://microservice.elrond.com'
-    - 'https://devnet-microservice.elrond.com'
-    - 'https://testnet-microservice.elrond.com'
-  redis: '127.0.0.1'
+    - 'https://api.fellowship.tools'
+  redis: 'redis'
 features:
   publicApi: true
   privateApi: true
-  transactionProcessor: true
+  transactionProcessor: false
 security:
   jwtSecret: ''
 contracts:
   tips: ''
+  trade: ''

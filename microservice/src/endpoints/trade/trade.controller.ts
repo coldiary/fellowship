@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from "@nestjs/common";
+import { Controller, Get, NotFoundException, Param } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { ContractInfo } from "src/types/Contract";
@@ -38,7 +38,9 @@ export class TradeController {
 	async getTrade(
 		@Param('id') id: string,
 	): Promise<Trade> {
-		return await this._trade.getTrade(+id);
+		const trade = await this._trade.getTrade(+id);
+		if (!trade) throw new NotFoundException();
+		return trade;
 	}
 
 	@Get("/clear-cache")

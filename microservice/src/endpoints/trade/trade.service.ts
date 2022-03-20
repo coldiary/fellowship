@@ -50,7 +50,7 @@ export class TradeService {
         );
     }
 
-    async getTrade(id: number): Promise<Trade> {
+    async getTrade(id: number): Promise<Trade | null> {
         return await this.cachingService.getOrSetCache(
             `trade:${id}`,
             async () => await this.queryTrade(id),
@@ -86,7 +86,7 @@ export class TradeService {
         return trades;
     }
 
-    private async queryTrade(id: number): Promise<Trade> {
+    private async queryTrade(id: number): Promise<Trade | null> {
         if (!this.abi || !this.registry) throw new Error('Tips ABI not loaded');
 
         const contract = new SmartContract({ address: this.contractAddress, abi: this.abi });
@@ -99,6 +99,8 @@ export class TradeService {
         });
 
         let returnData: string[] = result.returnData;
+
+        if (!returnData.length) return null;
 
         const definitions = this.registry.getInterface('Trade').getEndpoint('trades').output;
         const values = this.serializer.buffersToValues(returnData.map(d => Buffer.from(d, 'base64')), definitions);

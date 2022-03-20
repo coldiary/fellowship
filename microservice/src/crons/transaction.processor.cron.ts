@@ -27,25 +27,29 @@ export class TransactionProcessorCron {
     @Cron('*/1 * * * * *')
     async handleNewTransactions() {
         Locker.lock('newTransactions', async () => {
-            await this.transactionProcessor.start({
-                gatewayUrl: this.apiConfigService.getApiUrl(),
-                maxLookBehind: 10,
-                onTransactionsReceived: async (shardId, nonce, transactions, statistics) => {
-                    this.logger.verbose(`Received ${transactions.length} transactions on shard ${shardId} and nonce ${nonce}. Time left: ${statistics.secondsLeft}`);
-                    for (let transaction of transactions) {
-                        switch (transaction.receiver) {
-                            case this.contractAddresses.tips: this.processTipsTransaction(transaction); break;
-                            case this.contractAddresses.trade: await this.cachingService.deleteInCache(`trade:*`); break;
+            try {
+                await this.transactionProcessor.start({
+                    gatewayUrl: this.apiConfigService.getApiUrl(),
+                    maxLookBehind: 10,
+                    onTransactionsReceived: async (shardId, nonce, transactions, statistics) => {
+                        this.logger.verbose(`Received ${transactions.length} transactions on shard ${shardId} and nonce ${nonce}. Time left: ${statistics.secondsLeft}`);
+                        for (let transaction of transactions) {
+                            switch (transaction.receiver) {
+                                case this.contractAddresses.tips: this.processTipsTransaction(transaction); break;
+                                case this.contractAddresses.trade: await this.cachingService.deleteInCache(`trade:*`); break;
+                            }
                         }
+                    },
+                    getLastProcessedNonce: async (shardId) => {
+                        return await this.cachingService.getCacheRemote(`lastProcessedNonce:${shardId}`);
+                    },
+                    setLastProcessedNonce: async (shardId, nonce) => {
+                        await this.cachingService.setCacheRemote(`lastProcessedNonce:${shardId}`, nonce, Constants.oneMonth());
                     }
-                },
-                getLastProcessedNonce: async (shardId) => {
-                    return await this.cachingService.getCacheRemote(`lastProcessedNonce:${shardId}`);
-                },
-                setLastProcessedNonce: async (shardId, nonce) => {
-                    await this.cachingService.setCacheRemote(`lastProcessedNonce:${shardId}`, nonce, Constants.oneMonth());
-                }
-            });
+                });
+            } catch (err) {
+                console.error(err);
+            }
         });
     }
 
