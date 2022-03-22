@@ -1,5 +1,4 @@
-import { refreshAccount, transactionServices } from '@elrondnetwork/dapp-core';
-import { SimpleTransactionType } from '@elrondnetwork/dapp-core/build/types/transactions';
+import { refreshAccount, transactionServices, SimpleTransactionType } from '@elrondnetwork/dapp-core';
 import {
     AbiRegistry,
     Address,
@@ -98,7 +97,7 @@ export class Contract extends ContractSerializer {
 
 
     private async loadAbi(abiPath: string) {
-        this.registry = (await AbiRegistry.load({ urls: [`${window.location.origin}/${abiPath}`] }));
+        this.registry = (await AbiRegistry.load({ urls: [window.location.origin + abiPath] }));
     }
 
     private async decodeWithAbi(encoded: string[], endpoint: string) {

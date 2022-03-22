@@ -34,10 +34,6 @@ export function useCampaign(options: UseCampaignOptions) {
     }, [metadata]);
 
     useEffect(() => {
-        console.log({ campaign, metadata, illustrationUrl });
-    }, [campaign, metadata, illustrationUrl]);
-
-    useEffect(() => {
         mutate();
     }, [hasPendingTransactions, options]);
 

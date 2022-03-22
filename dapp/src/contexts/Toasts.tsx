@@ -61,7 +61,6 @@ export const ToastsContextProvider: FC = ({ children }) => {
     const showToast = (options: ToastOptions) => {
         const { message, duration, overwrite } = { duration: 3000, ...options };
         const newId = uniqueId('toast-');
-        console.log(newId, message, duration);
         dispatch({ type: ToastsContextActionType.addToast, payload: { overwrite, toast: { id: newId, message }}});
         setTimeout(() => dispatch({ type: ToastsContextActionType.removeToast, payload: { id: newId }}), duration);
     };

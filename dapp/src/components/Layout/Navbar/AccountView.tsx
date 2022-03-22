@@ -27,10 +27,6 @@ export const AccountView = () => {
         setTimeout(() => setHasCopied(false), 3000);
     };
 
-    // useEffect(() => {
-    //     console.log(account);
-    // }, [account]);
-
     return !account.address ? null : (
         <div className="flex flex-col gap-6">
             <div className="flex flex-row justify-between">
