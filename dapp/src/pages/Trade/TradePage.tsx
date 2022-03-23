@@ -9,6 +9,7 @@ import { ReactComponent as TradeIcon } from 'assets/img/trade.svg';
 import { Button } from 'components/Button';
 import { ConfirmModal, useModal } from 'components/Layout/Modal';
 import { primaryButton } from 'components/styles';
+import { ToastsContext } from 'contexts/Toasts';
 import { TokensContext } from 'contexts/Tokens';
 import { Trade } from 'types/Trades';
 import { getShortHash } from 'utils/display';
@@ -24,6 +25,7 @@ export const TradePage = () => {
     const { address } = useGetAccountInfo();
     const navigate = useNavigate();
     const { get: getToken } = useContext(TokensContext);
+    const { showToast } = useContext(ToastsContext);
     const { data: trade, mutate } = useSWR(id ? `trade-${id}` : null, async (): Promise<Trade | undefined> => {
         if (!id) return;
         return await Trades.instance.getTrade(+id);
@@ -68,8 +70,13 @@ export const TradePage = () => {
         }
     };
 
+    const copyLink = async () => {
+        navigator.clipboard.writeText(window.location.href);
+        showToast({ message: 'Link copied !' });
+    };
+
     return (
-        <div className='max-w-screen-2xl mx-auto my-4 p-10 w-full flex-auto flex flex-col'>
+        <div className='max-w-screen-2xl mx-auto my-4 p-10 md:pt-4 w-full flex-auto flex flex-col'>
             { !trade || !offerToken || !traderToken ? (
                 <>
                     { isSuccessful ? (
@@ -86,74 +93,81 @@ export const TradePage = () => {
                     )}
                 </>
             ) : (
-                <div className="flex flex-col gap-12 p-6 md:gap-24 md:p-12 bg-whitee border">
-                    <div className="text-lg text-center">
-                        {
-                            isCreator ? 'You created this trade :' :
-                            trade.trader_address ? 'This trade has been reserved for you :' : null
-                        }
+                <div className='flex flex-col gap-6'>
+                    <div className='flex justify-center items-center'>
+                        <div className='py-2 px-6 border bg-whitee rounded-full cursor-pointer hover:shadow-md text-center' onClick={copyLink}>
+                            Send this offer : <span className="text-main">{window.location.href}</span>
+                        </div>
                     </div>
+                    <div className="flex flex-col gap-12 p-6 md:gap-24 md:p-12 bg-whitee border">
+                        <div className="text-lg text-center">
+                            {
+                                isCreator ? 'You created this trade :' :
+                                trade.trader_address ? 'This trade has been reserved for you :' : null
+                            }
+                        </div>
 
-                    <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-trade items-center">
-                        <div className="flex-auto flex flex-col items-center gap-4 md:gap-8">
-                            <div className="text-xs uppercase">Offered</div>
-                            <div className="flex flex-row items-center gap-4">
-                                <img className='w-8 h-8' src={offerToken.assets?.svgUrl} />
-                                <div className="text-2xl md:text-4xl">
-                                    <DappUI.Denominate value={trade.offer_asset_quantity} token={offerToken.name} denomination={offerToken.decimals} decimals={2}/>
+                        <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-trade items-center">
+                            <div className="flex-auto flex flex-col items-center gap-4 md:gap-8">
+                                <div className="text-xs uppercase">Offered</div>
+                                <div className="flex flex-row items-center gap-4">
+                                    <img className='w-8 h-8' src={offerToken.assets?.svgUrl} />
+                                    <div className="text-2xl md:text-4xl">
+                                        <DappUI.Denominate value={trade.offer_asset_quantity} token={offerToken.name} denomination={offerToken.decimals} decimals={2}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex justify-center items-center w-12 transform rotate-90 m-auto md:rotate-0">
+                                <TradeIcon className='w-full h-full' />
+                            </div>
+                            <div className="flex-auto flex flex-col items-center gap-4 md:gap-8">
+                                <div className="text-xs uppercase">Asked</div>
+                                <div className="flex flex-row items-center gap-4">
+                                    <img className='w-8 h-8' src={traderToken.assets?.svgUrl} />
+                                    <div className="tex-2xl md:text-4xl">
+                                        <DappUI.Denominate value={trade.trader_asset_quantity} token={traderToken.name} denomination={traderToken.decimals} decimals={2}/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-center items-center w-12 transform rotate-90 m-auto md:rotate-0">
-                            <TradeIcon className='w-full h-full' />
-                        </div>
-                        <div className="flex-auto flex flex-col items-center gap-4 md:gap-8">
-                            <div className="text-xs uppercase">Asked</div>
-                            <div className="flex flex-row items-center gap-4">
-                                <img className='w-8 h-8' src={traderToken.assets?.svgUrl} />
-                                <div className="tex-2xl md:text-4xl">
-                                    <DappUI.Denominate value={trade.trader_asset_quantity} token={traderToken.name} denomination={traderToken.decimals} decimals={2}/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-trade items-center">
-                        <div className="flex-auto flex flex-col items-center gap-4">
-                            {isCreator ? (
-                                <ConfirmModal shown={cancelModalShown} closeModal={onCloseCancelModal}
-                                    toggle={() => <button className={primaryButton} onClick={openCancelModal}>Cancel trade</button>}
-                                    content={() => (
-                                        <div className='flex flex-col gap-4'>
-                                            <div className="text-lg text-center uppercase">Cancel trade</div>
-                                            <div className="flex flex-col gap-4">
-                                                Are you sure you want to cancel this trade ?<br />
-                                                <div className="text-sm text-gray-500">
-                                                    Your funds will be returned to your address.
+                        <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-trade items-center">
+                            <div className="flex-auto flex flex-col items-center gap-4">
+                                {isCreator ? (
+                                    <ConfirmModal shown={cancelModalShown} closeModal={onCloseCancelModal}
+                                        toggle={() => <button className={primaryButton} onClick={openCancelModal}>Cancel trade</button>}
+                                        content={() => (
+                                            <div className='flex flex-col gap-4'>
+                                                <div className="text-lg text-center uppercase">Cancel trade</div>
+                                                <div className="flex flex-col gap-4">
+                                                    Are you sure you want to cancel this trade ?<br />
+                                                    <div className="text-sm text-gray-500">
+                                                        Your funds will be returned to your address.
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )}
-                                ></ConfirmModal>
-                            ): (
-                                <div className='text-gray-600 font-medium'>
-                                    <>Created by {getShortHash(trade.offer_address)}</>
-                                </div>
-                            )}
+                                        )}
+                                    ></ConfirmModal>
+                                ): (
+                                    <div className='text-gray-600 font-medium'>
+                                        <>Created by {getShortHash(trade.offer_address)}</>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex-shrink-0 w-6 flex justify-center items-center">
+                            </div>
+                            <div className="flex-auto flex flex-col items-center gap-4">
+                                {!isCreator ? (
+                                    <Button onClick={proceedTrade} onlyAuth>Trade</Button>
+                                ) : (
+                                    <div className='text-gray-600 font-medium'>
+                                        {trade.trader_address && <>Reserved for {getShortHash(trade.trader_address)}</>}
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                        <div className="flex-shrink-0 w-6 flex justify-center items-center">
-                        </div>
-                        <div className="flex-auto flex flex-col items-center gap-4">
-                            {!isCreator ? (
-                                <Button onClick={proceedTrade} onlyAuth>Trade</Button>
-                            ) : (
-                                <div className='text-gray-600 font-medium'>
-                                    {trade.trader_address && <>Reserved for {getShortHash(trade.trader_address)}</>}
-                                </div>
-                            )}
-                        </div>
-                    </div>
 
+                    </div>
                 </div>
             )}
         </div>

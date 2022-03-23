@@ -9,6 +9,7 @@ import { Tips } from 'api/tips';
 import { ReactComponent as Loader } from 'assets/img/loader.svg';
 import { Modal, ConfirmModal, useModal } from 'components/Layout/Modal';
 import { primaryButton, secondaryButton } from 'components/styles';
+import { ToastsContext } from 'contexts/Toasts';
 import { TokensContext } from 'contexts/Tokens';
 import { CampaignStatus } from 'types/Tips';
 import { EditCampaignModal } from './EditCampaignModal';
@@ -18,6 +19,7 @@ export const CampaignPage = () => {
     const { id } = useParams();
     const { address } = useGetAccountInfo();
     const { get: getToken } = useContext(TokensContext);
+    const { showToast } = useContext(ToastsContext);
 
     const [campaign, metadata, illustrationUri] = useCampaign({ id: id ? +id : undefined });
     const [editModalShown, openEditModal, closeEditModal] = useModal();
@@ -56,6 +58,11 @@ export const CampaignPage = () => {
         }
     };
 
+    const copyLink = async () => {
+        navigator.clipboard.writeText(window.location.href);
+        showToast({ message: 'Link copied !' });
+    };
+
     const { register, handleSubmit, formState: { errors } } = useForm();
     const isCreator = campaign?.creator_address === address;
 
@@ -68,8 +75,8 @@ export const CampaignPage = () => {
             ) : (
                 <div className='flex flex-col gap-6'>
                     <div className='flex justify-center items-center'>
-                        <div className='py-2 px-6 border bg-whitee rounded-full cursor-pointer hover:shadow-md text-center'>
-                            Partagez le lien de cette campagne : <span className="text-main">{window.location.href}</span>
+                        <div className='py-2 px-6 border bg-whitee rounded-full cursor-pointer hover:shadow-md text-center' onClick={copyLink}>
+                            Share this campaign : <span className="text-main">{window.location.href}</span>
                         </div>
                     </div>
                     <div className="flex flex-col md:flex-row gap-6">
