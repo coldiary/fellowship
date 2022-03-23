@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, NavLink } from 'react-router-dom';
 
 import ReactTooltip from 'react-tooltip';
@@ -17,6 +18,7 @@ const Navbar = () => {
   const [menuShown, /* openMenu */, closeMenu, toggleMenu] = useModal();
 
   const { showToast } = useContext(ToastsContext);
+  const { t } = useTranslation();
 
   const showComingSoonToast = () => showToast({ message: 'Comming soon !' });
 
@@ -30,12 +32,12 @@ const Navbar = () => {
 
         <div className="hidden lg:flex flex-auto flex-row justify-between items-center">
           <div className='flex flex-row items-center gap-6'>
-            <NavLink data-tip="Coming soon !" data-for="nav" className={navLink} to={'/' /*routeNames.kickstart */}>Kickstart</NavLink>
-            <NavLink data-tip="Coming soon !" data-for="nav" className={navLink} to={'/' /*routeNames.giveaway */}>Fundraise</NavLink>
+            <NavLink data-tip={t('coming_soon')} data-for="nav" className={navLink} to={'/' /*routeNames.kickstart */}>Kickstart</NavLink>
+            <NavLink data-tip={t('coming_soon')} data-for="nav" className={navLink} to={'/' /*routeNames.giveaway */}>Fundraise</NavLink>
             <NavLink className={navLinkClass} to="/tip">Tip</NavLink>
             <NavLink className={navLinkClass} to='/trade'>Trade</NavLink>
-            <NavLink data-tip="Coming soon !" data-for="nav" className={navLink} to={'/' /*routeNames.giveaway */}>Giveaway</NavLink>
-            <NavLink data-tip="Coming soon !" data-for="nav" className={navLink} to={'/' /*routeNames.airdrop */}>Airdrop</NavLink>
+            <NavLink data-tip={t('coming_soon')} data-for="nav" className={navLink} to={'/' /*routeNames.giveaway */}>Giveaway</NavLink>
+            <NavLink data-tip={t('coming_soon')} data-for="nav" className={navLink} to={'/' /*routeNames.airdrop */}>Airdrop</NavLink>
           </div>
 
           <ReactTooltip id='nav' place='bottom'/>

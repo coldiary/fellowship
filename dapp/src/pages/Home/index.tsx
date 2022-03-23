@@ -1,4 +1,5 @@
 import React, { FC }  from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
@@ -35,15 +36,16 @@ const Item: FC<ItemProps> = (props) => (
 );
 
 const Home = () => {
+  const { t } = useTranslation();
   return (
     <div className='max-w-screen-2xl mx-auto my-4 p-10 w-full flex-auto'>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        <Item tooltip="Coming soon !" link={'/' /*routeNames.kickstart */} illustration={KickstartImg} title='Start your project with funds from the community'></Item>
-        <Item tooltip="Coming soon !" link={'/' /*routeNames.giveaway */} illustration={FundImg} title='Collect funds for people in needs'></Item>
-        <Item link="/tip" illustration={TipImg} title='Collect funding from your followers'></Item>
-        <Item link='/trade' illustration={TradeImg} title='Trade your assets with confidence'></Item>
-        <Item tooltip="Coming soon !" link={'/' /*routeNames.giveaway */} illustration={GiveawayImg} title='Make your followers win assets in a fair way'></Item>
-        <Item tooltip="Coming soon !" link={'/' /*routeNames.airdrop */} illustration={AirdropImg} title='Distribute assets easily to your community'></Item>
+        <Item tooltip={t('coming_soon')} link={'/' /*routeNames.kickstart */} illustration={KickstartImg} title={t('home.kickstart')}></Item>
+        <Item tooltip={t('coming_soon')} link={'/' /*routeNames.fundraise */} illustration={FundImg} title={t('home.fundraise')}></Item>
+        <Item link="/tip" illustration={TipImg} title={t('home.tip')}></Item>
+        <Item link='/trade' illustration={TradeImg} title={t('home.trade')}></Item>
+        <Item tooltip={t('coming_soon')} link={'/' /*routeNames.giveaway */} illustration={GiveawayImg} title={t('home.giveaway')}></Item>
+        <Item tooltip={t('coming_soon')} link={'/' /*routeNames.airdrop */} illustration={AirdropImg} title={t('home.airdrop')}></Item>
       </div>
       <ReactTooltip id='home' place='top'/>
     </div>

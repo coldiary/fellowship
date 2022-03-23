@@ -1,5 +1,6 @@
 import React, { FC, useContext, useMemo } from 'react';
 import { DappUI } from '@elrondnetwork/dapp-core';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { ReactComponent as Loader } from 'assets/img/loader.svg';
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const TradeCard: FC<Props> = ({ trade }) => {
+    const { t } = useTranslation();
     const { get } = useContext(TokensContext);
 
     const [offerToken, traderToken] = useMemo(() => [
@@ -33,7 +35,7 @@ export const TradeCard: FC<Props> = ({ trade }) => {
                 ) : (
                     <div className="grid grid-cols-trade p-6">
                         <div className="flex flex-col items-center gap-2">
-                            <div className="text-xs uppercase">Offered</div>
+                            <div className="text-xs uppercase">{t('trade.card.offered')}</div>
                             <div className="text-lg">
                                 <Denominate value={trade.offer_asset_quantity} token={offerToken.name} denomination={offerToken.decimals} decimals={2}/>
                             </div>
@@ -42,7 +44,7 @@ export const TradeCard: FC<Props> = ({ trade }) => {
                             <TradeIcon />
                         </div>
                         <div className="flex flex-col items-center gap-2">
-                            <div className="text-xs uppercase">Asked</div>
+                            <div className="text-xs uppercase">{t('trade.card.requested')}</div>
                             <div className="text-lg">
                                 <Denominate value={trade.trader_asset_quantity} token={traderToken.name} denomination={traderToken.decimals} decimals={2}/>
                             </div>

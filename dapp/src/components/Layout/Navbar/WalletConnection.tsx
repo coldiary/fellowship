@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 
 import { ReactComponent as CashIcon } from 'assets/img/cash.svg';
@@ -13,12 +14,9 @@ export const WalletConnection = () => {
     const account = useContext(AccountContext);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const isMobile = useMediaQuery({ query: '(max-width: 1024px)' });
+    const { t } = useTranslation();
 
-    useEffect(() => {
-        // setTimeout(() => {
-            setLoggedIn(Boolean(account.address));
-        // }, 500);
-    }, [account.address]);
+    useEffect(() => { setLoggedIn(Boolean(account.address)); }, [account.address]);
 
     const [
         connectModalShown,
@@ -59,7 +57,7 @@ export const WalletConnection = () => {
     ) : (
         <Modal shown={connectModalShown} closeModal={closeConnectModal}
             content={() => <UnlockView />}
-            toggle={() => (<button className={primaryButton} onClick={toggleConnectModal}>Connect wallet</button>)}
+            toggle={() => (<button className={primaryButton} onClick={toggleConnectModal}>{t('login')}</button>)}
         ></Modal>
     );
 };

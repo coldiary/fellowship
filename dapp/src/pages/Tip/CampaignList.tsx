@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { transactionServices, useGetAccountInfo } from '@elrondnetwork/dapp-core';
+import { useTranslation, Trans } from 'react-i18next';
 import useSWR from 'swr';
 
 import { Tips } from 'api/tips';
@@ -19,6 +20,7 @@ const { useGetPendingTransactions } = transactionServices;
 
 export const CampaignList = () => {
     const { hasPendingTransactions } = useGetPendingTransactions();
+    const { t } = useTranslation();
     const { address } = useGetAccountInfo();
     const { data: campaigns = [[], []], mutate } = useSWR(address ? `campaigns-${address}` : null, async (): Promise<SortedCampaigns> => {
         if (!address) return [[], []];
@@ -40,12 +42,12 @@ export const CampaignList = () => {
                     content={() => <CampaignHowTo closeModal={closeHowToModal} />}
                     toggle={() => (
                         <Button onClick={openHowToModal} type="clear">
-                            How it works ?
+                            {t('tip.list.how_to')}
                         </Button>
                     )}>
                 </Modal>
 
-                <a className="flex-shrink-0" href={contracts.tips.sourceUrl} target='_blank' rel="noreferrer">
+                <a className="flex-shrink-0" href={contracts.tips.sourceUrl} target='_blank' rel="noreferrer" title={t('tip.list.see_code')}>
                     <img className='w-5 h-5' src={githubLogo}></img>
                 </a>
 
@@ -53,14 +55,16 @@ export const CampaignList = () => {
                     content={() => <CreateCampaignModal closeModal={closeCreationModal} />}
                     toggle={() => (
                         <Button onClick={openCreationModal} type="secondary" onlyAuth={true}>
-                            Create <span className='hidden xs:inline'>campaign</span>
+                            <Trans i18nKey='tip.list.create_campaign'>
+                                Create <span className='hidden sm:inline'>campaign</span>
+                            </Trans>
                         </Button>
                     )}>
                 </Modal>
             </div>
             <div className='flex-auto flex flex-col'>
                 <div className="flex flex-row justify-between mb-6">
-                    <div className="text-2xl lg:text-3xl">Active campaigns</div>
+                    <div className="text-2xl lg:text-3xl">{t('tip.list.active_campaigns')}</div>
                 </div>
                 {campaigns[0].length ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -70,7 +74,7 @@ export const CampaignList = () => {
                     <div className='flex-auto flex justify-center items-center'>
                         <div className='flex flex-col gap-6 items-center justify-center'>
                             <EmptyImg className='w-28 md:w-40 h-auto' />
-                            <div className='text-2xl text-gray-500 font-medium'>No campaigns created yet</div>
+                            <div className='text-2xl text-gray-500 font-medium'>{t('tip.list.no_active_campaigns')}</div>
                         </div>
                     </div>
                 )}
@@ -78,7 +82,7 @@ export const CampaignList = () => {
 
             <div className='flex-auto flex flex-col'>
                 <div className="flex flex-row justify-between mb-6">
-                    <div className="text-2xl lg:text-3xl">Ended campaigns</div>
+                    <div className="text-2xl lg:text-3xl">{t('tip.list.ended_campaigns')}</div>
                 </div>
                 {campaigns[1].length ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -88,7 +92,7 @@ export const CampaignList = () => {
                     <div className='flex-auto flex justify-center items-center'>
                         <div className='flex flex-col gap-6 items-center justify-center'>
                             <EmptyImg className='w-28 md:w-40 h-auto' />
-                            <div className='text-2xl text-gray-500 font-medium'>No campaigns ended yet</div>
+                            <div className='text-2xl text-gray-500 font-medium'>{t('tip.list.no_ended_campaigns')}</div>
                         </div>
                     </div>
                 )}

@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Popover } from 'react-tiny-popover';
 
 import { ReactComponent as CloseIcon } from 'assets/img/close.svg';
@@ -13,6 +14,7 @@ export interface ConfirmModalProps {
 }
 
 export const ConfirmModal: FC<ConfirmModalProps> = ({ shown, closeModal, toggle, content }) => {
+    const { t } = useTranslation();
     return (
         <Popover
             isOpen={shown}
@@ -25,8 +27,8 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({ shown, closeModal, toggle,
                     </button>
                     {content()}
                     <div className="mt-6 flex flex-row gap-10 justify-evenly">
-                        <button className={`${secondaryButton} flex-auto`} onClick={() => closeModal(true)}>Cancel</button>
-                        <button className={`${primaryButton} flex-auto`} onClick={() => closeModal(true)}>Confirm</button>
+                        <button className={`${secondaryButton} flex-auto`} onClick={() => closeModal(true)}>{t('global.cancel')}</button>
+                        <button className={`${primaryButton} flex-auto`} onClick={() => closeModal(true)}>{t('global.confirm')}</button>
                     </div>
                 </div>
             </div>}

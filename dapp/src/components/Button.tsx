@@ -1,6 +1,7 @@
 import React, { FC, forwardRef, MouseEventHandler, useMemo } from 'react';
 import { useGetAccountInfo } from '@elrondnetwork/dapp-core';
 import { uniqueId } from 'lodash';
+import { useTranslation } from 'react-i18next';
 import ReactTooltip from 'react-tooltip';
 
 import { clearButton, primaryButton, secondaryButton } from './styles';
@@ -18,6 +19,7 @@ interface Props {
 
 export const Button: FC<Props> = forwardRef(({ onClick, onlyAuth, children, type = 'primary' }, _) => {
     const { address } = useGetAccountInfo();
+    const { t } = useTranslation();
     const tooltipId = useMemo(() => uniqueId('tooltip-'), []);
 
     const disabled = useMemo(() => (!!onlyAuth && !address), [address, onlyAuth]);
@@ -33,7 +35,7 @@ export const Button: FC<Props> = forwardRef(({ onClick, onlyAuth, children, type
     return (
         <>
             <button className={buttonStyle} onClick={onClick}
-                {...(disabled ? { 'data-tip': 'Connect wallet', 'data-for': tooltipId } : {})} disabled={disabled}
+                {...(disabled ? { 'data-tip': t('login'), 'data-for': tooltipId } : {})} disabled={disabled}
             >
                 {children}
             </button>

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { logout, DappUI } from '@elrondnetwork/dapp-core';
+import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as CopyCheckIcon } from 'assets/img/copy-check.svg';
 import { ReactComponent as CopyIcon } from 'assets/img/copy.svg';
@@ -15,6 +16,7 @@ import { getShortHash, getTokenShortName } from 'utils/display';
 export const AccountView = () => {
     const account = useContext(AccountContext);
     const [hasCopied, setHasCopied] = useState(false);
+    const { t } = useTranslation();
 
     const handleLogout = () => logout();
 
@@ -34,45 +36,45 @@ export const AccountView = () => {
                     <DappUI.Denominate value={account.balance} decimals={2} token='EGLD'
                         denomination={18} showLastNonZeroDecimal={false} />
                 </div>
-                <button className={primaryLink} onClick={handleLogout}>Disconnect</button>
+                <button className={primaryLink} onClick={handleLogout}>{t('account_view.logout')}</button>
             </div>
 
             <div className='flex flex-col gap-2'>
-                <div className="font-medium">My address :</div>
+                <div className="font-medium">{t('account_view.address')} :</div>
                 <div className="flex flex-row gap-4 justify-end items-center text-sm">
                     <span className="truncate">
                         {account.address}
                     </span>
-                    <button title='Copy address to clipboard' onClick={copyAddress}>
+                    <button title={t('account_view.copy_address')} onClick={copyAddress}>
                         {hasCopied ? <CopyCheckIcon /> : <CopyIcon />}
                     </button>
                 </div>
             </div>
 
             <div className='flex flex-col gap-2'>
-                <div className="font-medium">My tokens :</div>
-                <div className="flex flex-row flex-wrap gap-10 text-sm">
+                <div className="font-medium">{t('account_view.tokens')} :</div>
+                <div className="flex flex-row flex-wrap gap-x-10 gap-y-2 text-sm">
                     {account.tokens.map(token => (
                         <DappUI.Denominate key={token.identifier} value={token.balance} decimals={2} token={getTokenShortName(token.ticker)}
                             showLastNonZeroDecimal={false} denomination={token.decimals} />
                     ))}
                     { !account.tokens.length && (
-                        <>No tokens yet</>
+                        <>{t('account_view.no_tokens')}</>
                     )}
                 </div>
             </div>
 
             <div className='flex flex-col gap-2'>
-                <div className="font-medium">Latest transactions :</div>
+                <div className="font-medium">{t('account_view.transactions')} :</div>
                 <div className="flex flex-col gap-4 text-sm">
                     {account.transactions.map(tr => (
                         <div key={tr.txHash} className="flex flex-row items-center justify-between">
                             <div className="w-6 mr-2">
                                 {tr.status === 'success' ?
-                                    <SuccessIcon title='Successful' /> :
+                                    <SuccessIcon title={t('account_view.transaction_state.successful')} /> :
                                     tr.status === 'fail' ?
-                                        <FailureIcon title='Failed' /> :
-                                        <PendingIcon title='Pending' />}
+                                        <FailureIcon title={t('account_view.transaction_state.failed')} /> :
+                                        <PendingIcon title={t('account_view.transaction_state.pending')} />}
                             </div>
                             <div className='w-28 text-center flex-shrink-0'>
                                 {getShortHash(tr.txHash)}
@@ -81,7 +83,7 @@ export const AccountView = () => {
                             <div className='flex-auto overflow-hidden overflow-ellipsis whitespace-nowrap'>
                                 {tr.action?.description}
                             </div>
-                            <button title='Open in explorer' className="w-6 ml-2" onClick={() => openExplorer(tr.txHash)}>
+                            <button title={t('account_view.open_transaction')} className="w-6 ml-2" onClick={() => openExplorer(tr.txHash)}>
                                 <ExplorerIcon />
                             </button>
                         </div>
