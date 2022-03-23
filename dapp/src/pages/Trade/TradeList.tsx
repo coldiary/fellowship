@@ -6,9 +6,12 @@ import { Trades } from 'api/trades';
 import { ReactComponent as EmptyImg } from 'assets/img/empty.svg';
 import { Button } from 'components/Button';
 import { Modal, useModal } from 'components/Layout/Modal';
+import { contracts } from 'config';
 import { Trade } from 'types/Trades';
+import githubLogo from '../../assets/img/github.png';
 import { CreateTradeModal } from './CreateTradeModal';
 import { TradeCard } from './TradeCard';
+import { TradeHowTo } from './TradeHowTo';
 
 type SortedTrades = [created: Trade[], reserved: Trade[]];
 
@@ -16,6 +19,7 @@ export const TradeList = () => {
     const { hasPendingTransactions } = transactionServices.useGetPendingTransactions();
     const { address } = useGetAccountInfo();
     const [creationModalShown, openCreationModal, closeCreationModal] = useModal();
+    const [ howToModalShown, openHowToModal, closeHowToModal ] = useModal();
     const { data: trades = [[], []], mutate } = useSWR(address ? `trades-${address}` : null, async (): Promise<SortedTrades> => {
         const own = await Trades.instance.getTradesFor(address);
         return own.reduce<SortedTrades>((acc, trade) => {
@@ -32,15 +36,30 @@ export const TradeList = () => {
 
     return (
         <div className='max-w-screen-2xl mx-auto p-10 w-full flex-auto flex flex-col gap-6'>
-            <div className='flex-auto flex flex-col'>
-                <div className="flex flex-row justify-between mb-6">
-                    <div className="text-2xl lg:text-3xl">My trades</div>
-                    <Modal shown={creationModalShown} closeModal={closeCreationModal}
+            <div className='flex flex-row items-center justify-end gap-4'>
+                <Modal shown={howToModalShown} closeModal={closeHowToModal}
+                    content={() => <TradeHowTo closeModal={closeHowToModal} />}
+                    toggle={() => (
+                        <Button onClick={openHowToModal} type="clear">
+                            How it works ?
+                        </Button>
+                    )}>
+                </Modal>
+
+                <a className="flex-shrink-0" href={contracts.trade.sourceUrl} target='_blank' rel="noreferrer">
+                    <img className='w-5 h-5' src={githubLogo}></img>
+                </a>
+
+                <Modal shown={creationModalShown} closeModal={closeCreationModal}
                         content={() => <CreateTradeModal closeModal={closeCreationModal} />}
                         toggle={() => (
                             <Button onClick={openCreationModal} type="secondary" onlyAuth>Create trade</Button>
                         )}>
                     </Modal>
+            </div>
+            <div className='flex-auto flex flex-col'>
+                <div className="flex flex-row justify-between mb-6">
+                    <div className="text-2xl lg:text-3xl">My trades</div>
                 </div>
                 {trades[0].length ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">

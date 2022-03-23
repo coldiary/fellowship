@@ -3,12 +3,17 @@ import { useGetAccountInfo } from '@elrondnetwork/dapp-core';
 import { uniqueId } from 'lodash';
 import ReactTooltip from 'react-tooltip';
 
-import { primaryButton, secondaryButton } from './styles';
+import { clearButton, primaryButton, secondaryButton } from './styles';
 
+type ButtonType =
+    | 'primary'
+    | 'secondary'
+    | 'clear'
+;
 interface Props {
     onClick?: MouseEventHandler<HTMLButtonElement>;
     onlyAuth?: boolean;
-    type?: 'primary' | 'secondary';
+    type?: ButtonType;
 }
 
 export const Button: FC<Props> = forwardRef(({ onClick, onlyAuth, children, type = 'primary' }, _) => {
@@ -17,9 +22,17 @@ export const Button: FC<Props> = forwardRef(({ onClick, onlyAuth, children, type
 
     const disabled = useMemo(() => (!!onlyAuth && !address), [address, onlyAuth]);
 
+    const buttonStyle = useMemo(() => {
+        switch (type) {
+            case 'primary': return primaryButton;
+            case 'secondary': return secondaryButton;
+            case 'clear': return clearButton;
+        }
+    }, [type]);
+
     return (
         <>
-            <button className={type === 'primary' ? primaryButton : secondaryButton} onClick={onClick}
+            <button className={buttonStyle} onClick={onClick}
                 {...(disabled ? { 'data-tip': 'Connect wallet', 'data-for': tooltipId } : {})} disabled={disabled}
             >
                 {children}

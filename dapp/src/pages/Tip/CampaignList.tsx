@@ -6,8 +6,11 @@ import { Tips } from 'api/tips';
 import { ReactComponent as EmptyImg } from 'assets/img/empty.svg';
 import { Button } from 'components/Button';
 import { Modal, useModal } from 'components/Layout/Modal';
+import { contracts } from 'config';
 import { Campaign, CampaignStatus } from 'types/Tips';
+import githubLogo from '../../assets/img/github.png';
 import { CampaignCard } from './CampaignCard';
+import { CampaignHowTo } from './CampaignHowTo';
 import { CreateCampaignModal } from './CreateCampaignModal';
 
 export type SortedCampaigns = [active: Campaign[], ended: Campaign[]];
@@ -26,22 +29,38 @@ export const CampaignList = () => {
         }, [[], []]);;
     });
     const [ creationModalShown, openCreationModal, closeCreationModal ] = useModal();
+    const [ howToModalShown, openHowToModal, closeHowToModal ] = useModal();
 
     useEffect(() => { mutate(); }, [hasPendingTransactions]);
 
     return (
         <div className='max-w-screen-2xl mx-auto p-10 w-full flex-auto flex flex-col gap-6'>
+            <div className='flex flex-row items-center justify-end gap-4'>
+                <Modal shown={howToModalShown} closeModal={closeHowToModal}
+                    content={() => <CampaignHowTo closeModal={closeHowToModal} />}
+                    toggle={() => (
+                        <Button onClick={openHowToModal} type="clear">
+                            How it works ?
+                        </Button>
+                    )}>
+                </Modal>
+
+                <a className="flex-shrink-0" href={contracts.tips.sourceUrl} target='_blank' rel="noreferrer">
+                    <img className='w-5 h-5' src={githubLogo}></img>
+                </a>
+
+                <Modal shown={creationModalShown} closeModal={closeCreationModal}
+                    content={() => <CreateCampaignModal closeModal={closeCreationModal} />}
+                    toggle={() => (
+                        <Button onClick={openCreationModal} type="secondary" onlyAuth={true}>
+                            Create <span className='hidden xs:inline'>campaign</span>
+                        </Button>
+                    )}>
+                </Modal>
+            </div>
             <div className='flex-auto flex flex-col'>
                 <div className="flex flex-row justify-between mb-6">
                     <div className="text-2xl lg:text-3xl">Active campaigns</div>
-                    <Modal shown={creationModalShown} closeModal={closeCreationModal}
-                        content={() => <CreateCampaignModal closeModal={closeCreationModal} />}
-                        toggle={() => (
-                            <Button onClick={openCreationModal} type="secondary" onlyAuth={true}>
-                                Create <span className='hidden md:inline'>campaign</span>
-                            </Button>
-                        )}>
-                    </Modal>
                 </div>
                 {campaigns[0].length ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

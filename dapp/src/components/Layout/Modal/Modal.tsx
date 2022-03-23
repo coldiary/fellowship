@@ -16,11 +16,13 @@ export const Modal: FC<ModalProps> = ({ shown, closeModal, content, toggle }) =>
             containerStyle={{ width: '100vw', height: '100vh', position: 'absolute' }}
             contentLocation={{ top: 0, left: 0 }}
             content={<div className='absolute inset-0 bg-black bg-opacity-30 flex justify-center items-center p-6 lg:p-0'>
-                <div className='bg-white border shadow-md rounded-md relative max-h-full max-w-full p-6 lg:max-w-screen-sm lg:p-0'>
+                <div className='bg-white border shadow-md rounded-md relative h-full md:h-auto md:max-h-full w-full lg:max-w-screen-sm lg:max-h-9/10'>
                     <button className='absolute top-2 right-2' onClick={closeModal}>
                         <CloseIcon className='w-5' />
                     </button>
-                    {content()}
+                    <div className="h-full w-full p-6 overflow-scroll">
+                        {content()}
+                    </div>
                 </div>
             </div>}
         >

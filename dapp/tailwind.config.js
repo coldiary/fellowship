@@ -6,6 +6,12 @@ module.exports = {
       gridTemplateColumns: {
         'trade': '1fr 48px 1fr'
       },
+      screens: {
+        'xs': '380px',
+      },
+      maxHeight: {
+        '9/10': '90%'
+      },
       colors: {
         main: {
           lighter: '#9091b6',

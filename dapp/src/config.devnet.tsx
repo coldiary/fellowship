@@ -1,8 +1,18 @@
 export const environment = 'devnet';
 
 export const contracts = {
-  tips: { name: 'Tips', address: 'erd1qqqqqqqqqqqqqpgqt8vfhqpvtsvjce9jle3gw5njwqq0l9hju4aq9wfw9s', abiPath: '/tips.abi.json' },
-  trade: { name: 'Trade', address: 'erd1qqqqqqqqqqqqqpgql585tt797dfpg0lpn6ce264nv59a8g9eu4aqx5tvq8', abiPath: '/trade.abi.json' },
+  tips: {
+    name: 'Tips',
+    address: 'erd1qqqqqqqqqqqqqpgqt8vfhqpvtsvjce9jle3gw5njwqq0l9hju4aq9wfw9s',
+    abiPath: '/tips.abi.json',
+    sourceUrl: 'https://github.com/coldiary/fellowship/tree/main/contracts/tips',
+  },
+  trade: {
+    name: 'Trade',
+    address: 'erd1qqqqqqqqqqqqqpgql585tt797dfpg0lpn6ce264nv59a8g9eu4aqx5tvq8',
+    abiPath: '/trade.abi.json',
+    sourceUrl: 'https://github.com/coldiary/fellowship/tree/main/contracts/trade'
+  },
 };
 
 export const proxyAddress = 'https://devnet.api.fellowship.tools';
