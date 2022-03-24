@@ -32,7 +32,7 @@ export const Dropdown: FC<PropsWithChildren<DropdownProps>> = ({ shown, closeDro
             onClickOutside={closeDropdown}
             boundaryInset={20}
             content={
-                <div className='bg-white border shadow-md rounded-md max-w-screen-md p-6' onClick={e => e.stopPropagation()}>
+                <div className='bg-white border shadow-md rounded-md max-w-screen-md' onClick={e => e.stopPropagation()}>
                     {content()}
                 </div>
             }

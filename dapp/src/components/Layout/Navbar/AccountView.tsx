@@ -30,7 +30,7 @@ export const AccountView = () => {
     };
 
     return !account.address ? null : (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 p-6">
             <div className="flex flex-row justify-between">
                 <div className="text-2xl">
                     <DappUI.Denominate value={account.balance} decimals={2} token='EGLD'
