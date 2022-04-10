@@ -1,0 +1,346 @@
+{
+    "name": "giveaway register multiple success",
+    "steps": [
+        {
+            "step": "externalSteps",
+            "path": "create-success-multiple.scen.json"
+        },
+        {
+            "step": "setState",
+            "currentBlockInfo": {
+                "blockTimestamp": "0"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "register-giveaway-1",
+            "tx": {
+                "from": "address:bob",
+                "to": "sc:giveaway",
+                "function": "register",
+                "value": "0",
+                "arguments": [
+                    "u64:1"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "register-giveaway-2",
+            "tx": {
+                "from": "address:alice",
+                "to": "sc:giveaway",
+                "function": "register",
+                "value": "0",
+                "arguments": [
+                    "u64:2"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "register-giveaway-3",
+            "tx": {
+                "from": "address:carol",
+                "to": "sc:giveaway",
+                "function": "register",
+                "value": "0",
+                "arguments": [
+                    "u64:1"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "register-giveaway-4",
+            "tx": {
+                "from": "address:carol",
+                "to": "sc:giveaway",
+                "function": "register",
+                "value": "0",
+                "arguments": [
+                    "u64:2"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:alice": {
+                    "nonce": "2",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:bob": {
+                    "nonce": "2",
+                    "balance": "500,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:carol": {
+                    "nonce": "2",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "sc:giveaway": {
+                    "nonce": "0",
+                    "balance": "500,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "4,000,000"
+                    },
+                    "storage": {
+                        "str:nextId": "3",
+                        "str:giveaways|u64:1": {
+                            "0-id": "u64:1",
+                            "1-creator_address": "address:alice",
+                            "2-token_identifier": "nested:str:TEST-123456",
+                            "3-delivery_plan": "u32:3|u8:80|u8:15|u8:5",
+                            "4-amount": "biguint:4,000,000",
+                            "5-status": "0x00",
+                            "6-registration_limit": "0x00",
+                            "7-registration_deadline": "0x00",
+                            "8-has_whitelist": "0x00"
+                        },
+                        "str:giveaways|u64:2": {
+                            "0-id": "u64:2",
+                            "1-creator_address": "address:bob",
+                            "2-token_identifier": "nested:str:EGLD",
+                            "3-delivery_plan": "u32:1|u8:100",
+                            "4-amount": "biguint:500,000,000,000,000,000",
+                            "5-status": "0x00",
+                            "6-registration_limit": "0x00",
+                            "7-registration_deadline": "0x00",
+                            "8-has_whitelist": "0x00"
+                        },
+                        "str:participants|u64:1": [
+                            "address:bob",
+                            "address:carol"
+                        ],
+                        "str:participants|u64:2": [
+                            "address:alice",
+                            "address:carol"
+                        ],
+                        "str:userGiveaways|address:bob|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:bob|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:bob|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:bob|str:.value|u32:1": "1",
+                        "str:userGiveaways|address:alice|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:alice|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:alice|str:.node_id|u64:2": "1",
+                        "str:userGiveaways|address:alice|str:.value|u32:1": "2",
+                        "str:userGiveaways|address:carol|str:.info": "u32:2|u32:1|u32:2|u32:2",
+                        "str:userGiveaways|address:carol|str:.node_links|u32:1": "u32:0|u32:2",
+                        "str:userGiveaways|address:carol|str:.node_links|u32:2": "u32:1|u32:0",
+                        "str:userGiveaways|address:carol|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:carol|str:.node_id|u64:2": "2",
+                        "str:userGiveaways|address:carol|str:.value|u32:1": "1",
+                        "str:userGiveaways|address:carol|str:.value|u32:2": "2"
+                    },
+                    "code": "file:../output/giveaway.wasm"
+                },
+                "+": ""
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "register-giveaway-3",
+            "tx": {
+                "from": "address:denis",
+                "to": "sc:giveaway",
+                "function": "register",
+                "value": "0",
+                "arguments": [
+                    "u64:1"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "register-giveaway-3",
+            "tx": {
+                "from": "address:eric",
+                "to": "sc:giveaway",
+                "function": "register",
+                "value": "0",
+                "arguments": [
+                    "u64:1"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "register-giveaway-3",
+            "tx": {
+                "from": "address:fanny",
+                "to": "sc:giveaway",
+                "function": "register",
+                "value": "0",
+                "arguments": [
+                    "u64:1"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:alice": {
+                    "nonce": "2",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:bob": {
+                    "nonce": "2",
+                    "balance": "500,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:carol": {
+                    "nonce": "2",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:denis": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:eric": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:fanny": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "sc:giveaway": {
+                    "nonce": "0",
+                    "balance": "500,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "4,000,000"
+                    },
+                    "storage": {
+                        "str:nextId": "3",
+                        "str:giveaways|u64:1": {
+                            "0-id": "u64:1",
+                            "1-creator_address": "address:alice",
+                            "2-token_identifier": "nested:str:TEST-123456",
+                            "3-delivery_plan": "u32:3|u8:80|u8:15|u8:5",
+                            "4-amount": "biguint:4,000,000",
+                            "5-status": "0x00",
+                            "6-registration_limit": "0x00",
+                            "7-registration_deadline": "0x00",
+                            "8-has_whitelist": "0x00"
+                        },
+                        "str:giveaways|u64:2": {
+                            "0-id": "u64:2",
+                            "1-creator_address": "address:bob",
+                            "2-token_identifier": "nested:str:EGLD",
+                            "3-delivery_plan": "u32:1|u8:100",
+                            "4-amount": "biguint:500,000,000,000,000,000",
+                            "5-status": "0x00",
+                            "6-registration_limit": "0x00",
+                            "7-registration_deadline": "0x00",
+                            "8-has_whitelist": "0x00"
+                        },
+                        "str:participants|u64:1": [
+                            "address:bob",
+                            "address:carol",
+                            "address:denis",
+                            "address:eric",
+                            "address:fanny"
+                        ],
+                        "str:participants|u64:2": [
+                            "address:alice",
+                            "address:carol"
+                        ],
+                        "str:userGiveaways|address:bob|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:bob|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:bob|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:bob|str:.value|u32:1": "1",
+                        "str:userGiveaways|address:alice|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:alice|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:alice|str:.node_id|u64:2": "1",
+                        "str:userGiveaways|address:alice|str:.value|u32:1": "2",
+                        "str:userGiveaways|address:carol|str:.info": "u32:2|u32:1|u32:2|u32:2",
+                        "str:userGiveaways|address:carol|str:.node_links|u32:1": "u32:0|u32:2",
+                        "str:userGiveaways|address:carol|str:.node_links|u32:2": "u32:1|u32:0",
+                        "str:userGiveaways|address:carol|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:carol|str:.node_id|u64:2": "2",
+                        "str:userGiveaways|address:carol|str:.value|u32:1": "1",
+                        "str:userGiveaways|address:carol|str:.value|u32:2": "2",
+                        "str:userGiveaways|address:denis|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:denis|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:denis|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:denis|str:.value|u32:1": "1",
+                        "str:userGiveaways|address:eric|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:eric|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:eric|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:eric|str:.value|u32:1": "1",
+                        "str:userGiveaways|address:fanny|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:fanny|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:fanny|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:fanny|str:.value|u32:1": "1"
+                    },
+                    "code": "file:../output/giveaway.wasm"
+                },
+                "+": ""
+            }
+        }
+    ]
+}

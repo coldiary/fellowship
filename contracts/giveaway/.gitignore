@@ -5,3 +5,7 @@
 
 # The erdpy output
 output
+
+# IDE
+elrond.workspace.json
+.devcontainer

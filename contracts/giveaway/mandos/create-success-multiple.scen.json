@@ -1,0 +1,134 @@
+{
+    "name": "giveaway create multiple success",
+    "steps": [
+        {
+            "step": "externalSteps",
+            "path": "init.scen.json"
+        },
+        {
+            "step": "scCall",
+            "txId": "giveaway-1",
+            "tx": {
+                "from": "address:alice",
+                "to": "sc:giveaway",
+                "function": "createGiveaway",
+                "esdtValue": [
+                    {
+                        "tokenIdentifier": "str:TEST-123456",
+                        "value": "4,000,000"
+                    }
+                ],
+                "arguments": [
+                    [
+                        "u8:80",
+                        "u8:15",
+                        "u8:5"
+                    ]
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": ["1"],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "giveaway-2",
+            "tx": {
+                "from": "address:bob",
+                "to": "sc:giveaway",
+                "function": "createGiveaway",
+                "egldValue": "500,000,000,000,000,000",
+                "arguments": [
+                    [
+                        "u8:100"
+                    ]
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": ["2"],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000"
+                },
+                "address:alice": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:bob": {
+                    "nonce": "1",
+                    "balance": "500,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:carol": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:denis": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:eric": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:fanny": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "sc:giveaway": {
+                    "nonce": "0",
+                    "balance": "500,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "4,000,000"
+                    },
+                    "storage": {
+                        "str:nextId": "3",
+                        "str:giveaways|u64:1": {
+                            "0-id": "u64:1",
+                            "1-creator_address": "address:alice",
+                            "2-token_identifier": "nested:str:TEST-123456",
+                            "3-delivery_plan": "u32:3|u8:80|u8:15|u8:5",
+                            "4-amount": "biguint:4,000,000",
+                            "5-status": "0x00",
+                            "6-registration_limit": "0x00",
+                            "7-registration_deadline": "0x00",
+                            "8-has_whitelist": "0x00"
+                        },
+                        "str:giveaways|u64:2": {
+                            "0-id": "u64:2",
+                            "1-creator_address": "address:bob",
+                            "2-token_identifier": "nested:str:EGLD",
+                            "3-delivery_plan": "u32:1|u8:100",
+                            "4-amount": "biguint:500,000,000,000,000,000",
+                            "5-status": "0x00",
+                            "6-registration_limit": "0x00",
+                            "7-registration_deadline": "0x00",
+                            "8-has_whitelist": "0x00"
+                        }
+                    },
+                    "code": "file:../output/giveaway.wasm"
+                }
+            }
+        }
+    ]
+}

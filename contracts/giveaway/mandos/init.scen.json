@@ -3,10 +3,40 @@
     "steps": [
         {
             "step": "setState",
+            "currentBlockInfo": {
+                "blockTimestamp": "0"
+            },
             "accounts": {
                 "address:owner": {
                     "nonce": "0",
                     "balance": "1,000,000,000"
+                },
+                "address:alice": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "4,000,000"
+                    }
+                },
+                "address:bob": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000"
+                },
+                "address:carol": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000"
+                },
+                "address:denis": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000"
+                },
+                "address:eric": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000"
+                },
+                "address:fanny": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000"
                 }
             },
             "newAddresses": [
@@ -50,7 +80,8 @@
                         "str:nextId": "1"
                     },
                     "code": "file:../output/giveaway.wasm"
-                }
+                },
+                "+": ""
             }
         }
     ]

@@ -1,0 +1,106 @@
+{
+    "name": "giveaway success",
+    "steps": [
+        {
+            "step": "externalSteps",
+            "path": "init.scen.json"
+        },
+        {
+            "step": "setState",
+            "currentBlockInfo": {
+                "blockRandomSeed": "0x000000040000000400000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "draw-winner-giveaway-1",
+            "tx": {
+                "from": "address:alice",
+                "to": "sc:giveaway",
+                "function": "giveaway",
+                "esdtValue": [
+                    {
+                        "tokenIdentifier": "str:TEST-123456",
+                        "value": "4,000,000"
+                    }
+                ],
+                "arguments": [
+                    [
+                        "u8:80",
+                        "u8:15",
+                        "u8:5"
+                    ],
+                    [
+                        "address:bob",
+                        "address:carol",
+                        "address:denis",
+                        "address:eric",
+                        "address:fanny"
+                    ]
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000"
+                },
+                "address:alice": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:bob": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:carol": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "3,200,000"
+                    }
+                },
+                "address:denis": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "600,000"
+                    }
+                },
+                "address:eric": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:fanny": {
+                    "nonce": "0",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "200,000"
+                    }
+                },
+                "sc:giveaway": {
+                    "nonce": "0",
+                    "balance": "0",
+                    "esdt": {},
+                    "storage": {
+                        "str:nextId": "1"
+                    },
+                    "code": "file:../output/giveaway.wasm"
+                }
+            }
+        }
+    ]
+}

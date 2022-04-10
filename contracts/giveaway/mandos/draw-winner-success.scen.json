@@ -1,0 +1,122 @@
+{
+    "name": "giveaway register success",
+    "steps": [
+        {
+            "step": "externalSteps",
+            "path": "register-success.scen.json"
+        },
+        {
+            "step": "setState",
+            "currentBlockInfo": {
+                "blockRandomSeed": "0x000000040000000400000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "draw-winner-giveaway-1",
+            "tx": {
+                "from": "address:alice",
+                "to": "sc:giveaway",
+                "function": "drawWinners",
+                "value": "0",
+                "arguments": [
+                    "u64:1"
+                ],
+                "gasLimit": "100,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:bob": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:carol": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "3,200,000"
+                    }
+                },
+                "address:denis": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "600,000"
+                    }
+                },
+                "address:eric": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {}
+                },
+                "address:fanny": {
+                    "nonce": "1",
+                    "balance": "1,000,000,000,000,000,000",
+                    "esdt": {
+                        "str:TEST-123456": "200,000"
+                    }
+                },
+                "sc:giveaway": {
+                    "nonce": "0",
+                    "balance": "0",
+                    "esdt": {
+                        "str:TEST-123456": "0"
+                    },
+                    "storage": {
+                        "str:nextId": "2",
+                        "str:giveaways|u64:1": {
+                            "0-id": "u64:1",
+                            "1-creator_address": "address:alice",
+                            "2-token_identifier": "nested:str:TEST-123456",
+                            "3-delivery_plan": "u32:3|u8:80|u8:15|u8:5",
+                            "4-amount": "biguint:4,000,000",
+                            "5-status": "0x01",
+                            "6-registration_limit": "0x00",
+                            "7-registration_deadline": "0x00",
+                            "8-has_whitelist": "0x00"
+                        },
+                        "str:participants|u64:1": [
+                            "address:bob",
+                            "address:carol",
+                            "address:denis",
+                            "address:eric",
+                            "address:fanny"
+                        ],
+                        "str:userGiveaways|address:bob|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:bob|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:bob|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:bob|str:.value|u32:1": "1",
+                        "str:userGiveaways|address:carol|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:carol|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:carol|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:carol|str:.value|u32:1": "1",
+                        "str:userGiveaways|address:denis|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:denis|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:denis|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:denis|str:.value|u32:1": "1",
+                        "str:userGiveaways|address:eric|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:eric|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:eric|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:eric|str:.value|u32:1": "1",
+                        "str:userGiveaways|address:fanny|str:.info": "u32:1|u32:1|u32:1|u32:1",
+                        "str:userGiveaways|address:fanny|str:.node_links|u32:1": "u32:0|u32:0",
+                        "str:userGiveaways|address:fanny|str:.node_id|u64:1": "1",
+                        "str:userGiveaways|address:fanny|str:.value|u32:1": "1"
+                    },
+                    "code": "file:../output/giveaway.wasm"
+                },
+                "+": ""
+            }
+        }
+    ]
+}

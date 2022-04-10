@@ -248,15 +248,7 @@ name = "giveaway"
 version = "0.0.1"
 dependencies = [
  "elrond-wasm",
-]
-
-[[package]]
-name = "giveaway-meta"
-version = "0.0.0"
-dependencies = [
- "elrond-wasm",
  "elrond-wasm-debug",
- "giveaway",
 ]
 
 [[package]]
