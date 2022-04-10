@@ -3,13 +3,13 @@ export const environment = 'devnet';
 export const contracts = {
   tips: {
     name: 'Tips',
-    address: 'erd1qqqqqqqqqqqqqpgqt8vfhqpvtsvjce9jle3gw5njwqq0l9hju4aq9wfw9s',
+    address: 'erd1qqqqqqqqqqqqqpgqlwd46cauxwzxllle3hufs22d3snnjn3du4aqr3gls8',
     abiPath: '/tips.abi.json',
     sourceUrl: 'https://github.com/coldiary/fellowship/tree/main/contracts/tips',
   },
   trade: {
     name: 'Trade',
-    address: 'erd1qqqqqqqqqqqqqpgql585tt797dfpg0lpn6ce264nv59a8g9eu4aqx5tvq8',
+    address: 'erd1qqqqqqqqqqqqqpgqe2695k6rr0lnzuu9x9t0vskrazm9hn76u4aqa9tldn',
     abiPath: '/trade.abi.json',
     sourceUrl: 'https://github.com/coldiary/fellowship/tree/main/contracts/trade'
   },
